@@ -65,4 +65,8 @@ Event `keydown` dengan filter `!e.repeat` digunakan untuk mengeksekusi aksi disk
 * **Hover Canvas:** Mengarahkan circle follower dan menampilkan koordinat real-time.
 * **Klik Kiri:** Mengubah warna pesawat player sekaligus membuat satu circle statis pada titik klik.
 
+## Tautan Demo & Repositori
+
+- **Live Demo / Deployment** : [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%201/)
+- **Video Demo / Dokumentasi**: [https://youtu.be/xxxxxx](https://your-video-link-here.com)
 ---
