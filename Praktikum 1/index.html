@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktikum Grafika Komputer - Pertemuan 1: Graphics Playground</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121214;
+            color: #e1e1e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #00e676;
+            margin-bottom: 4px;
+        }
+
+        p.subtitle {
+            font-size: 0.9rem;
+            color: #a8a8b3;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1100px;
+        }
+
+        canvas {
+            background-color: #1a1a1e;
+            border: 2px solid #323238;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            cursor: crosshair;
+        }
+
+        .panel {
+            background-color: #202024;
+            border: 1px solid #323238;
+            border-radius: 8px;
+            padding: 18px;
+            width: 360px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel h2 {
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+            color: #61dafb;
+            border-bottom: 1px solid #323238;
+            padding-bottom: 6px;
+        }
+
+        .challenge-badge {
+            display: inline-block;
+            background: #2d2d38;
+            border: 1px solid #4a4a5a;
+            color: #ffca28;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 4px;
+        }
+
+        .instruction-group {
+            margin-bottom: 12px;
+        }
+
+        .instruction-group strong {
+            display: block;
+            font-size: 0.85rem;
+            color: #e1e1e6;
+            margin-bottom: 4px;
+        }
+
+        .instruction-group ul {
+            list-style: none;
+            font-size: 0.8rem;
+            line-height: 1.45;
+            color: #a8a8b3;
+        }
+
+        .kbd {
+            display: inline-block;
+            background: #29292e;
+            border: 1px solid #4d4d57;
+            border-radius: 4px;
+            padding: 1px 5px;
+            font-size: 0.72rem;
+            font-family: monospace;
+            color: #00e676;
+        }
+
+        .status-box {
+            margin-top: 14px;
+            padding: 10px;
+            background-color: #121214;
+            border: 1px solid #29292e;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            line-height: 1.5;
+            font-family: 'Consolas', monospace;
+            color: #a8a8b3;
+        }
+
+        .status-box span {
+            color: #00e676;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>2D Graphics Playground</h1>
+        <p class="subtitle">Praktikum Grafika Komputer — Canvas 2D Core & Challenges</p>
+    </header>
+
+    <div class="main-container">
+        <!-- Canvas Viewport -->
+        <canvas id="glCanvas" width="640" height="480"></canvas>
+
+        <!-- Sidebar Panel -->
+        <div class="panel">
+            <h2>Daftar Fitur & Challenge</h2>
+
+            <div class="instruction-group">
+                <strong><span class="challenge-badge">D</span>Keyboard Movement (Player)</strong>
+                <ul>
+                    <li><span class="kbd">W</span><span class="kbd">A</span><span class="kbd">S</span><span class="kbd">D</span> / Arrow Keys untuk gerak bebas</li>
+                </ul>
+            </div>
+
+            <div class="instruction-group">
+                <strong><span class="challenge-badge">B & E</span>Mouse Tracking & Coords</strong>
+                <ul>
+                    <li>Lingkaran biru muda mengikuti posisi kursor secara real-time</li>
+                </ul>
+            </div>
+
+            <div class="instruction-group">
+                <strong><span class="challenge-badge">C & 34.1</span>Mouse Click Interaction</strong>
+                <ul>
+                    <li>Klik Kanvas: Ubah warna objek & spawn static circle baru</li>
+                </ul>
+            </div>
+
+            <div class="instruction-group">
+                <strong><span class="challenge-badge">A & 34.3</span>Bouncing & Multiple Objects</strong>
+                <ul>
+                    <li>Bola-bola bergerak otomatis dengan posisi, warna, dan kecepatan berbeda</li>
+                </ul>
+            </div>
+
+            <div class="instruction-group">
+                <strong><span class="challenge-badge">34.2</span>Trail Mode & Reset</strong>
+                <ul>
+                    <li><span class="kbd">T</span> : Toggle Trail Mode (Clear vs No Clear)</li>
+                    <li><span class="kbd">R</span> : Reset Canvas, Player, & Circles</li>
+                </ul>
+            </div>
+
+            <div class="status-box" id="statusDisplay">
+                Mouse  : (X: 0, Y: 0)<br>
+                Player : (X: 0, Y: 0)<br>
+                Circles: 0 spawned<br>
+                Trail  : <span>OFF</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
