@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktikum Grafika Komputer</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ambient Glow Background Effect -->
+    <div class="ambient-glow"></div>
+
+    <div class="container">
+        <!-- HEADER HERO -->
+        <header>
+            <div class="badge-wrapper">
+                <span class="status-dot"></span>
+                <span class="badge-course">Grafika Komputer B</span>
+            </div>
+            <h1>Praktikum Grafika Komputer</h1>
+            <p class="hero-subtitle">
+                Eksplorasi Pipeline Render 2D, WebGL Shaders, & Grafika Interaktif
+            </p>
+        </header>
+
+        <!-- STATS BAR -->
+        <div class="stats-bar">
+            <div class="stats-count">
+                Modul Aktif: <span id="readyCount">0</span>
+            </div>
+            <div class="stats-repo">
+                Repository: Praktikum-Grafika-Komputer
+            </div>
+        </div>
+
+        <!-- MAIN MODULE LIST -->
+        <main class="grid" id="moduleContainer">
+            <!-- Dynamic Module Cards rendered by main.js -->
+        </main>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>Institut Teknologi Sepuluh Nopember</p>
+        </footer>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="main.js"></script>
+</body>
+</html>

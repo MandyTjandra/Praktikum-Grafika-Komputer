@@ -1,0 +1,310 @@
+:root {
+    --bg-base: #0a0d12;
+    --bg-surface: rgba(22, 27, 34, 0.75);
+    --bg-surface-hover: rgba(30, 36, 46, 0.95);
+    --border: rgba(48, 54, 61, 0.8);
+    --border-highlight: #00e676;
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --accent-green: #00e676;
+    --accent-cyan: #00e5ff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Ambient Radial Glow Background */
+.ambient-glow {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 650px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(0, 230, 118, 0.14) 0%, rgba(0, 229, 255, 0.05) 50%, rgba(0, 0, 0, 0) 75%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    z-index: 1;
+}
+
+/* =============================================================================
+   HEADER & HERO SECTION
+   ============================================================================= */
+
+header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Badge with Glowing Pulse Indicator */
+.badge-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 230, 118, 0.08);
+    border: 1px solid rgba(0, 230, 118, 0.28);
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+    box-shadow: 0 0 16px rgba(0, 230, 118, 0.12);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+
+.badge-wrapper:hover {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 24px rgba(0, 230, 118, 0.25);
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    background-color: var(--accent-green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-green);
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.35;
+        transform: scale(0.85);
+    }
+}
+
+.badge-course {
+    color: var(--accent-green);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Fira Code', monospace;
+}
+
+/* Main Heading (H1) */
+h1 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    background: linear-gradient(180deg, #ffffff 30%, #a2b0c6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+/* Hero Subtitle */
+.hero-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    max-width: 540px;
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+/* =============================================================================
+   STATS BAR
+   ============================================================================= */
+
+.stats-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 12px 20px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    font-size: 0.85rem;
+}
+
+.stats-count {
+    color: var(--text-secondary);
+}
+
+.stats-count span {
+    color: var(--accent-green);
+    font-weight: 700;
+}
+
+.stats-repo {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* =============================================================================
+   MODULE LIST & CARDS
+   ============================================================================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+.card {
+    background-color: var(--bg-surface);
+    border: 1px solid rgba(0, 230, 118, 0.25);
+    border-radius: 14px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    backdrop-filter: blur(12px);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-highlight);
+    box-shadow: 0 16px 36px rgba(0, 230, 118, 0.12);
+    background-color: var(--bg-surface-hover);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.modul-tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+.status-pill {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(0, 230, 118, 0.15);
+    color: var(--accent-green);
+    border: 1px solid rgba(0, 230, 118, 0.35);
+}
+
+.card h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.card p {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 20px;
+}
+
+.topics-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.topic-chip {
+    background: rgba(33, 38, 45, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-family: 'Fira Code', monospace;
+    color: #c9d1d9;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 18px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.action-link {
+    color: var(--accent-green);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.action-link:hover {
+    transform: translateX(3px);
+    color: #33ff99;
+}
+
+.repo-link {
+    color: var(--accent-cyan);
+    text-decoration: none;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.75rem;
+    background: rgba(33, 38, 45, 0.8);
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+}
+
+.repo-link:hover {
+    background: rgba(48, 54, 61, 0.9);
+    border-color: var(--accent-cyan);
+}
+
+/* =============================================================================
+   FOOTER
+   ============================================================================= */
+
+footer {
+    margin-top: 64px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    width: 100%;
+}
