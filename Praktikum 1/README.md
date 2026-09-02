@@ -67,6 +67,6 @@ Event `keydown` dengan filter `!e.repeat` digunakan untuk mengeksekusi aksi disk
 
 ## Tautan Demo & Repositori
 
-- **Live Demo / Deployment** : [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%201/)
-- **Video Demo / Dokumentasi**: [https://youtu.be/xxxxxx](https://your-video-link-here.com)
+- **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%201/)
+- **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1W5wBAuFDqBciNBTEMGXkxfmpCehYFaoe/view?usp=sharing)
 ---
