@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Praktikum Grafika Komputer - Pertemuan 1: Graphics Playground</title>
+    <title>Praktikum 1 - Graphics Playground</title>
     <style>
         * {
             box-sizing: border-box;
@@ -23,7 +23,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -39,13 +39,14 @@
 
         .main-container {
             display: flex;
-            gap: 20px;
+            gap: 24px;
             align-items: flex-start;
-            flex-wrap: wrap;
             justify-content: center;
-            max-width: 1100px;
+            flex-wrap: wrap;
+            max-width: 1240px;
         }
 
+        /* Canvas diset minimal 800 x 500 */
         canvas {
             background-color: #1a1a1e;
             border: 2px solid #323238;
@@ -58,29 +59,17 @@
             background-color: #202024;
             border: 1px solid #323238;
             border-radius: 8px;
-            padding: 18px;
+            padding: 20px;
             width: 360px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .panel h2 {
             font-size: 1.15rem;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             color: #61dafb;
             border-bottom: 1px solid #323238;
             padding-bottom: 6px;
-        }
-
-        .challenge-badge {
-            display: inline-block;
-            background: #2d2d38;
-            border: 1px solid #4a4a5a;
-            color: #ffca28;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 4px;
         }
 
         .instruction-group {
@@ -89,16 +78,17 @@
 
         .instruction-group strong {
             display: block;
-            font-size: 0.85rem;
-            color: #e1e1e6;
+            font-size: 0.82rem;
+            color: #ffca28;
             margin-bottom: 4px;
+            text-transform: uppercase;
         }
 
         .instruction-group ul {
             list-style: none;
-            font-size: 0.8rem;
-            line-height: 1.45;
-            color: #a8a8b3;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            color: #c4c4cc;
         }
 
         .kbd {
@@ -114,12 +104,12 @@
 
         .status-box {
             margin-top: 14px;
-            padding: 10px;
+            padding: 12px;
             background-color: #121214;
             border: 1px solid #29292e;
             border-radius: 6px;
             font-size: 0.78rem;
-            line-height: 1.5;
+            line-height: 1.6;
             font-family: 'Consolas', monospace;
             color: #a8a8b3;
         }
@@ -132,59 +122,45 @@
 <body>
 
     <header>
-        <h1>2D Graphics Playground</h1>
-        <p class="subtitle">Praktikum Grafika Komputer — Canvas 2D Core & Challenges</p>
+        <h1>Canvas 2D Graphics Playground</h1>
+        <p class="subtitle">Praktikum 1 — Pipeline Grafika, Primitives & Interaktivitas</p>
     </header>
 
     <div class="main-container">
-        <!-- Canvas Viewport -->
-        <canvas id="glCanvas" width="640" height="480"></canvas>
+        <!-- Canvas Viewport: 800 x 500 (Memenuhi checklist min 800x500) -->
+        <canvas id="glCanvas" width="800" height="500"></canvas>
 
         <!-- Sidebar Panel -->
         <div class="panel">
-            <h2>Daftar Fitur & Challenge</h2>
+            <h2>Kontrol & Panduan</h2>
 
             <div class="instruction-group">
-                <strong><span class="challenge-badge">D</span>Keyboard Movement (Player)</strong>
+                <strong>Keyboard Translasi</strong>
                 <ul>
-                    <li><span class="kbd">W</span><span class="kbd">A</span><span class="kbd">S</span><span class="kbd">D</span> / Arrow Keys untuk gerak bebas</li>
+                    <li><span class="kbd">W</span><span class="kbd">A</span><span class="kbd">S</span><span class="kbd">D</span> / Arrow Keys : Gerak Segitiga</li>
                 </ul>
             </div>
 
             <div class="instruction-group">
-                <strong><span class="challenge-badge">B & E</span>Mouse Tracking & Coords</strong>
+                <strong>Simulasi & Parameter</strong>
                 <ul>
-                    <li>Lingkaran biru muda mengikuti posisi kursor secara real-time</li>
+                    <li><span class="kbd">Space</span> : Pause / Resume Simulasi</li>
+                    <li><span class="kbd">[</span> / <span class="kbd">]</span> : Atur Parameter Speed Player</li>
+                    <li><span class="kbd">R</span> : Reset Posisi & Objek</li>
                 </ul>
             </div>
 
             <div class="instruction-group">
-                <strong><span class="challenge-badge">C & 34.1</span>Mouse Click Interaction</strong>
+                <strong>Fitur Visual & Mouse</strong>
                 <ul>
-                    <li>Klik Kanvas: Ubah warna objek & spawn static circle baru</li>
-                </ul>
-            </div>
-
-            <div class="instruction-group">
-                <strong><span class="challenge-badge">A & 34.3</span>Bouncing & Multiple Objects</strong>
-                <ul>
-                    <li>Bola-bola bergerak otomatis dengan posisi, warna, dan kecepatan berbeda</li>
-                </ul>
-            </div>
-
-            <div class="instruction-group">
-                <strong><span class="challenge-badge">34.2</span>Trail Mode & Reset</strong>
-                <ul>
-                    <li><span class="kbd">T</span> : Toggle Trail Mode (Clear vs No Clear)</li>
-                    <li><span class="kbd">R</span> : Reset Canvas, Player, & Circles</li>
+                    <li><span class="kbd">T</span> : Toggle Trail Mode</li>
+                    <li><span class="kbd">C</span> : Ubah Warna Player</li>
+                    <li>Klik Mouse : Spawn Lingkaran Baru</li>
                 </ul>
             </div>
 
             <div class="status-box" id="statusDisplay">
-                Mouse  : (X: 0, Y: 0)<br>
-                Player : (X: 0, Y: 0)<br>
-                Circles: 0 spawned<br>
-                Trail  : <span>OFF</span>
+                Loading status...
             </div>
         </div>
     </div>
