@@ -6,6 +6,10 @@ Nama : Mandy Alphafyn Imanuel Tjandra
 NRP  : 5025241173
 Kelas: B
 
+Nama : Muhammad Nawfal Alfanni Darussalam
+NRP  : 5025241185
+Kelas: B
+
 Challenge:
 - Challenge A : Bouncing Object (Position + Velocity + Boundary Check)
 - Challenge B : Follow Mouse (Circle mengikuti koordinat kursor mouse)
