@@ -10,6 +10,14 @@ const modules = [
         githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%201",
         desc: "Fondasi rendering pipeline, primitive drawing (Line, Rect, Circle, Triangle), boundary collision check, state-based keyboard movement, event-based action, trail mode, dan kinematika bouncing ball.",
         tags: ["HTML5 Canvas 2D", "State-Based Input", "Primitive Drawing", "Kinematics", "Boundary Check"]
+    },
+    {
+        id: "Praktikum 02",
+        title: "WebGL Primitive Playground",
+        liveUrl: "./Praktikum 2/index.html",
+        githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%202",
+        desc: "Implementasi native WebGL pipeline, GLSL vertex & fragment shaders, buffer GPU interleaved (VBO), matriks transformasi manual (MVP), manipulasi camera Z, serta mode rasterisasi dinamis (Triangles, Lines, Points).",
+        tags: ["WebGL", "GLSL Shaders", "Matrix MVP", "GPU Buffers", "3D Transforms", "Primitives"]
     }
 ];
 
@@ -17,7 +25,7 @@ const modules = [
 const container = document.getElementById('moduleContainer');
 const readyCountEl = document.getElementById('readyCount');
 
-// Update Status Jumlah Modul Aktif
+// Update Status Jumlah Modul Aktif (otomatis menjadi 2)
 if (readyCountEl) {
     readyCountEl.innerText = modules.length;
 }
