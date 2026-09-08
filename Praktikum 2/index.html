@@ -7,137 +7,237 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #d4d4d4;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 30px 20px;
         }
-        h1 { color: #58a6ff; margin-bottom: 10px; }
-        .container {
+
+        /* Header Style */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: #00ff66;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .header p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* Layout Container */
+        .main-container {
             display: flex;
             flex-direction: row;
-            gap: 20px;
-            background: #161b22;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            max-width: 1000px;
+            gap: 24px;
+            max-width: 1100px;
             width: 100%;
+            align-items: flex-start;
+        }
+
+        /* Canvas Wrapper with Grid Background */
+        .canvas-container {
+            position: relative;
+            background-color: #181818;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 30px 30px;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
         canvas {
-            border: 2px solid #30363d;
-            border-radius: 8px;
-            background-color: #000;
+            display: block;
             cursor: grab;
         }
         canvas:active { cursor: grabbing; }
-        .controls {
+
+        /* Sidebar Style */
+        .sidebar {
             flex: 1;
+            background-color: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            min-width: 320px;
         }
-        .card {
-            background: #21262d;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #30363d;
-        }
-        .card h3 { color: #f0883e; margin-bottom: 8px; font-size: 16px; }
-        ul { list-style-type: none; font-size: 14px; line-height: 1.6; }
-        kbd {
-            background: #30363d;
-            border-radius: 3px;
-            padding: 2px 6px;
-            font-size: 12px;
+
+        .sidebar h2 {
             color: #58a6ff;
-            border: 1px solid #484f58;
+            font-size: 18px;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
         }
-        .status-bar {
+
+        .section-title {
+            color: #ffcc00;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+
+        .control-group {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-item {
+            font-size: 13px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        kbd {
+            background-color: #262626;
+            color: #00ff66;
+            border: 1px solid #3d3d3d;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+            font-size: 12px;
             font-weight: bold;
         }
-        .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            background: #238636;
-            color: white;
-            font-size: 12px;
+
+        /* Status Box */
+        .status-box {
+            background-color: #111;
+            border: 1px solid #282828;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+        }
+        .status-label { color: #aaa; }
+        .status-value { color: #00ff66; font-weight: bold; }
+        .status-value.off { color: #ff4444; }
+
+        /* Interactive Buttons */
         .btn-group {
             display: flex;
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 4px;
         }
         button {
-            background: #21262d;
-            color: #58a6ff;
-            border: 1px solid #30363d;
-            padding: 6px 12px;
-            border-radius: 6px;
+            flex: 1;
+            background: #252525;
+            color: #00ff66;
+            border: 1px solid #3d3d3d;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
         }
-        button:hover { background: #30363d; }
+        button:hover {
+            background: #00ff66;
+            color: #111;
+            border-color: #00ff66;
+        }
     </style>
 </head>
 <body>
 
-    <h1>WebGL Primitive Playground</h1>
+    <div class="header">
+        <h1>WebGL Primitive Playground</h1>
+        <p>Praktikum 2 — Pipeline Grafika, GLSL Shaders, Buffers & Primitives</p>
+    </div>
 
-    <div class="container">
-        <div>
-            <div class="status-bar">
-                <span>Draw Mode: <span id="modeLabel" style="color:#f0883e;">TRIANGLES</span></span>
-                <span class="badge" id="animBadge">Anim: ON</span>
-            </div>
-            <canvas id="webgl-canvas" width="600" height="500"></canvas>
+    <div class="main-container">
+        <!-- Canvas Left Area -->
+        <div class="canvas-container">
+            <canvas id="webgl-canvas" width="650" height="520"></canvas>
         </div>
 
-        <div class="controls">
-            <div class="card">
-                <h3>🎮 Kontrol Interaksi</h3>
-                <ul>
-                    <li><kbd>Drag Mouse</kbd> : Rotasi 3D</li>
-                    <li><kbd>A</kbd> / <kbd>D</kbd> : Rotasi Sumbu Y</li>
-                    <li><kbd>W</kbd> / <kbd>S</kbd> : Zoom In / Zoom Out</li>
-                    <li><kbd>1</kbd> : Mode Triangles</li>
-                    <li><kbd>2</kbd> : Mode Lines</li>
-                    <li><kbd>3</kbd> : Mode Points</li>
-                    <li><kbd>Space</kbd> : Toggle Animasi</li>
-                </ul>
-            </div>
+        <!-- Sidebar Right Area -->
+        <div class="sidebar">
+            <h2>Kontrol & Panduan</h2>
 
-            <div class="card">
-                <h3>⚙️ Pilih Primitive Draw Mode</h3>
-                <div class="btn-group">
-                    <button onclick="setDrawMode(0)">Triangles</button>
-                    <button onclick="setDrawMode(1)">Lines</button>
-                    <button onclick="setDrawMode(2)">Points</button>
+            <div class="control-group">
+                <div class="section-title">Keyboard Rotasi & Kamera</div>
+                <div class="control-item">
+                    <kbd>W</kbd> <kbd>S</kbd> / <kbd>A</kbd> <kbd>D</kbd> : Zoom Kamera & Rotasi Y
                 </div>
             </div>
 
-            <div class="card">
-                <h3>💡 Konsep WebGL Pipeline</h3>
-                <p style="font-size: 12px; line-height: 1.4; color: #8b949e;">
-                    1. <b>Vertex Data & Buffer</b> → Data posisi & warna disalurkan ke VBO.<br>
-                    2. <b>Vertex Shader</b> → Mentransformasi titik & mengirim warna via <i>varying</i>.<br>
-                    3. <b>Rasterization & Fragment Shader</b> → Menghitung warna piksel.<br>
-                    4. <b>Draw Call</b> → Menggambar primitif ke framebuffer setiap frame.
-                </p>
+            <div class="control-group">
+                <div class="section-title">Simulasi & Parameter</div>
+                <div class="control-item">
+                    <kbd>Space</kbd> : Pause / Resume Animasi
+                </div>
+                <div class="control-item">
+                    <kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd> : Ganti Primitive Draw Mode
+                </div>
+                <div class="btn-group">
+                    <button onclick="setDrawMode(0)">TRIANGLES</button>
+                    <button onclick="setDrawMode(1)">LINES</button>
+                    <button onclick="setDrawMode(2)">POINTS</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="section-title">Fitur Visual & Mouse</div>
+                <div class="control-item">
+                    <kbd>Drag Mouse</kbd> : Rotasi Objek 3D Bebas
+                </div>
+            </div>
+
+            <!-- Status Box -->
+            <div class="status-box">
+                <div class="status-row">
+                    <span class="status-label">Status</span>
+                    <span class="status-value" id="valStatus">RUNNING</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Draw Mode</span>
+                    <span class="status-value" id="valMode" style="color:#ffcc00;">TRIANGLES</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Rotation Y</span>
+                    <span class="status-value" id="valRotY">0.00 rad</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Camera Z</span>
+                    <span class="status-value" id="valCamZ">-4.00</span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Animation</span>
+                    <span class="status-value" id="valAnim">ON</span>
+                </div>
             </div>
         </div>
     </div>
 
 <script>
 
-// GSL
+
+//GLSL SHADERS CODE
 const vertexShaderSource = `
     attribute vec3 aPosition;
     attribute vec3 aColor;
@@ -150,7 +250,7 @@ const vertexShaderSource = `
     void main() {
         gl_Position = uMatrix * vec4(aPosition, 1.0);
         gl_PointSize = uPointSize;
-        vColor = aColor; // Meneruskan vertex color ke Fragment Shader
+        vColor = aColor;
     }
 `;
 
@@ -164,16 +264,7 @@ const fragmentShaderSource = `
 `;
 
 
-// MATRIKS MATH UTILITIES (3D Transformation)
-function createIdentityMatrix() {
-    return [
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    ];
-}
-
+// MATRIKS MATH UTILITIES
 function multiplyMatrices(a, b) {
     let out = new Float32Array(16);
     for (let i = 0; i < 4; i++) {
@@ -229,23 +320,14 @@ function createTranslationMatrix(tx, ty, tz) {
 }
 
 
-// INISIALISASI WEBGL & SHADER PROGRAM
+// INIT WEBGL & SHADERS
 const canvas = document.getElementById('webgl-canvas');
-const gl = canvas.getContext('webgl');
-
-if (!gl) {
-    alert("WebGL tidak didukung oleh browser Anda!");
-}
+const gl = canvas.getContext('webgl', { alpha: true });
 
 function createShader(gl, type, source) {
     const shader = gl.createShader(type);
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error('Error compiling shader:', gl.getShaderInfoLog(shader));
-        gl.deleteShader(shader);
-        return null;
-    }
     return shader;
 }
 
@@ -256,42 +338,33 @@ const program = gl.createProgram();
 gl.attachShader(program, vertexShader);
 gl.attachShader(program, fragmentShader);
 gl.linkProgram(program);
-
-if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error('Error linking program:', gl.getProgramInfoLog(program));
-}
-
 gl.useProgram(program);
 
-// Lookups attribute & uniform locations
 const aPositionLoc = gl.getAttribLocation(program, 'aPosition');
 const aColorLoc = gl.getAttribLocation(program, 'aColor');
 const uMatrixLoc = gl.getUniformLocation(program, 'uMatrix');
 const uPointSizeLoc = gl.getUniformLocation(program, 'uPointSize');
 
-// MEMBUAT GEOMETRI (VERTICES & COLORS)
-// Triangle
+
+// GEOMETRI & BUFFERS
 const triangleData = new Float32Array([
-    // x, y, z,       r, g, b
-     0.0,  0.5, 0.0,  1.0, 0.0, 0.0,
-    -0.5, -0.5, 0.0,  0.0, 1.0, 0.0,
-     0.5, -0.5, 0.0,  0.0, 0.0, 1.0
+     0.0,  0.5, 0.0,  1.0, 0.2, 0.2,
+    -0.5, -0.5, 0.0,  0.2, 1.0, 0.2,
+     0.5, -0.5, 0.0,  0.2, 0.4, 1.0
 ]);
 
-// Square (2 Triangles = 6 Vertices)
 const squareData = new Float32Array([
-    -0.5,  0.5, 0.0,  1.0, 0.0, 0.0,
-    -0.5, -0.5, 0.0,  0.0, 1.0, 0.0,
-     0.5, -0.5, 0.0,  0.0, 0.0, 1.0,
+    -0.5,  0.5, 0.0,  1.0, 0.2, 0.2,
+    -0.5, -0.5, 0.0,  0.2, 1.0, 0.2,
+     0.5, -0.5, 0.0,  0.2, 0.2, 1.0,
 
-    -0.5,  0.5, 0.0,  1.0, 0.0, 0.0,
-     0.5, -0.5, 0.0,  0.0, 0.0, 1.0,
-     0.5,  0.5, 0.0,  1.0, 1.0, 0.0
+    -0.5,  0.5, 0.0,  1.0, 0.2, 0.2,
+     0.5, -0.5, 0.0,  0.2, 0.2, 1.0,
+     0.5,  0.5, 0.0,  1.0, 1.0, 0.2
 ]);
 
-// Circle / Polygon (Triangle Fan / Points)
 function createCircleData(radius, segments) {
-    let verts = [0.0, 0.0, 0.0,  1.0, 1.0, 1.0]; // Center vertex
+    let verts = [0.0, 0.0, 0.0,  1.0, 1.0, 1.0];
     for(let i = 0; i <= segments; i++) {
         let angle = (i / segments) * Math.PI * 2;
         let x = Math.cos(angle) * radius;
@@ -305,26 +378,21 @@ function createCircleData(radius, segments) {
 }
 const circleData = createCircleData(0.5, 30);
 
-// Wireframe Cube (12 Lines = 24 Vertices)
 const cubeLinesData = new Float32Array([
-    // Depan
-    -0.4,-0.4, 0.4,  1,0,0,   0.4,-0.4, 0.4,  1,0,0,
-     0.4,-0.4, 0.4,  1,0,0,   0.4, 0.4, 0.4,  1,0,0,
-     0.4, 0.4, 0.4,  1,0,0,  -0.4, 0.4, 0.4,  1,0,0,
-    -0.4, 0.4, 0.4,  1,0,0,  -0.4,-0.4, 0.4,  1,0,0,
-    // Belakang
-    -0.4,-0.4,-0.4,  0,1,1,   0.4,-0.4,-0.4,  0,1,1,
-     0.4,-0.4,-0.4,  0,1,1,   0.4, 0.4,-0.4,  0,1,1,
-     0.4, 0.4,-0.4,  0,1,1,  -0.4, 0.4,-0.4,  0,1,1,
-    -0.4, 0.4,-0.4,  0,1,1,  -0.4,-0.4,-0.4,  0,1,1,
-    // Penghubung
+    -0.4,-0.4, 0.4,  0,1,1,   0.4,-0.4, 0.4,  0,1,1,
+     0.4,-0.4, 0.4,  0,1,1,   0.4, 0.4, 0.4,  0,1,1,
+     0.4, 0.4, 0.4,  0,1,1,  -0.4, 0.4, 0.4,  0,1,1,
+    -0.4, 0.4, 0.4,  0,1,1,  -0.4,-0.4, 0.4,  0,1,1,
+    -0.4,-0.4,-0.4,  1,0,1,   0.4,-0.4,-0.4,  1,0,1,
+     0.4,-0.4,-0.4,  1,0,1,   0.4, 0.4,-0.4,  1,0,1,
+     0.4, 0.4,-0.4,  1,0,1,  -0.4, 0.4,-0.4,  1,0,1,
+    -0.4, 0.4,-0.4,  1,0,1,  -0.4,-0.4,-0.4,  1,0,1,
     -0.4,-0.4, 0.4,  0,1,0,  -0.4,-0.4,-0.4,  0,1,0,
      0.4,-0.4, 0.4,  0,1,0,   0.4,-0.4,-0.4,  0,1,0,
      0.4, 0.4, 0.4,  0,1,0,   0.4, 0.4,-0.4,  0,1,0,
     -0.4, 0.4, 0.4,  0,1,0,  -0.4, 0.4,-0.4,  0,1,0
 ]);
 
-// Helper Function: Membuat Buffer WebGL
 function createGPUBuffer(data) {
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -338,8 +406,9 @@ const objCircle   = createGPUBuffer(circleData);
 const objCube     = createGPUBuffer(cubeLinesData);
 
 
-// STATE & INTERAKSI
-let drawModeIndex = 0; // 0: TRIANGLES, 1: LINES, 2: POINTS
+    
+// INTERAKSI & STATE
+let drawModeIndex = 0;
 const drawModes = [gl.TRIANGLES, gl.LINES, gl.POINTS];
 const drawModeNames = ["TRIANGLES", "LINES", "POINTS"];
 
@@ -352,7 +421,6 @@ let isDragging = false;
 let lastMouseX = 0;
 let lastMouseY = 0;
 
-// Mouse Interaction
 canvas.addEventListener('mousedown', (e) => {
     isDragging = true;
     lastMouseX = e.clientX;
@@ -373,7 +441,6 @@ canvas.addEventListener('mousemove', (e) => {
     lastMouseY = e.clientY;
 });
 
-// Keyboard Interaction
 window.addEventListener('keydown', (e) => {
     switch (e.key.toLowerCase()) {
         case 'a': rotY -= 0.1; break;
@@ -385,60 +452,59 @@ window.addEventListener('keydown', (e) => {
         case '3': setDrawMode(2); break;
         case ' ': 
             isAnimating = !isAnimating;
-            document.getElementById('animBadge').innerText = `Anim: ${isAnimating ? 'ON' : 'OFF'}`;
-            document.getElementById('animBadge').style.background = isAnimating ? '#238636' : '#da3633';
+            updateStatusUI();
             break;
     }
 });
 
 function setDrawMode(index) {
     drawModeIndex = index;
-    document.getElementById('modeLabel').innerText = drawModeNames[index];
+    updateStatusUI();
+}
+
+function updateStatusUI() {
+    document.getElementById('valMode').innerText = drawModeNames[drawModeIndex];
+    document.getElementById('valStatus').innerText = isAnimating ? "RUNNING" : "PAUSED";
+    document.getElementById('valStatus').style.color = isAnimating ? "#00ff66" : "#ffcc00";
+    document.getElementById('valAnim').innerText = isAnimating ? "ON" : "OFF";
+    document.getElementById('valAnim').className = isAnimating ? "status-value" : "status-value off";
 }
 
 
 // RENDER LOOP
 function drawObject(obj, activeDrawMode, modelMatrix, projMatrix) {
-    // Gabungkan Matriks Perspektif & Model
     let mvp = multiplyMatrices(projMatrix, modelMatrix);
     gl.uniformMatrix4fv(uMatrixLoc, false, mvp);
 
-    // Bind Buffer
     gl.bindBuffer(gl.ARRAY_BUFFER, obj.buffer);
 
-    // Set Attributes (Position & Color dari Buffer yang sama)
     const FSIZE = Float32Array.BYTES_PER_ELEMENT;
-    
-    // Position Attribute
     gl.vertexAttribPointer(aPositionLoc, 3, gl.FLOAT, false, FSIZE * 6, 0);
     gl.enableVertexAttribArray(aPositionLoc);
 
-    // Color Attribute
     gl.vertexAttribPointer(aColorLoc, 3, gl.FLOAT, false, FSIZE * 6, FSIZE * 3);
     gl.enableVertexAttribArray(aColorLoc);
 
-    // Set Point Size (apabila menggunakan gl.POINTS)
     gl.uniform1f(uPointSizeLoc, 6.0);
-
-    // Draw Call
     gl.drawArrays(activeDrawMode, 0, obj.count);
 }
 
 function render() {
     gl.enable(gl.DEPTH_TEST);
-    gl.clearColor(0.05, 0.07, 0.1, 1.0);
+    gl.clearColor(0.0, 0.0, 0.0, 0.0); // Transparent canvas background to see grid
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // Update Animasi Rotasi
     if (isAnimating) {
         rotY += 0.01;
     }
 
-    // Matriks Proyeksi Perspektif
+    // Dynamic UI Updates
+    document.getElementById('valRotY').innerText = rotY.toFixed(2) + " rad";
+    document.getElementById('valCamZ').innerText = cameraZ.toFixed(2);
+
     const aspect = canvas.width / canvas.height;
     const projMatrix = createPerspectiveMatrix(Math.PI / 4, aspect, 0.1, 100.0);
 
-    // Transformasi Utama Scene / Kamera
     let viewMatrix = createTranslationMatrix(0, 0, cameraZ);
     let rx = createRotationXMatrix(rotX);
     let ry = createRotationYMatrix(rotY);
@@ -447,30 +513,27 @@ function render() {
 
     const currentMode = drawModes[drawModeIndex];
 
-    // --- 1. Triangle (Kiri Atas) ---
-    let mTriangle = multiplyMatrices(sceneMatrix, createTranslationMatrix(-1.2, 0.8, 0));
+    // 1. Triangle
+    let mTriangle = multiplyMatrices(sceneMatrix, createTranslationMatrix(-1.2, 0.7, 0));
     drawObject(objTriangle, currentMode, mTriangle, projMatrix);
 
-    // --- 2. Square (Kiri Bawah) ---
+    // 2. Square
     let mSquare = multiplyMatrices(sceneMatrix, createTranslationMatrix(-1.2, -0.6, 0));
     drawObject(objSquare, currentMode, mSquare, projMatrix);
 
-    // --- 3. Circle / Fan (Tengah) ---
+    // 3. Circle / Fan
     let mCircle = multiplyMatrices(sceneMatrix, createTranslationMatrix(0.0, -0.6, 0));
-    // Lingkaran menggunakan TRIANGLE_FAN jika mode default, atau mengikuti global mode
     let circleMode = (drawModeIndex === 0) ? gl.TRIANGLE_FAN : currentMode;
     drawObject(objCircle, circleMode, mCircle, projMatrix);
 
-    // --- 4. Wireframe Cube (Kanan) ---
-    let mCube = multiplyMatrices(sceneMatrix, createTranslationMatrix(1.2, 0.2, 0));
-    // Cube bawaannya adalah garis
+    // 4. Wireframe Cube
+    let mCube = multiplyMatrices(sceneMatrix, createTranslationMatrix(1.2, 0.1, 0));
     let cubeMode = (drawModeIndex === 0) ? gl.LINES : currentMode;
     drawObject(objCube, cubeMode, mCube, projMatrix);
 
     requestAnimationFrame(render);
 }
 
-// Mulai Render Loop
 requestAnimationFrame(render);
 
 </script>
