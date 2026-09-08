@@ -60,3 +60,9 @@ $$\text{MVP} = \text{Matrix}_{\text{proj}} \times \text{Matrix}_{\text{view}} \t
 
 * **Depth Testing**: Mengaktifkan `gl.DEPTH_TEST` untuk menangani urutan kedalaman objek di ruang 3D secara presisi.
 ---
+
+## Tautan & Demo
+
+* 🌐 **Live Demo**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%202/)
+* 📂 **Video Demo**: [Video Demo](www.test.com)
+---
