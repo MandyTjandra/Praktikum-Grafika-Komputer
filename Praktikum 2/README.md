@@ -64,5 +64,5 @@ $$\text{MVP} = \text{Matrix}_{\text{proj}} \times \text{Matrix}_{\text{view}} \t
 ## Tautan & Demo
 
 * 🌐 **Live Demo**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%202/)
-* 📂 **Video Demo**: [Video Demo](www.test.com)
+* 📂 **Video Demo**: [Video Demo](https://drive.google.com/file/d/1Ho8qDMwKmjfoRhZRXq-lY2TpNkcLKBxF/view?usp=sharing)
 ---
