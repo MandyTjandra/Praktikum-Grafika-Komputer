@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Transformation Playground - WebGL2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="canvas-container">
+    <canvas id="glcanvas" width="700" height="700"></canvas>
+  </div>
+
+  <div id="hud">
+    <div class="hud-title">Transformation HUD</div>
+
+    <div class="hud-box">
+      <strong>Objek 1 (Terkontrol):</strong><br>
+      Posisi: <span id="val-pos" class="val">(0.00, 0.00)</span><br>
+      Rotasi: <span id="val-rot" class="val">0.00°</span><br>
+      Skala: <span id="val-scale" class="val">(1.00, 1.00)</span><br>
+      Order: <span id="val-order" class="val">T × R × S</span>
+    </div>
+
+    <div class="hud-box">
+      <strong>Objek 2 (Auto Orbit):</strong><br>
+      Status: <span class="val">Active Orbit</span><br>
+      Radius: <span class="val">0.55</span> | Speed: <span class="val">1.2 rad/s</span>
+    </div>
+
+    <div class="hud-box">
+      <strong>Kontrol Keyboard:</strong><br>
+      • Translasi: <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / Panah<br>
+      • Rotasi: <kbd>Q</kbd> / <kbd>E</kbd><br>
+      • Uniform Scale: <kbd>Z</kbd> / <kbd>X</kbd><br>
+      • Non-Uniform Scale: <kbd>U</kbd><kbd>I</kbd> (X), <kbd>O</kbd><kbd>P</kbd> (Y)<br>
+      • Challenge A (Reset): <kbd>R</kbd><br>
+      • Challenge B (Preset): <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd><br>
+      • Challenge C (Toggle Order): <kbd>T</kbd><br>
+      • Challenge D (Mouse Translation): Klik kanvas
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

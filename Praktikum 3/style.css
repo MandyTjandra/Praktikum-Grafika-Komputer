@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #121214;
+  color: #e1e1e6;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#canvas-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #1b1b22 0%, #0d0d10 100%);
+}
+
+canvas {
+  background-color: #1a1a1e;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  border: 1px solid #29292e;
+  border-radius: 4px;
+  cursor: crosshair;
+}
+
+#hud {
+  width: 340px;
+  background: #202024;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-left: 1px solid #323238;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-y: auto;
+}
+
+.hud-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #00b37e;
+  border-bottom: 1px solid #323238;
+  padding-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.hud-box {
+  background: #121214;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #29292e;
+}
+
+.val {
+  color: #04d361;
+  font-weight: 600;
+}
+
+kbd {
+  background: #323238;
+  color: #f75a68;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #4a4a52;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0 1px;
+}
