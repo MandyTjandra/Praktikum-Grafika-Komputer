@@ -119,19 +119,11 @@ const colorLoc = gl.getUniformLocation(program, "u_color");
 // ==========================================
 // 4. SETUP BUFFER GEOMETRI LOKAL (VBO / VAO)
 // ==========================================
-// Geometri panah asimetris agar orientasi tampak jelas
+// Geometri segitiga sama kaki simetris (Puncak atas: +Y)
 const objectVertices = new Float32Array([
-  0.0,   0.15,
- -0.08, -0.12,
-  0.0,  -0.06,
-
-  0.0,   0.15,
-  0.0,  -0.06,
-  0.08, -0.12,
-
-  0.08, -0.06,
-  0.16, -0.12,
-  0.0,  -0.06
+   0.0,   0.15,  // Titik puncak atas
+  -0.12, -0.12,  // Titik alas kiri
+   0.12, -0.12   // Titik alas kanan
 ]);
 
 const vaoObject = gl.createVertexArray();
@@ -307,7 +299,7 @@ function render(now) {
 
   gl.uniformMatrix3fv(matrixLoc, false, modelMatrix1);
   gl.uniform4f(colorLoc, 0.0, 0.8, 1.0, 1.0); // Cyan
-  gl.drawArrays(gl.TRIANGLES, 0, 9);
+  gl.drawArrays(gl.TRIANGLES, 0, 3); // 3 Vertices untuk 1 segitiga
 
   // 3. Gambar Objek 2 (Auto Orbit - Challenge F)
   const T_orbit = m3.translation(0.55, 0.0);
@@ -319,7 +311,7 @@ function render(now) {
 
   gl.uniformMatrix3fv(matrixLoc, false, modelMatrix2);
   gl.uniform4f(colorLoc, 1.0, 0.6, 0.0, 1.0); // Oranye
-  gl.drawArrays(gl.TRIANGLES, 0, 9);
+  gl.drawArrays(gl.TRIANGLES, 0, 3); // 3 Vertices untuk 1 segitiga
 
   requestAnimationFrame(render);
 }
