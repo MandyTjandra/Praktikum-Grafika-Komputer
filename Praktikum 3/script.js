@@ -232,21 +232,21 @@ function update(deltaTime) {
   if (keys['q'] || keys['Q']) obj1.rot += rotSpeed;
   if (keys['e'] || keys['E']) obj1.rot -= rotSpeed;
 
-  // Keyboard Uniform Scaling
-  if (keys['z'] || keys['Z']) {
-    obj1.scale[0] = Math.max(0.1, obj1.scale[0] - scaleSpeed);
-    obj1.scale[1] = Math.max(0.1, obj1.scale[1] - scaleSpeed);
-  }
-  if (keys['x'] || keys['X']) {
+  // Keyboard Uniform Scaling ( + / - )
+  if (keys['+'] || keys['=']) {
     obj1.scale[0] += scaleSpeed;
     obj1.scale[1] += scaleSpeed;
   }
+  if (keys['-'] || keys['_']) {
+    obj1.scale[0] = Math.max(0.1, obj1.scale[0] - scaleSpeed);
+    obj1.scale[1] = Math.max(0.1, obj1.scale[1] - scaleSpeed);
+  }
 
-  // Keyboard Non-Uniform Scaling
-  if (keys['u'] || keys['U']) obj1.scale[0] = Math.max(0.1, obj1.scale[0] - scaleSpeed);
-  if (keys['i'] || keys['I']) obj1.scale[0] += scaleSpeed;
-  if (keys['o'] || keys['O']) obj1.scale[1] = Math.max(0.1, obj1.scale[1] - scaleSpeed);
-  if (keys['p'] || keys['P']) obj1.scale[1] += scaleSpeed;
+  // Keyboard Non-Uniform Scaling: Z/X untuk Scale X, C/V untuk Scale Y
+  if (keys['z'] || keys['Z']) obj1.scale[0] = Math.max(0.1, obj1.scale[0] - scaleSpeed);
+  if (keys['x'] || keys['X']) obj1.scale[0] += scaleSpeed;
+  if (keys['c'] || keys['C']) obj1.scale[1] = Math.max(0.1, obj1.scale[1] - scaleSpeed);
+  if (keys['v'] || keys['V']) obj1.scale[1] += scaleSpeed;
 
   // Automatic Animation Objek 2 (Orbit)
   autoAngle += 1.2 * deltaTime;
@@ -301,10 +301,11 @@ function render(now) {
   gl.uniform4f(colorLoc, 0.0, 0.8, 1.0, 1.0); // Cyan
   gl.drawArrays(gl.TRIANGLES, 0, 3); // 3 Vertices untuk 1 segitiga
 
-  // 3. Gambar Objek 2 (Auto Orbit - Challenge F)
+  // 3. Gambar Objek 2 (Auto Orbit + Animated Scaling - Challenge F)
+  const orbitScale = 0.45 + 0.2 * Math.sin(autoAngle * 2.0); // Animated pulsing scale
   const T_orbit = m3.translation(0.55, 0.0);
   const R_orbit = m3.rotation(autoAngle);
-  const S_orbit = m3.scaling(0.6, 0.6);
+  const S_orbit = m3.scaling(orbitScale, orbitScale);
 
   // Matrix Composition: R_orbit * T_orbit * S_orbit
   const modelMatrix2 = m3.multiply(R_orbit, m3.multiply(T_orbit, S_orbit));
