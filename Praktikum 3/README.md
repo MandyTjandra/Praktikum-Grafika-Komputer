@@ -10,9 +10,9 @@ Aplikasi WebGL2 interaktif 2D untuk menguji dan memvisualisasikan matriks transf
 * NRP  : 5025241173
 * Kelas: B
 
-Nama : Muhammad Nawfal Alfanni Darussalam
-NRP  : 5025241185
-Kelas: B
+* Nama : Muhammad Nawfal Alfanni Darussalam
+* NRP  : 5025241185
+* Kelas: B
 
 ---
 
