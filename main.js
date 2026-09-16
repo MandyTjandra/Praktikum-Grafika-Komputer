@@ -18,6 +18,14 @@ const modules = [
         githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%202",
         desc: "Implementasi native WebGL pipeline, GLSL vertex & fragment shaders, buffer GPU interleaved (VBO), matriks transformasi manual (MVP), manipulasi camera Z, serta mode rasterisasi dinamis (Triangles, Lines, Points).",
         tags: ["WebGL", "GLSL Shaders", "Matrix MVP", "GPU Buffers", "3D Transforms", "Primitives"]
+    },
+    {
+        id: "Praktikum 03",
+        title: "Interactive Transformation Playground (WebGL2)",
+        liveUrl: "./Praktikum 3/index.html",
+        githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%203",
+        desc: "Visualisasi interaktif matriks transformasi geometri 2D (Translasi, Rotasi, Uniform/Non-Uniform Scaling) pada WebGL2 NDC. Komparasi hierarki transform order TRS (Local Pivot) vs RTS (World Pivot Orbit), kontrol mouse-to-NDC, preset matriks, serta animasi dynamic pulsing & orbiting object.",
+        tags: ["WebGL2", "2D Transformations", "Matrix Order (TRS vs RTS)", "NDC Coordinates", "Non-Uniform Scaling", "Orbit & Pulsing Animation"]
     }
 ];
 
@@ -25,7 +33,7 @@ const modules = [
 const container = document.getElementById('moduleContainer');
 const readyCountEl = document.getElementById('readyCount');
 
-// Update Status Jumlah Modul Aktif (otomatis menjadi 2)
+// Update Status Jumlah Modul Aktif (otomatis menjadi 3)
 if (readyCountEl) {
     readyCountEl.innerText = modules.length;
 }
