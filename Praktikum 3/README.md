@@ -7,8 +7,8 @@ Aplikasi WebGL2 interaktif 2D untuk menguji dan memvisualisasikan matriks transf
 ## 1. Identitas Kelompok
 
 * Nama : Mandy Alphafyn Imanuel Tjandra
-* NRP  : 5025241173
-* Kelas: B
+  NRP  : 5025241173
+  Kelas: B
 
 * Nama : Muhammad Nawfal Alfanni Darussalam
 * NRP  : 5025241185
