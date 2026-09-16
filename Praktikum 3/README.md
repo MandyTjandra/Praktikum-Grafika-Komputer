@@ -57,5 +57,5 @@ Aplikasi membandingkan dua urutan perkalian matriks kolom-utama (*Column-Major*)
 # Tautan Demo & Repositori
 
 - **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%203/index.html)
-- **Video Demo / Dokumentasi**: [Video Demo](link)
+- **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1BsPLRluAo9Ke9Chj261xiqU291BhHeNS/view?usp=sharing)
 ---
