@@ -52,3 +52,9 @@ Aplikasi membandingkan dua urutan perkalian matriks kolom-utama (*Column-Major*)
 * **Challenge D (Mouse Translation)**: Translasi posisi objek ke titik koordinat klik pengguna dengan konversi sistem koordinat layar piksel ke NDC WebGL $[-1, 1]$.[cite: 2]
 * **Challenge E (Non-Uniform Scaling)**: Manipulasi skala independen untuk sumbu X (`Z`/`X`) dan sumbu Y (`C`/`V`).[cite: 1, 2]
 * **Challenge F (Animated Scaling / Orbiting Object)**: Objek 2 yang mengorbit origin secara otomatis disertai efek perubahan skala (*pulsing scale*) dinamis berbasis fungsi sinusoide.[cite: 1, 2]
+
+# Tautan Demo & Repositori
+
+- **Live Demo / Deployment**: [Link Web](link)
+- **Video Demo / Dokumentasi**: [Video Demo](link)
+---
