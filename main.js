@@ -26,6 +26,14 @@ const modules = [
         githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%203",
         desc: "Visualisasi interaktif matriks transformasi geometri 2D (Translasi, Rotasi, Uniform/Non-Uniform Scaling) pada WebGL2 NDC. Komparasi hierarki transform order TRS (Local Pivot) vs RTS (World Pivot Orbit), kontrol mouse-to-NDC, preset matriks, serta animasi dynamic pulsing & orbiting object.",
         tags: ["WebGL2", "2D Transformations", "Matrix Order (TRS vs RTS)", "NDC Coordinates", "Non-Uniform Scaling", "Orbit & Pulsing Animation"]
+    },
+    {
+        id: "Praktikum 04",
+        title: "3D Lighting & Shading Playground (WebGL2)",
+        liveUrl: "./Praktikum 4/index.html",
+        githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%204",
+        desc: "Implementasi model pencahayaan 3D (Phong/Blinn-Phong Lighting), kalkulasi vektor normal permukaan, komponen ambient, diffuse, dan specular reflection, material properties, serta interaksi rotasi kamera 3D.",
+        tags: ["WebGL2", "3D Lighting", "Phong / Blinn-Phong", "Surface Normals", "Camera Projection", "Shading"]
     }
 ];
 
