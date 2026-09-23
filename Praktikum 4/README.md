@@ -65,5 +65,5 @@ Aplikasi menyediakan dua jenis matriks proyeksi utama:
 
 ## 5. Tautan Demo & Repositori
 
-* **Live Demo / Deployment**: [Link Web](taruh link disini)
+* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%204/)
 * **Video Demo / Dokumentasi**: [Video Demo](taruh link disini oi)
