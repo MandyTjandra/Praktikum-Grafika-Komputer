@@ -65,5 +65,5 @@ Aplikasi menyediakan dua jenis matriks proyeksi utama:
 
 ## 5. Tautan Demo & Repositori
 
-* **Live Demo / Deployment**: [Link Web](https://username.github.io/repository-name/index.html)
-* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/xxxxx/view?usp=sharing)
+* **Live Demo / Deployment**: [Link Web](taruh link disini)
+* **Video Demo / Dokumentasi**: [Video Demo](taruh link disini oi)
