@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Textured & Lit Cube Playground — Full Control</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="layout-container">
+    <!-- Main Display Section -->
+    <main class="viewport-area">
+      <header>
+        <h1>Textured and Lit Cube Playground</h1>
+        <p>Praktikum Grafika Komputer — WebGL2 Lighting, Shading & Texture</p>
+      </header>
+
+      <div class="canvas-wrapper">
+        <canvas id="glCanvas" width="960" height="600"></canvas>
+      </div>
+
+      <!-- Real-time HUD -->
+      <section id="hud">
+        <div>Shading: <strong id="hudShading">FLAT</strong></div>
+        <div>Filter: <strong id="hudFilter">LINEAR</strong></div>
+        <div>Wrap: <strong id="hudWrap">REPEAT</strong></div>
+        <div>UV Scale: <strong id="hudUv">1.00</strong></div>
+        <div>Shininess: <strong id="hudShininess">32.0</strong></div>
+        <div>Ambient: <strong id="hudAmbient">0.18</strong></div>
+        <div>Light: <strong id="hudLight">(2.00, 2.00, 2.00)</strong></div>
+      </section>
+
+      <!-- Keyboard Shortcuts Info -->
+      <section class="controls-guide">
+        <strong>Hotkeys:</strong>
+        <span><strong>Panah</strong>: Light X/Y</span>
+        <span><strong>W / S</strong>: Light Z</span>
+        <span><strong>F</strong>: Toggle Flat/Smooth</span>
+        <span><strong>T</strong>: Cycle Filter</span>
+        <span><strong>G</strong>: Cycle Wrap</span>
+        <span><strong>[ / ]</strong>: UV Scale</span>
+        <span><strong>- / +</strong>: Shininess</span>
+        <span><strong>1 / 2 / 3</strong>: Ambient / Diffuse / Specular Toggle</span>
+        <span><strong>R</strong>: Reset</span>
+      </section>
+    </main>
+
+    <!-- Interactive Settings Control Panel -->
+    <aside class="control-panel">
+      <h2>Pengaturan Scene</h2>
+      <button id="btnReset" class="btn btn-warning">Reset Default (R)</button>
+
+      <!-- 1. Transformasi Cube -->
+      <details open>
+        <summary>Transformasi Cube</summary>
+        <div class="panel-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="ctrlAutoRotate" checked />
+            Rotasi Otomatis
+          </label>
+
+          <label>Kecepatan Rotasi X: <span id="valRotSpeedX">20</span>°/s</label>
+          <input type="range" id="ctrlRotSpeedX" min="-180" max="180" value="20" step="5" />
+
+          <label>Kecepatan Rotasi Y: <span id="valRotSpeedY">35</span>°/s</label>
+          <input type="range" id="ctrlRotSpeedY" min="-180" max="180" value="35" step="5" />
+
+          <label>Rotasi Manual X: <span id="valManualRotX">20</span>°</label>
+          <input type="range" id="ctrlManualRotX" min="0" max="360" value="20" step="1" />
+
+          <label>Rotasi Manual Y: <span id="valManualRotY">30</span>°</label>
+          <input type="range" id="ctrlManualRotY" min="0" max="360" value="30" step="1" />
+
+          <div class="divider"></div>
+
+          <label class="checkbox-label">
+            <input type="checkbox" id="ctrlNonUniformScale" />
+            Non-Uniform Scale Preset (1.8, 0.6, 1.0)
+          </label>
+
+          <label>Scale X: <span id="valScaleX">1.0</span></label>
+          <input type="range" id="ctrlScaleX" min="0.2" max="3.0" value="1.0" step="0.1" />
+
+          <label>Scale Y: <span id="valScaleY">1.0</span></label>
+          <input type="range" id="ctrlScaleY" min="0.2" max="3.0" value="1.0" step="0.1" />
+
+          <label>Scale Z: <span id="valScaleZ">1.0</span></label>
+          <input type="range" id="ctrlScaleZ" min="0.2" max="3.0" value="1.0" step="0.1" />
+        </div>
+      </details>
+
+      <!-- 2. Shading & Normal Model -->
+      <details open>
+        <summary>Shading & Normal Matrix</summary>
+        <div class="panel-group">
+          <label>Mode Shading:</label>
+          <div class="radio-inline">
+            <label><input type="radio" name="ctrlShading" value="FLAT" checked /> Flat</label>
+            <label><input type="radio" name="ctrlShading" value="SMOOTH" /> Smooth</label>
+          </div>
+
+          <label class="checkbox-label" title="Eksperimen 1: Normalisasi vektor normal di fragment shader">
+            <input type="checkbox" id="ctrlNormalizeNormal" checked />
+            Gunakan normalize(N) di Shader
+          </label>
+
+          <label class="checkbox-label" title="Eksperimen 9: Menjaga ortogonalitas normal saat non-uniform scale">
+            <input type="checkbox" id="ctrlUseNormalMatrix" checked />
+            Gunakan Normal Matrix (Inverse-Transpose)
+          </label>
+        </div>
+      </details>
+
+      <!-- 3. Pencahayaan & Phong Reflection -->
+      <details open>
+        <summary>Pencahayaan (Lighting)</summary>
+        <div class="panel-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="ctrlLightOrbit" />
+            Orbit Otomatis Cahaya
+          </label>
+
+          <label>Orbit Speed: <span id="valOrbitSpeed">1.0</span> rad/s</label>
+          <input type="range" id="ctrlOrbitSpeed" min="0.1" max="4.0" value="1.0" step="0.1" />
+
+          <label>Light Pos X: <span id="valLightX">2.0</span></label>
+          <input type="range" id="ctrlLightX" min="-5.0" max="5.0" value="2.0" step="0.1" />
+
+          <label>Light Pos Y: <span id="valLightY">2.0</span></label>
+          <input type="range" id="ctrlLightY" min="-5.0" max="5.0" value="2.0" step="0.1" />
+
+          <label>Light Pos Z: <span id="valLightZ">2.0</span></label>
+          <input type="range" id="ctrlLightZ" min="-5.0" max="5.0" value="2.0" step="0.1" />
+
+          <label>Warna Cahaya:</label>
+          <input type="color" id="ctrlLightColor" value="#ffffff" />
+
+          <div class="divider"></div>
+
+          <label>Ambient Strength: <span id="valAmbient">0.18</span></label>
+          <input type="range" id="ctrlAmbient" min="0.0" max="1.0" value="0.18" step="0.02" />
+
+          <label>Shininess (Highlight): <span id="valShininess">32.0</span></label>
+          <input type="range" id="ctrlShininess" min="2.0" max="128.0" value="32.0" step="2.0" />
+
+          <div class="divider"></div>
+
+          <label>Komponen Aktif:</label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="ctrlEnableAmbient" checked /> Ambient [1]
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="ctrlEnableDiffuse" checked /> Diffuse [2]
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="ctrlEnableSpecular" checked /> Specular [3]
+          </label>
+          <label class="checkbox-label" title="Eksperimen 10: Tampilkan tekstur tanpa pengaruh pencahayaan">
+            <input type="checkbox" id="ctrlTextureOnly" /> Hanya Tekstur (No Light)
+          </label>
+        </div>
+      </details>
+
+      <!-- 4. Tekstur, UV, Filtering, Wrapping -->
+      <details open>
+        <summary>Tekstur & UV</summary>
+        <div class="panel-group">
+          <label>Sumber Tekstur:</label>
+          <select id="ctrlTextureSource">
+            <option value="CHECKER">Procedural Checkerboard (Default)</option>
+            <option value="CUSTOM_FILE">Upload Gambar Kustom...</option>
+          </select>
+
+          <div id="fileUploadWrapper" style="display: none; margin-top: 6px;">
+            <input type="file" id="ctrlTextureFile" accept="image/*" />
+          </div>
+
+          <label>UV Scale: <span id="valUvScale">1.00</span></label>
+          <input type="range" id="ctrlUvScale" min="0.25" max="5.0" value="1.00" step="0.05" />
+
+          <label>Minification Filter (MIN_FILTER):</label>
+          <select id="ctrlMinFilter">
+            <option value="LINEAR">LINEAR (Smooth)</option>
+            <option value="NEAREST">NEAREST (Pixelated)</option>
+            <option value="LINEAR_MIPMAP_LINEAR">LINEAR_MIPMAP_LINEAR (Trilinear)</option>
+            <option value="NEAREST_MIPMAP_NEAREST">NEAREST_MIPMAP_NEAREST</option>
+            <option value="LINEAR_MIPMAP_NEAREST">LINEAR_MIPMAP_NEAREST</option>
+            <option value="NEAREST_MIPMAP_LINEAR">NEAREST_MIPMAP_LINEAR</option>
+          </select>
+
+          <label>Magnification Filter (MAG_FILTER):</label>
+          <select id="ctrlMagFilter">
+            <option value="LINEAR">LINEAR</option>
+            <option value="NEAREST">NEAREST</option>
+          </select>
+
+          <label>Wrapping Mode (S & T):</label>
+          <select id="ctrlWrapMode">
+            <option value="REPEAT">REPEAT</option>
+            <option value="CLAMP_TO_EDGE">CLAMP_TO_EDGE</option>
+            <option value="MIRRORED_REPEAT">MIRRORED_REPEAT</option>
+          </select>
+        </div>
+      </details>
+
+      <!-- 5. Kamera & Perspektif -->
+      <details>
+        <summary>Kamera & Proyeksi</summary>
+        <div class="panel-group">
+          <label>Camera Pos X: <span id="valCamX">0.0</span></label>
+          <input type="range" id="ctrlCamX" min="-6.0" max="6.0" value="0.0" step="0.1" />
+
+          <label>Camera Pos Y: <span id="valCamY">1.4</span></label>
+          <input type="range" id="ctrlCamY" min="-6.0" max="6.0" value="1.4" step="0.1" />
+
+          <label>Camera Pos Z: <span id="valCamZ">4.0</span></label>
+          <input type="range" id="ctrlCamZ" min="1.0" max="10.0" value="4.0" step="0.1" />
+
+          <label>Field of View (FOV): <span id="valFov">60</span>°</label>
+          <input type="range" id="ctrlFov" min="30" max="100" value="60" step="1" />
+        </div>
+      </details>
+    </aside>
+  </div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
