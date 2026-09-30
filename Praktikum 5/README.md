@@ -80,5 +80,5 @@ Selain keyboard, seluruh parameter aplikasi dapat dikontrol melalui sidebar inte
 
 ## 6. Tautan Demo & Repositori
 
-* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%204/index.html)
+* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%205/index.html)
 * **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/xxxxxx/view?usp=sharing)
