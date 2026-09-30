@@ -34,6 +34,14 @@ const modules = [
         githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%204",
         desc: "Implementasi model pencahayaan 3D (Phong/Blinn-Phong Lighting), kalkulasi vektor normal permukaan, komponen ambient, diffuse, dan specular reflection, material properties, serta interaksi rotasi kamera 3D.",
         tags: ["WebGL2", "3D Lighting", "Phong / Blinn-Phong", "Surface Normals", "Camera Projection", "Shading"]
+    },
+    {
+        id: "Praktikum 05",
+        title: "Textured & Lit Cube Playground (WebGL2)",
+        liveUrl: "./Praktikum 5/index.html",
+        githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%205",
+        desc: "Penerapan pemetaan tekstur 2D (Texture Mapping, UV Coordinates, Texture Filtering & Wrapping), model pencahayaan Phong terintegrasi dengan tekstur, normal matrix (invers-transpose) untuk koreksi non-uniform scale, serta perbandingan flat vs smooth shading.",
+        tags: ["WebGL2", "Texture Mapping", "UV Coordinates", "Filtering & Wrapping", "Phong Reflection", "Normal Matrix", "Flat vs Smooth"]
     }
 ];
 
@@ -41,7 +49,7 @@ const modules = [
 const container = document.getElementById('moduleContainer');
 const readyCountEl = document.getElementById('readyCount');
 
-// Update Status Jumlah Modul Aktif (otomatis menjadi 3)
+// Update Status Jumlah Modul Aktif
 if (readyCountEl) {
     readyCountEl.innerText = modules.length;
 }
