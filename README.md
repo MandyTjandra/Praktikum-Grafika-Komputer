@@ -74,13 +74,6 @@ Aplikasi ini dikembangkan menggunakan HTML5, CSS3, JavaScript ES Modules, dan We
 
 ## 6. Tautan Demo & Repositori
 
-* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%204/index.html)
-* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/xxxxxx/view?usp=sharing)
-
----
-
-## Tautan Proyek
-
 * **Live Demo (GitHub Pages)** : [Link Website Pusat](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/)
 * **Repositori GitHub**        : [Link Repo](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main)
 
