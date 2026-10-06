@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Three.js Mini 3D Scene - Live Server</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Import map untuk CDN ES Module -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/",
+        "lil-gui": "https://cdn.jsdelivr.net/npm/lil-gui@0.20.0/dist/lil-gui.esm.min.js"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div id="app">
+    <div id="hud">
+      <strong>Three.js Mini 3D Scene</strong>
+      <span id="info">Loading...</span>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+
+</html>

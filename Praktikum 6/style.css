@@ -1,0 +1,49 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: #050816;
+  font-family: Arial, sans-serif;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#hud {
+  position: absolute;
+  z-index: 10;
+  top: 16px;
+  left: 16px;
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  color: white;
+  background: rgba(8, 15, 30, 0.78);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* Memastikan panel controller selalu di atas canvas */
+.lil-gui {
+  --font-size: 11px;
+  z-index: 100 !important;
+}

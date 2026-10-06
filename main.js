@@ -36,7 +36,8 @@ const modules = [
         tags: ["WebGL2", "3D Lighting", "Phong / Blinn-Phong", "Surface Normals", "Camera Projection", "Shading"]
     },
     {
-        id: "Praktikum 05",
+        id: "Praktikum 0
+        5",
         title: "Textured & Lit Cube Playground (WebGL2)",
         liveUrl: "./Praktikum 5/index.html",
         githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%205",
