@@ -93,5 +93,5 @@ Proyek ini menyajikan lanskap 3D interaktif yang terdiri dari objek geometri das
 
 ## 6. Tautan Demo & Repositori
 
-* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%205/index.html)
-* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1dq2K2MzE2fOJdwotqq182ys1Fz-TJ4xf/view?usp=sharing)
+* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%206/index.html)
+* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1168ik30qQ6CLn4_xfXlepw9c26UAahXx/view?usp=sharing)
