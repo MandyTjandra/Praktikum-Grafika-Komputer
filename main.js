@@ -36,13 +36,20 @@ const modules = [
         tags: ["WebGL2", "3D Lighting", "Phong / Blinn-Phong", "Surface Normals", "Camera Projection", "Shading"]
     },
     {
-        id: "Praktikum 0
-        5",
+        id: "Praktikum 05",
         title: "Textured & Lit Cube Playground (WebGL2)",
         liveUrl: "./Praktikum 5/index.html",
         githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%205",
         desc: "Penerapan pemetaan tekstur 2D (Texture Mapping, UV Coordinates, Texture Filtering & Wrapping), model pencahayaan Phong terintegrasi dengan tekstur, normal matrix (invers-transpose) untuk koreksi non-uniform scale, serta perbandingan flat vs smooth shading.",
         tags: ["WebGL2", "Texture Mapping", "UV Coordinates", "Filtering & Wrapping", "Phong Reflection", "Normal Matrix", "Flat vs Smooth"]
+    },
+    {
+        id: "Praktikum 06",
+        title: "Three.js Mini 3D Scene Playground",
+        liveUrl: "./Praktikum 6/index.html",
+        githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%206",
+        desc: "Eksplorasi framework Three.js untuk membangun pemandangan 3D secara modular. Mencakup pengaturan scene, kamera perspektif, tata cahaya (Ambient & Directional Light), bayangan lembut (soft shadows), material MeshLambert & MeshPhong, OrbitControls, serta panel kendali real-time menggunakan lil-gui.",
+        tags: ["Three.js", "ES Modules", "OrbitControls", "lil-gui", "Soft Shadows", "MeshPhongMaterial", "Animation Loop"]
     }
 ];
 
