@@ -91,11 +91,7 @@ Proyek ini menyajikan lanskap 3D interaktif yang terdiri dari objek geometri das
 
 ---
 
-## 6. Cara Menjalankan Proyek
+## 6. Tautan Demo & Repositori
 
-Proyek ini dibuat menggunakan standar **ES Modules** bawaan browser dengan bantuan *Import Maps* (tanpa memerlukan bundler/build tool seperti Vite/Webpack).
-
-1. **Clone Repositori**:
-   ```bash
-   git clone [https://github.com/MandyTjandra/Praktikum-Grafika-Komputer.git](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer.git)
-   cd Praktikum-Grafika-Komputer
+* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%205/index.html)
+* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1dq2K2MzE2fOJdwotqq182ys1Fz-TJ4xf/view?usp=sharing)
