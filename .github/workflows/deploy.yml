@@ -20,7 +20,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -28,25 +28,29 @@ jobs:
         with:
           node-version: 20
 
-      - name: Clean node_modules cache
+      - name: Build Praktikum 7
         working-directory: ./Praktikum 7
-        run: rm -rf node_modules package-lock.json
+        run: |
+          npm install
+          npx vite build
 
-      - name: Install dependencies
-        working-directory: ./Praktikum 7
-        run: npm install
-
-      - name: Build
-        working-directory: ./Praktikum 7
-        run: npx vite build
+      - name: Prepare Deployment Artifact
+        run: |
+          mkdir -p site_build
+          # Salin file dashboard root dan modul lainnya
+          cp -r index.html style.css main.js README.md site_build/ 2>/dev/null || true
+          cp -r "Praktikum 1" "Praktikum 2" "Praktikum 3" "Praktikum 4" "Praktikum 5" "Praktikum 6" site_build/ 2>/dev/null || true
+          # Masukkan hasil build Praktikum 7 ke dalam subfolder Praktikum 7
+          mkdir -p "site_build/Praktikum 7"
+          cp -r "Praktikum 7/dist/"* "site_build/Praktikum 7/"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload artifact
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './Praktikum 7/dist'
+          path: './site_build'
 
       - name: Deploy to GitHub Pages
         id: deployment
