@@ -5,6 +5,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Three.js Interactive 3D Application</title>
+  
+  <!-- Hubungkan CSS langsung agar tampilan gelap & panel langsung aktif -->
+  <link rel="stylesheet" href="./style.css" />
+
+  <!-- Import Map agar browser bisa menjalankan Three.js langsung di GitHub Pages -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 
 <body>
@@ -36,7 +49,6 @@
     <aside id="controlDeck">
       <h2>Pusat Pengaturan</h2>
 
-      <!-- Posisi Objek Terpilih & Tombol Reset Objek -->
       <fieldset>
         <legend>Posisi Objek Terpilih</legend>
         <label>Posisi X: <span id="posXVal">0.00</span>
@@ -104,6 +116,7 @@
     </aside>
   </div>
 
-  <script type="module" src="/src/main.js"></script>
+  <!-- Path dibuat relatif ./src/main.js -->
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>
