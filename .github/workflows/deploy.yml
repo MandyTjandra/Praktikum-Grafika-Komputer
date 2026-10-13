@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ['main'] # ganti jika nama default branch Anda 'master'
+    branches: ['main']
 
 permissions:
   contents: read
@@ -30,11 +30,13 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./Praktikum 7
-        run: npm install
+        run: npm ci || npm install
 
-      - name: Build
+      - name: Fix Binary Permissions and Build
         working-directory: ./Praktikum 7
-        run: npm run build
+        run: |
+          chmod -R +x node_modules/.bin || true
+          npx --no-install vite build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
