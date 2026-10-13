@@ -3,7 +3,6 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { TransformControls } from "three/addons/controls/TransformControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import "./style.css";
 
 // --- 1. DOM REFERENCES ---
 const hoverInfo = document.getElementById("hoverInfo");
@@ -229,7 +228,7 @@ let animations = [];
 loadingInfo.textContent = "loading model...";
 
 loader.load(
-  "/models/model.glb",
+  "./public/models/model.glb",
   (gltf) => {
     importedModel = gltf.scene;
     importedModel.name = "Imported GLB";
