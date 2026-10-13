@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Three.js Interactive 3D Application</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- HUD Info Kiri Atas -->
+    <aside id="hud">
+      <h1>Interactive 3D Prototype</h1>
+      <div>Hover: <span id="hoverInfo">-</span></div>
+      <div>Selected: <span id="selectedInfo">-</span></div>
+      <div>Animation: <span id="animationInfo">-</span></div>
+      <div>Loading: <span id="loadingInfo">ready</span></div>
+    </aside>
+
+    <!-- Panduan Kontrol Layar (Kiri Bawah) -->
+    <aside id="cameraTutorial">
+      <h3>🎮 Panduan Kontrol & Pindah Objek</h3>
+      <ul>
+        <li><b>Klik Objek:</b> Pilih objek & aktifkan gizmo panah 3D</li>
+        <li><b>Tarik Panah Gizmo:</b> Geser objek di sumbu X, Y, Z</li>
+        <li><b>Tombol Panah (← ↑ → ↓):</b> Pindahkan objek terpilih (X & Z)</li>
+        <li><b>PageUp / PageDown:</b> Naik / turunkan objek (Y)</li>
+        <li><b>Klik Kiri + Drag Kosong:</b> Rotasi kamera 360°</li>
+        <li><b>Q / E:</b> Rotasi kamera horizontal</li>
+        <li><b>W / A / S / D:</b> Gerak posisi kamera</li>
+      </ul>
+    </aside>
+
+    <!-- Panel Pengaturan Kanan -->
+    <aside id="controlDeck">
+      <h2>Pusat Pengaturan</h2>
+
+      <!-- Posisi Objek Terpilih & Tombol Reset Objek -->
+      <fieldset>
+        <legend>Posisi Objek Terpilih</legend>
+        <label>Posisi X: <span id="posXVal">0.00</span>
+          <input type="range" id="inputPosX" min="-10" max="10" step="0.1" value="0" />
+        </label>
+        <label>Posisi Y: <span id="posYVal">0.00</span>
+          <input type="range" id="inputPosY" min="0" max="10" step="0.1" value="0" />
+        </label>
+        <label>Posisi Z: <span id="posZVal">0.00</span>
+          <input type="range" id="inputPosZ" min="-10" max="10" step="0.1" value="0" />
+        </label>
+        <button id="btnResetObject">Reset Posisi Objek</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Animasi Karakter GLB</legend>
+        <label>Pilih Aksi:
+          <select id="selectAnimation">
+            <option value="0">Loading clips...</option>
+          </select>
+        </label>
+        <label>Kecepatan Animasi: <span id="animSpeedVal">1.0x</span>
+          <input type="range" id="inputAnimSpeed" min="0.1" max="2.5" step="0.1" value="1.0" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Material PBR Sphere</legend>
+        <label>Roughness: <span id="roughVal">0.25</span>
+          <input type="range" id="inputRoughness" min="0" max="1" step="0.01" value="0.25" />
+        </label>
+        <label>Metalness: <span id="metalVal">0.10</span>
+          <input type="range" id="inputMetalness" min="0" max="1" step="0.01" value="0.10" />
+        </label>
+        <label>Warna:
+          <input type="color" id="inputColor" value="#22c55e" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Pencahayaan (Lighting)</legend>
+        <label>Directional Light: <span id="dirLightVal">2.5</span>
+          <input type="range" id="inputDirLight" min="0" max="6" step="0.1" value="2.5" />
+        </label>
+        <label>Ambient Light: <span id="ambLightVal">0.45</span>
+          <input type="range" id="inputAmbLight" min="0" max="2" step="0.05" value="0.45" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Hierarki Karakter Minecraft</legend>
+        <label>Putar Badan (Parent): <span id="parentSpeedVal">0.50</span>
+          <input type="range" id="inputParentSpeed" min="0" max="3" step="0.05" value="0.50" />
+        </label>
+        <label>Ayunan Anggota Badan (Child): <span id="childSpeedVal">2.50</span>
+          <input type="range" id="inputChildSpeed" min="0" max="6" step="0.1" value="2.50" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Environment & Scene</legend>
+        <button id="btnToggleEnv">Toggle Environment (ON)</button>
+        <button id="btnResetView">Reset Posisi Kamera</button>
+      </fieldset>
+    </aside>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
