@@ -28,15 +28,17 @@ jobs:
         with:
           node-version: 20
 
+      - name: Clean node_modules cache
+        working-directory: ./Praktikum 7
+        run: rm -rf node_modules package-lock.json
+
       - name: Install dependencies
         working-directory: ./Praktikum 7
-        run: npm ci || npm install
+        run: npm install
 
-      - name: Fix Binary Permissions and Build
+      - name: Build
         working-directory: ./Praktikum 7
-        run: |
-          chmod -R +x node_modules/.bin || true
-          npx --no-install vite build
+        run: npx vite build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
