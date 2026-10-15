@@ -91,11 +91,7 @@ Seluruh pilihan challenge telah diimplementasikan dalam proyek ini:
 
 ---
 
-## 6. Cara Menjalankan Proyek
+## 6. Tautan Demo & Repositori
 
-Proyek ini dibuat menggunakan standar **ES Modules** bawaan browser dengan bantuan *Import Maps* (tanpa memerlukan bundler/build tool seperti Vite/Webpack).
-
-1. **Clone Repositori**:
-   ```bash
-   git clone [https://github.com/MandyTjandra/Praktikum-Grafika-Komputer.git](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer.git)
-   cd Praktikum-Grafika-Komputer
+* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%206/index.html)
+* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1168ik30qQ6CLn4_xfXlepw9c26UAahXx/view?usp=sharing)
