@@ -102,22 +102,7 @@ Seluruh pilihan challenge dan fitur lanjutan telah diimplementasikan dalam proye
 
 ---
 
-## 6. Petunjuk Cara Menjalankan Project
+## 6. Tautan Demo & Repositori
 
-### A. Prerequisites
-Pastikan **Node.js** (versi 18+) sudah terinstall di perangkat Anda.
-
-### B. Langkah Instalasi & Jalankan
-
-```bash
-# 1. Clone repositori ini
-git clone [https://github.com/mandytjandra/Praktikum-Grafika-Komputer.git](https://github.com/mandytjandra/Praktikum-Grafika-Komputer.git)
-
-# 2. Masuk ke direktori project
-cd Praktikum-Grafika-Komputer
-
-# 3. Install dependensi
-npm install
-
-# 4. Jalankan dev server
-npm run dev
+* **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%206/index.html)
+* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1168ik30qQ6CLn4_xfXlepw9c26UAahXx/view?usp=sharing)
