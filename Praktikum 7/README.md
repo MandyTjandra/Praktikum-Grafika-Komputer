@@ -105,4 +105,4 @@ Seluruh pilihan challenge dan fitur lanjutan telah diimplementasikan dalam proye
 ## 6. Tautan Demo & Repositori
 
 * **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%207/index.html)
-* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1168ik30qQ6CLn4_xfXlepw9c26UAahXx/view?usp=sharing)
+* **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1AvReKhR-EJ2MYxlHF3JnnVb_6jmZ2XjR/view?usp=sharing)
