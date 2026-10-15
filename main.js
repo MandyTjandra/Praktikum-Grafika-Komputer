@@ -50,6 +50,14 @@ const modules = [
         githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%206",
         desc: "Eksplorasi framework Three.js untuk membangun pemandangan 3D secara modular. Mencakup pengaturan scene, kamera perspektif, tata cahaya (Ambient & Directional Light), bayangan lembut (soft shadows), material MeshLambert & MeshPhong, OrbitControls, serta panel kendali real-time menggunakan lil-gui.",
         tags: ["Three.js", "ES Modules", "OrbitControls", "lil-gui", "Soft Shadows", "MeshPhongMaterial", "Animation Loop"]
+    },
+    {
+        id: "Praktikum 07",
+        title: "Three.js Advanced Features & Interactive Scene",
+        liveUrl: "./Praktikum 7/index.html",
+        githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%207",
+        desc: "Pengembangan scene 3D tingkat lanjut menggunakan Three.js, meliputi pemuatan model eksternal (GLTF/OBJ Loader), interaksi objek dengan Raycasting, pemetaan lingkungan (Skybox/Environment Mapping), serta animasi hierarkis kompleks.",
+        tags: ["Three.js", "GLTF Loader", "Raycasting", "Skybox", "Environment Map", "Hierarchical Animation"]
     }
 ];
 
