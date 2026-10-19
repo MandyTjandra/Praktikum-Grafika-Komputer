@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meteor Defense 3D - ETS Grafika Komputer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- HUD UTAMA -->
+  <div id="hud">
+    <!-- Baris Atas: Status Utama & Boss Warning -->
+    <div class="hud-top">
+      <div class="stat-box">
+        <span class="label">MODE &amp; OBJECTIVE</span>
+        <span id="objective-text">Campaign: Wave 1/3</span>
+        <div class="sub-info" id="camera-mode-text">Cam: Third-Person [K]</div>
+      </div>
+
+      <!-- Boss Asteroid Health Bar (Muncul saat Boss datang) -->
+      <div id="boss-hud" class="boss-box hidden">
+        <span class="boss-label">⚠️ DANGER: GIGANTIC BOSS ASTEROID</span>
+        <div class="boss-bar-bg"><div id="boss-bar-fill"></div></div>
+      </div>
+
+      <div class="stat-box">
+        <span class="label">PLANET INTEGRITY (HP)</span>
+        <div class="hp-bar-bg"><div id="hp-bar-fill"></div></div>
+        <div class="sub-info" id="shield-status-text">Active Buffs: None</div>
+      </div>
+
+      <div class="stat-box">
+        <span class="label">SCORE / COMBO / HIGH</span>
+        <span id="score-text">0 (x1)</span>
+        <div class="sub-info">High Score: <span id="highscore-text">0</span> | Coins: <span id="coin-text">100</span></div>
+      </div>
+    </div>
+
+    <!-- Combo Streak Notification Popup -->
+    <div id="combo-streak" class="hidden">COMBO x5! MEGA BLAST!</div>
+
+    <!-- Panel Kiri & Kanan: Upgrade, Power-Up & Kustomisasi -->
+    <div class="hud-middle">
+      <div class="side-panel">
+        <h4>UPGRADE TURRET (COINS)</h4>
+        <button class="hud-btn" id="btn-upg-dmg">[Z] Damage Lv.1 (50c)</button>
+        <button class="hud-btn" id="btn-upg-rate">[X] Fire Rate Lv.1 (50c)</button>
+        <button class="hud-btn" id="btn-upg-ammo">[C] Max Ammo Lv.1 (40c)</button>
+        <button class="hud-btn" id="btn-upg-rot">[V] Rot Speed Lv.1 (40c)</button>
+        <hr />
+        <h4>CUSTOMIZATION &amp; MODE</h4>
+        <button class="hud-btn" id="btn-skin">[T] Skin: Cyber Cyan</button>
+        <button class="hud-btn" id="btn-planet">[B] Planet: Lunar Slate</button>
+        <button class="hud-btn" id="btn-gamemode">[M] Mode: Campaign</button>
+        <button class="hud-btn" id="btn-cam">[K] Switch Camera</button>
+      </div>
+
+      <div class="side-panel">
+        <h4>POWER-UPS (COINS / CD)</h4>
+        <button class="hud-btn" id="btn-pw-shield">[Q] Planet Shield (80c)</button>
+        <button class="hud-btn" id="btn-pw-emp">[E] EMP Nuke (120c)</button>
+        <button class="hud-btn" id="btn-pw-slow">[F] Time Slow (70c)</button>
+        <button class="hud-btn" id="btn-pw-dbl">[G] Double Score (60c)</button>
+        <hr />
+        <h4>PAPAN PERINGKAT</h4>
+        <button class="hud-btn highlight-btn" id="btn-open-leaderboard">[L] Lihat Leaderboard</button>
+      </div>
+    </div>
+
+    <!-- Baris Bawah: Amunisi, Pilihan Senjata & Petunjuk Kontrol -->
+    <div class="hud-bottom">
+      <div class="ammo-container">
+        <div class="ammo-info">
+          <div class="ammo-text-group">
+            <span id="ammo-label">AMUNISI:</span>
+            <span id="ammo-text">20 / 20</span>
+          </div>
+          <button id="btn-reload" class="reload-btn">[R] Reload</button>
+        </div>
+        <div class="ammo-bar-bg"><div id="ammo-bar-fill"></div></div>
+      </div>
+
+      <div class="weapon-selector">
+        <div id="wpn-1" class="wpn-card active">[1] Laser (Instant)</div>
+        <div id="wpn-2" class="wpn-card">[2] Missile (AOE Blast)</div>
+        <div id="wpn-3" class="wpn-card">[3] Railgun (Pierce All)</div>
+      </div>
+
+      <div class="controls-hint">
+        <span><strong>Klik Kiri:</strong> Tembak</span> |
+        <span><strong>Klik Kanan Drag / Panah:</strong> Kamera 360°</span> |
+        <span><strong>Scroll:</strong> Zoom</span> |
+        <span><strong>1/2/3:</strong> Senjata</span> |
+        <span><strong>[R]:</strong> Reload</span> |
+        <span><strong>[K]:</strong> Ganti Cam</span> |
+        <span><strong>[Q/E/F/G]:</strong> Power-Up</span> |
+        <span><strong>[Z/X/C/V]:</strong> Upgrade</span> |
+        <span><strong>[L]:</strong> Ranking</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL WIN / LOSE / RESTART -->
+  <div id="modal-overlay" class="hidden">
+    <div class="modal-box">
+      <h1 id="modal-title">MISSION COMPLETE</h1>
+      <p id="modal-desc">Seluruh gelombang meteor berhasil dihancurkan!</p>
+      
+      <div class="modal-action-row">
+        <button id="btn-restart" class="action-btn primary-btn">Main Lagi (Restart)</button>
+        <button id="btn-view-leaderboard-modal" class="action-btn secondary-btn">Buka Leaderboard</button>
+      </div>
+
+      <div class="credits-box">
+        <h4>Asset &amp; Technical Credits</h4>
+        <p>Engine: Three.js WebGL2 (PBR, Soft Shadows, Raycaster, Scene Graph, GLTF/GLB Orbital Satellite)</p>
+        <p>Audio &amp; VFX: Procedural Web Audio API &amp; Custom Particle System</p>
+        <p>Assets &amp; Insp: Screaming Brain Studios &amp; Ansimuz (itch.io)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL LEADERBOARD (PAPAN PERINGKAT LOKAL) -->
+  <div id="leaderboard-modal" class="hidden">
+    <div class="modal-box leaderboard-box">
+      <h2>🏆 PAPAN PERINGKAT KOMANDAN</h2>
+      <p class="sub-title">Top 5 Skor Pertahanan Planet (Tersimpan Lokal)</p>
+      
+      <div class="table-container">
+        <table id="leaderboard-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mode</th>
+              <th>Wave</th>
+              <th>Skor</th>
+              <th>Tanggal</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-tbody">
+            <!-- Diisi dinamis oleh JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <button id="btn-close-leaderboard" class="action-btn primary-btn">Tutup Papan Peringkat</button>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
