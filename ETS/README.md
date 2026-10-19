@@ -58,17 +58,20 @@ Topik: **Topik 10 - Meteor Defense**.
 ---
 
 ### 4. Audio Visual & Kosmetik
-- **Efek Visual (VFX)**:
-  - **Partikel Ledakan**: Semburan partikel warna-warni saat meteor meledak.
-  - **Pecahan Batuan (Debris)**: Serpihan batu 3D yang berhamburan dengan simulasi gaya gravitasi dan rotasi tumbling.
-  - **Jejak Api (Fire Trail)**: Ekor partikel berasap menyala di belakang setiap meteor yang meluncur.
-  - **Kilatan Meriam (Muzzle Flash)**: Pancaran cahaya dinamis dan animasi recoil hentakan laras meriam ganda.
-- **Sensori Umpan Balik**:
-  - **Screen Shake**: Kamera berguncang dinamis saat pangkalan tertabrak, saat menembakkan misil, dan saat nuklir EMP meledak.
-  - **Sound Effects (Web Audio API Procedural)**: Suara tembakan laser, peluncuran misil bergemuruh, ledakan railgun magnetik, dentuman ledakan meteor, alarm peringatan saat HP kritis (< 30%), dan bunyi reload mekanik.
-- **Kustomisasi**:
-  - **5 Skin Meriam**: Cyber Cyan, Crimson Mecha, Gold Prime, Neon Emerald, dan Void Purple.
-  - **5 Tema Planet / Latar Belakang**: Lunar Slate, Mars Red, Ice Europa, Toxic Alien, dan Volcanic Ash.
+- **Audio Visual & Kosmetik**:
+  - **Efek Visual (VFX)**:
+    - **Partikel Ledakan**: Semburan partikel warna-warni saat meteor meledak.
+    - **Pecahan Batuan (Debris)**: Serpihan batu 3D yang berhamburan dengan simulasi gaya gravitasi dan rotasi tumbling.
+    - **Jejak Api (Fire Trail)**: Ekor partikel berasap menyala di belakang setiap meteor yang meluncur.
+    - **Kilatan Meriam (Muzzle Flash)**: Pancaran cahaya dinamis dan animasi recoil hentakan laras meriam ganda.
+    - **Latar Belakang Kosmik Procedural**: 3D Procedural Starfield Skybox (1.600 partikel bintang) dengan atmosfer kabut dinamis (`THREE.FogExp2`).
+  - **Sensori Umpan Balik & Audio**:
+    - **Background Music (BGM)**: Trek musik tema antariksa sci-fi [`music.mp3`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/assets/music/music.mp3) dengan kontrol tombol HUD / pintasan keyboard `[N]`, dukungan pause otomatis, dan kepatuhan browser autoplay policy.
+    - **Screen Shake**: Kamera berguncang dinamis saat pangkalan tertabrak, saat menembakkan misil, dan saat nuklir EMP meledak.
+    - **Sound Effects (Web Audio API Procedural)**: Suara tembakan laser, peluncuran misil bergemuruh, ledakan railgun magnetik, dentuman ledakan meteor, alarm peringatan saat HP kritis (< 30%), dan bunyi reload mekanik.
+  - **Kustomisasi**:
+    - **5 Skin Meriam**: Cyber Cyan, Crimson Mecha, Gold Prime, Neon Emerald, dan Void Purple (`[T]`).
+    - **5 Tema Planet & Atmosfer**: Lunar Slate, Mars Red, Ice Europa, Toxic Alien, dan Volcanic Ash (`[B]`).
 
 ---
 
@@ -84,6 +87,9 @@ Topik: **Topik 10 - Meteor Defense**.
 | **`1` / `2` / `3`** | Memilih senjata: **[1] Laser**, **[2] Missile (AOE)**, **[3] Railgun (Tembus)** |
 | **`R`** | Reload Amunisi Meriam |
 | **`K`** | Mengganti mode kamera (*Third-Person*, *First-Person Turret*, *Top-Down*) |
+| **`N`** | **Mute / Unmute Background Music (BGM)** |
+| **`B`** | Mengganti **Tema Planet & Atmosfer** |
+| **`T`** | Mengganti **Skin Meriam** |
 | **`Z`** | Upgrade Damage Senjata (Koin) |
 | **`X`** | Upgrade Kecepatan Tembak (*Fire Rate*) |
 | **`C`** | Upgrade Kapasitas Amunisi (*Max Ammo*) |
@@ -92,8 +98,6 @@ Topik: **Topik 10 - Meteor Defense**.
 | **`E`** | Aktivasi **EMP Nuke** (Pembersih Layar) |
 | **`F`** | Aktivasi **Time Slow** (Perlambat Waktu) |
 | **`G`** | Aktivasi **Double Score** (Pengali Skor 2x) |
-| **`T`** | Mengganti **Skin Meriam** |
-| **`B`** | Mengganti **Tema Planet & Atmosfer** |
 | **`M`** | Mengganti **Mode Permainan** (*Campaign* / *Endless*) |
 | **`P` / `Escape`** | **Pause & Resume Game** (Menjeda / Melanjutkan Permainan) |
 | **`L`** | Membuka **Papan Peringkat (Leaderboard)** |
@@ -108,9 +112,9 @@ Topik: **Topik 10 - Meteor Defense**.
 | **Asset GLTF/GLB** | Model Satelit Orbital [`satellite.glb`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/assets/models/satellite.glb) dimuat via `GLTFLoader` (dengan fallback procedural GLB exporter jika via `file://`) | [`src/turret.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/turret.js) |
 | **PBR Material & Shadows** | `MeshStandardMaterial` dengan metalness & roughness. `castShadow` pada turret, meteor, debris batuan, dan satelit; `receiveShadow` pada permukaan tanah dan batuan | [`src/sceneSetup.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js) |
 | **Pencahayaan (Min. 2 Light)** | 1. `DirectionalLight` dengan bayangan 2048x2048<br>2. `AmbientLight`<br>3. `PointLight` pangkalan & muzzle flash dinamis | [`src/sceneSetup.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js) |
-| **Environment & Fog** | `FogExp2` atmosfer planet, Procedural 3D Starfield Skybox (1.500 partikel bintang), kawah planet | [`src/sceneSetup.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js) |
+| **Environment & Fog** | 5 Tema Planet (`PLANET_THEMES`), atmosfer `THREE.FogExp2`, dan Procedural Starfield (1.600 partikel bintang) | [`src/sceneSetup.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js) |
 | **Animasi & Interaksi Raycaster** | Raycaster mouse aiming & clicking, animasi orbit satelit, animasi recoil laras, animasi tumbling meteor, animasi debris gravitasi | [`src/main.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/main.js)<br>[`src/vfxManager.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/vfxManager.js) |
-| **VFX & Audio Feedback** | 5 jenis VFX (Laser beam, Missile 3D, Particle explosion, Debris gravity, Fire trail, Shield dome, Screen shake) + 10 jenis efek suara sintetis | [`src/vfxManager.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/vfxManager.js) |
+| **VFX & Audio Feedback** | 5 jenis VFX (Laser beam, Missile 3D, Particle explosion, Debris gravity, Fire trail, Shield dome, Screen shake) + BGM Soundtrack [`music.mp3`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/assets/music/music.mp3) + 10 efek suara sintetis | [`src/vfxManager.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/vfxManager.js) |
 | **Objective, Win/Lose, Restart** | Mode Campaign 3 Wave dengan Boss raksasa, Mode Endless, modal Game Over/Victory, tombol restart instan | [`src/main.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/main.js) |
 
 ---
@@ -132,8 +136,6 @@ Buka folder `ETS` di VS Code, klik kanan [`index.html`](file:///e:/GitHub's%20Re
 ## 📜 Asset Credits & Attribution
 - **3D Engine**: Three.js (MIT License) oleh Ricardo Cabello (mrdoob).
 - **Model 3D GLB**: Model pertahanan satelit orbital GLTF 2.0 binary ([`satellite.glb`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/assets/models/satellite.glb)).
-- **Audio Synthesizer**: Procedural Web Audio API sound generator.
-- **Backgrounds & References**: 
-  - Screaming Brain Studios ([Planet Surface Backgrounds](https://screamingbrainstudios.itch.io/planet-surface-backgrounds))
-  - Ansimuz ([Space Background Assets](https://ansimuz.itch.io/space-background))
+- **Musik Latar Belakang (BGM)**: Sci-Fi Space Defense Soundtrack (`assets/music/music.mp3` via YouTube Audio).
+- **Audio Synthesizer & SFX**: Procedural Web Audio API sound generator (Laser, Missile, Railgun, Explode, Alarm, Reload, Power-Up).
 - **VFX & Shader**: Custom procedural particle system dan dynamic standard material.

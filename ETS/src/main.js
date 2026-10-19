@@ -415,6 +415,52 @@ function closeLeaderboard() {
   document.getElementById('leaderboard-modal').classList.add('hidden');
 }
 
+// --- SISTEM AUDIO LATAR BELAKANG (BGM: assets/music/music.mp3) ---
+const bgm = document.getElementById('bgm-player');
+let isMusicMuted = false;
+let wasPlayingBeforePause = false;
+
+if (bgm) {
+  bgm.volume = 0.35; // Proporsi volume seimbang agar SFX tembakan/ledakan terdengar jelas
+}
+
+function updateMusicHUD() {
+  const btn = document.getElementById('btn-music');
+  if (!btn) return;
+  if (isMusicMuted || !bgm || bgm.paused) {
+    btn.textContent = '[N] Musik: 🔇 OFF';
+    btn.classList.remove('highlight-btn');
+  } else {
+    btn.textContent = '[N] Musik: 🔊 ON';
+    btn.classList.add('highlight-btn');
+  }
+}
+
+function toggleMusic(forceState = null) {
+  if (!bgm) return;
+  if (forceState !== null) isMusicMuted = !forceState;
+  else isMusicMuted = !isMusicMuted;
+
+  if (isMusicMuted) {
+    bgm.pause();
+  } else {
+    bgm.play().then(() => updateMusicHUD()).catch(() => {});
+  }
+  updateMusicHUD();
+}
+
+// Mulai musik saat gesture interaksi pertama kali (mematuhi browser autoplay policy)
+function initMusicOnGesture() {
+  if (bgm && !isMusicMuted && bgm.paused) {
+    bgm.play().then(() => {
+      updateMusicHUD();
+    }).catch(() => {});
+  }
+}
+['pointerdown', 'keydown', 'click'].forEach((evt) => {
+  window.addEventListener(evt, initMusicOnGesture, { once: true });
+});
+
 // --- SISTEM PAUSE GAME (RESUME & RESTART) ---
 function togglePause(forceState = null) {
   if (state.isGameOver) return; // Jika sudah mati/game over, modal game over yang aktif
@@ -424,10 +470,19 @@ function togglePause(forceState = null) {
   const pauseModal = document.getElementById('pause-modal');
   if (state.isPaused) {
     pauseModal.classList.remove('hidden');
+    if (bgm && !bgm.paused) {
+      bgm.pause();
+      wasPlayingBeforePause = true;
+    }
   } else {
     pauseModal.classList.add('hidden');
     clock.getDelta(); // Reset clock delta agar tidak ada lonjakan dt setelah unpause
+    if (bgm && wasPlayingBeforePause && !isMusicMuted) {
+      bgm.play().then(() => updateMusicHUD()).catch(() => {});
+      wasPlayingBeforePause = false;
+    }
   }
+  updateMusicHUD();
 }
 
 document.getElementById('btn-pause').addEventListener('click', () => togglePause(true));
@@ -470,6 +525,11 @@ document.getElementById('btn-planet').addEventListener('click', () => {
   const name = env.applyPlanetTheme(planetThemeIndex);
   document.getElementById('btn-planet').textContent = `[B] Planet: ${name}`;
 });
+
+const btnMusicEl = document.getElementById('btn-music');
+if (btnMusicEl) {
+  btnMusicEl.addEventListener('click', () => toggleMusic());
+}
 
 document.getElementById('btn-gamemode').addEventListener('click', () => {
   state.mode = state.mode === 'Campaign' ? 'Endless' : 'Campaign';
@@ -526,6 +586,7 @@ window.addEventListener('keydown', (e) => {
   else if (k === 'g') activateDoubleScore();
   else if (k === 't') document.getElementById('btn-skin').click();
   else if (k === 'b') document.getElementById('btn-planet').click();
+  else if (k === 'n') toggleMusic();
   else if (k === 'm') document.getElementById('btn-gamemode').click();
   else if (k === 'l') openLeaderboard();
 });
@@ -629,6 +690,8 @@ function endGame(isWin) {
   state.isGameOver = true;
   saveScoreToLeaderboard(state.score, state.wave, state.mode);
 
+  if (bgm) bgm.volume = 0.12; // Kecilkan volume BGM saat layar game over / win muncul
+
   const overlay = document.getElementById('modal-overlay');
   const title = document.getElementById('modal-title');
   const desc = document.getElementById('modal-desc');
@@ -670,6 +733,12 @@ function restartGame() {
   document.getElementById('leaderboard-modal').classList.add('hidden');
   document.getElementById('pause-modal').classList.add('hidden');
   clock.getDelta(); // Bersihkan delta clock setelah restart
+
+  if (bgm && !isMusicMuted) {
+    bgm.volume = 0.35;
+    bgm.play().catch(() => {});
+  }
+  updateMusicHUD();
   updateHUD();
 }
 

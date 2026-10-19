@@ -70,11 +70,15 @@
         <button class="hud-btn" id="btn-pw-slow">[F] Time Slow (70c)</button>
         <button class="hud-btn" id="btn-pw-dbl">[G] Double Score (60c)</button>
         <hr />
-        <h4>MENU &amp; PERINGKAT</h4>
+        <h4>MENU, AUDIO &amp; PERINGKAT</h4>
+        <button class="hud-btn highlight-btn" id="btn-music">[N] Musik: 🔊 ON</button>
         <button class="hud-btn" id="btn-pause">[P / Esc] ⏸️ Pause Game</button>
-        <button class="hud-btn highlight-btn" id="btn-open-leaderboard">[L] Papan Peringkat</button>
+        <button class="hud-btn" id="btn-open-leaderboard">[L] Papan Peringkat</button>
       </div>
     </div>
+
+    <!-- AUDIO LATAR BELAKANG (BGM) -->
+    <audio id="bgm-player" src="assets/music/music.mp3" loop preload="auto"></audio>
 
     <!-- Baris Bawah: Amunisi, Pilihan Senjata & Petunjuk Kontrol -->
     <div class="hud-bottom">
@@ -123,10 +127,9 @@
         <span><strong>Kanan Drag / Panah:</strong> Cam 360°</span> |
         <span><strong>1/2/3:</strong> Senjata</span> |
         <span><strong>[R]:</strong> Reload</span> |
-        <span><strong>[K]:</strong> Cam</span> |
-        <span><strong>[Q/E/F/G]:</strong> Power-Up</span> |
-        <span><strong>[P / Esc]:</strong> Pause</span> |
-        <span><strong>[L]:</strong> Ranking</span>
+        <span><strong>[B]:</strong> Tema Planet</span> |
+        <span><strong>[N]:</strong> Musik</span> |
+        <span><strong>[P / Esc]:</strong> Pause</span>
       </div>
     </div>
   </div>
@@ -174,8 +177,8 @@
       <div class="credits-box">
         <h4>Asset &amp; Technical Credits</h4>
         <p>Engine: Three.js WebGL2 (PBR, Soft Shadows, Raycaster, Scene Graph, GLTF/GLB Orbital Satellite)</p>
-        <p>Audio &amp; VFX: Procedural Web Audio API &amp; Custom Particle System</p>
-        <p>Assets &amp; Insp: Screaming Brain Studios &amp; Ansimuz (itch.io)</p>
+        <p>Audio BGM: Sci-Fi Space Defense Soundtrack (YouTube Audio)</p>
+        <p>VFX &amp; SFX: Procedural Web Audio API &amp; Custom Particle Trail/Debris System</p>
       </div>
     </div>
   </div>

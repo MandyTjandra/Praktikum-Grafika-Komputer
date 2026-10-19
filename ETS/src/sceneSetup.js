@@ -1,17 +1,19 @@
 import * as THREE from 'three';
 
+export const SPACE_BACKGROUND_COLOR = 0x05070f; // Warna background antariksa tetap sama (hitam kosmik konstan)
+
 export const PLANET_THEMES = [
-  { name: 'Lunar Slate',  ground: 0x1e293b, fog: 0x05070f, crater: 0x0f172a },
-  { name: 'Mars Red',     ground: 0x7c2d12, fog: 0x1c0a05, crater: 0x431407 },
-  { name: 'Ice Europa',   ground: 0x0c4a6e, fog: 0x041322, crater: 0x082f49 },
-  { name: 'Toxic Alien',  ground: 0x14532d, fog: 0x052e16, crater: 0x166534 },
-  { name: 'Volcanic Ash', ground: 0x451a03, fog: 0x1c0602, crater: 0x7c2d12 }
+  { name: 'Lunar Slate',  ground: 0x1e293b, crater: 0x0f172a },
+  { name: 'Mars Red',     ground: 0x881337, crater: 0x4c0519 },
+  { name: 'Ice Europa',   ground: 0x0284c7, crater: 0x082f49 },
+  { name: 'Toxic Alien',  ground: 0x15803d, crater: 0x14532d },
+  { name: 'Volcanic Ash', ground: 0x78350f, crater: 0x291404 }
 ];
 
 export function initScene() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x05070f);
-  scene.fog = new THREE.FogExp2(0x05070f, 0.0075);
+  scene.background = new THREE.Color(SPACE_BACKGROUND_COLOR);
+  scene.fog = new THREE.FogExp2(SPACE_BACKGROUND_COLOR, 0.004);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -212,8 +214,10 @@ export function initScene() {
   function applyPlanetTheme(themeIdx) {
     const t = PLANET_THEMES[themeIdx % PLANET_THEMES.length];
     groundMat.color.setHex(t.ground);
-    scene.background.setHex(t.fog);
-    scene.fog.color.setHex(t.fog);
+    rockMat.color.setHex(t.crater);
+    // Warna background antariksa tetap sama (hitam kosmik konstan)
+    scene.background.setHex(SPACE_BACKGROUND_COLOR);
+    scene.fog.color.setHex(SPACE_BACKGROUND_COLOR);
     return t.name;
   }
 
