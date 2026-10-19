@@ -95,6 +95,7 @@ Topik: **Topik 10 - Meteor Defense**.
 | **`T`** | Mengganti **Skin Meriam** |
 | **`B`** | Mengganti **Tema Planet & Atmosfer** |
 | **`M`** | Mengganti **Mode Permainan** (*Campaign* / *Endless*) |
+| **`P` / `Escape`** | **Pause & Resume Game** (Menjeda / Melanjutkan Permainan) |
 | **`L`** | Membuka **Papan Peringkat (Leaderboard)** |
 
 ---

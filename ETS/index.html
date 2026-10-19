@@ -70,8 +70,9 @@
         <button class="hud-btn" id="btn-pw-slow">[F] Time Slow (70c)</button>
         <button class="hud-btn" id="btn-pw-dbl">[G] Double Score (60c)</button>
         <hr />
-        <h4>PAPAN PERINGKAT</h4>
-        <button class="hud-btn highlight-btn" id="btn-open-leaderboard">[L] Lihat Leaderboard</button>
+        <h4>MENU &amp; PERINGKAT</h4>
+        <button class="hud-btn" id="btn-pause">[P / Esc] ⏸️ Pause Game</button>
+        <button class="hud-btn highlight-btn" id="btn-open-leaderboard">[L] Papan Peringkat</button>
       </div>
     </div>
 
@@ -89,21 +90,72 @@
       </div>
 
       <div class="weapon-selector">
-        <div id="wpn-1" class="wpn-card active">[1] Laser (Instant)</div>
-        <div id="wpn-2" class="wpn-card">[2] Missile (AOE Blast)</div>
-        <div id="wpn-3" class="wpn-card">[3] Railgun (Pierce All)</div>
+        <div id="wpn-1" class="wpn-card active">
+          <div class="wpn-header">
+            <span class="wpn-title">[1] Laser</span>
+            <span class="wpn-ammo-badge" id="w1-ammo">∞</span>
+          </div>
+          <div class="wpn-sub">Dmg: 1.2 • Rapid (170ms)</div>
+          <div class="wpn-role">Tipe: Single Target • Anti-Fast</div>
+        </div>
+
+        <div id="wpn-2" class="wpn-card">
+          <div class="wpn-header">
+            <span class="wpn-title">[2] Missile</span>
+            <span class="wpn-ammo-badge" id="w2-ammo">7/7</span>
+          </div>
+          <div class="wpn-sub">Dmg: 4.2 • Area AOE (8.5m)</div>
+          <div class="wpn-role">Tipe: Roket Meledak • Crowd Control</div>
+        </div>
+
+        <div id="wpn-3" class="wpn-card">
+          <div class="wpn-header">
+            <span class="wpn-title">[3] Railgun</span>
+            <span class="wpn-ammo-badge" id="w3-ammo">3/3</span>
+          </div>
+          <div class="wpn-sub">Dmg: 6.5 • Tembus Segaris</div>
+          <div class="wpn-role">Tipe: Piercing Beam • Anti-Boss/Armor</div>
+        </div>
       </div>
 
       <div class="controls-hint">
         <span><strong>Klik Kiri:</strong> Tembak</span> |
-        <span><strong>Klik Kanan Drag / Panah:</strong> Kamera 360°</span> |
-        <span><strong>Scroll:</strong> Zoom</span> |
+        <span><strong>Kanan Drag / Panah:</strong> Cam 360°</span> |
         <span><strong>1/2/3:</strong> Senjata</span> |
         <span><strong>[R]:</strong> Reload</span> |
-        <span><strong>[K]:</strong> Ganti Cam</span> |
+        <span><strong>[K]:</strong> Cam</span> |
         <span><strong>[Q/E/F/G]:</strong> Power-Up</span> |
-        <span><strong>[Z/X/C/V]:</strong> Upgrade</span> |
+        <span><strong>[P / Esc]:</strong> Pause</span> |
         <span><strong>[L]:</strong> Ranking</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PAUSE GAME (RESUME & RESTART) -->
+  <div id="pause-modal" class="hidden">
+    <div class="modal-box pause-box">
+      <h1>⏸️ GAME DIJEDA</h1>
+      <p class="sub-title">Permainan dihentikan sementara. Seluruh aktivitas berhenti.</p>
+      
+      <!-- Panduan Karakteristik Senjata In-Game -->
+      <div class="weapon-guide-table">
+        <div class="guide-item">
+          <strong style="color:#38bdf8;">[1] Meriam Laser (Amunisi: ∞)</strong>
+          <span>Dmg 1.2 • CD 170ms • Single Target • Efektif: Speedy &amp; Shards (1 Hit)</span>
+        </div>
+        <div class="guide-item">
+          <strong style="color:#f97316;">[2] Peluru Kendali Missile (Kapasitas: 7)</strong>
+          <span>Dmg 4.2 • Area AOE 8.5m • Reload 1.6s • Efektif: Gerombolan Standard &amp; Cluster</span>
+        </div>
+        <div class="guide-item">
+          <strong style="color:#a855f7;">[3] Railgun Magnetik (Kapasitas: 3)</strong>
+          <span>Dmg 6.5 • Menembus Seluruh Target Segaris • Recharge 3.2s • Efektif: Armored &amp; Boss Meteor</span>
+        </div>
+      </div>
+      
+      <div class="modal-action-row">
+        <button id="btn-resume" class="action-btn primary-btn">▶️ Lanjutkan (Resume)</button>
+        <button id="btn-pause-restart" class="action-btn secondary-btn">🔄 Mulai Ulang (Restart)</button>
       </div>
     </div>
   </div>

@@ -34,6 +34,7 @@ let state = {
   spawnedInWave: 0,
   targetPerWave: 8,
   isGameOver: false,
+  isPaused: false,
   // Amunisi & Reload (Laser: Tak Terbatas, Missile: 7, Railgun: 3)
   ammo: {
     1: Infinity,
@@ -85,8 +86,8 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('pointerdown', (e) => {
-  // Abaikan klik tombol HUD / saat modal terbuka
-  if (e.target.tagName === 'BUTTON' || e.button !== 0 || state.isGameOver) return;
+  // Abaikan klik tombol HUD / saat modal terbuka / saat game over / saat pause
+  if (e.target.tagName === 'BUTTON' || e.button !== 0 || state.isGameOver || state.isPaused) return;
 
   handleShoot();
 });
@@ -414,6 +415,28 @@ function closeLeaderboard() {
   document.getElementById('leaderboard-modal').classList.add('hidden');
 }
 
+// --- SISTEM PAUSE GAME (RESUME & RESTART) ---
+function togglePause(forceState = null) {
+  if (state.isGameOver) return; // Jika sudah mati/game over, modal game over yang aktif
+
+  const targetState = forceState !== null ? forceState : !state.isPaused;
+  state.isPaused = targetState;
+  const pauseModal = document.getElementById('pause-modal');
+  if (state.isPaused) {
+    pauseModal.classList.remove('hidden');
+  } else {
+    pauseModal.classList.add('hidden');
+    clock.getDelta(); // Reset clock delta agar tidak ada lonjakan dt setelah unpause
+  }
+}
+
+document.getElementById('btn-pause').addEventListener('click', () => togglePause(true));
+document.getElementById('btn-resume').addEventListener('click', () => togglePause(false));
+document.getElementById('btn-pause-restart').addEventListener('click', () => {
+  togglePause(false);
+  restartGame();
+});
+
 // --- EVENT LISTENER TOMBOL HUD & KEYBOARD ---
 document.getElementById('btn-upg-dmg').addEventListener('click', upgradeDamage);
 document.getElementById('btn-upg-rate').addEventListener('click', upgradeFireRate);
@@ -463,17 +486,34 @@ document.getElementById('btn-gamemode').addEventListener('click', () => {
       document.querySelectorAll('.wpn-card').forEach((card, idx) => {
         card.classList.toggle('active', idx + 1 === currentWeapon);
       });
+      updateHUD();
     });
   }
 });
 
 window.addEventListener('keydown', (e) => {
   const k = e.key.toLowerCase();
+
+  // Tombol Pause / Resume (P atau Escape)
+  if (k === 'p' || k === 'escape') {
+    const lbModal = document.getElementById('leaderboard-modal');
+    if (!lbModal.classList.contains('hidden')) {
+      closeLeaderboard();
+      return;
+    }
+    togglePause();
+    return;
+  }
+
+  // Jika game sedang di-pause atau sudah game over/mati, cegah input gameplay
+  if (state.isPaused || state.isGameOver) return;
+
   if (['1', '2', '3'].includes(k)) {
     currentWeapon = parseInt(k, 10);
     document.querySelectorAll('.wpn-card').forEach((el, idx) => {
       el.classList.toggle('active', idx + 1 === currentWeapon);
     });
+    updateHUD();
   } else if (k === 'r') reloadAmmo();
   else if (k === 'k') document.getElementById('btn-cam').click();
   else if (k === 'z') upgradeDamage();
@@ -552,20 +592,22 @@ function updateHUD() {
     }
   }
 
-  // Update label kartu senjata bawah
-  const w1 = document.getElementById('wpn-1');
-  const w2 = document.getElementById('wpn-2');
-  const w3 = document.getElementById('wpn-3');
-  if (w1) w1.textContent = '[1] Laser (∞)';
-  if (w2) {
-    w2.textContent = state.reloading[2]
-      ? `[2] Missile (Reload ${state.reloadTimers[2].toFixed(1)}s)`
-      : `[2] Missile (${state.ammo[2]}/${state.maxAmmo[2]})`;
+  // Update badge amunisi pada kartu senjata bawah tanpa menimpa keterangan/deskripsinya
+  const w1Ammo = document.getElementById('w1-ammo');
+  const w2Ammo = document.getElementById('w2-ammo');
+  const w3Ammo = document.getElementById('w3-ammo');
+  if (w1Ammo) w1Ammo.textContent = '∞';
+  if (w2Ammo) {
+    w2Ammo.textContent = state.reloading[2]
+      ? `Reload ${state.reloadTimers[2].toFixed(1)}s`
+      : `${state.ammo[2]}/${state.maxAmmo[2]}`;
+    w2Ammo.style.color = state.reloading[2] ? '#facc15' : '#f97316';
   }
-  if (w3) {
-    w3.textContent = state.reloading[3]
-      ? `[3] Railgun (Recharge ${state.reloadTimers[3].toFixed(1)}s)`
-      : `[3] Railgun (${state.ammo[3]}/${state.maxAmmo[3]})`;
+  if (w3Ammo) {
+    w3Ammo.textContent = state.reloading[3]
+      ? `Recharge ${state.reloadTimers[3].toFixed(1)}s`
+      : `${state.ammo[3]}/${state.maxAmmo[3]}`;
+    w3Ammo.style.color = state.reloading[3] ? '#facc15' : '#c084fc';
   }
 
   const waveLabel = state.mode === 'Campaign' ? `Wave ${state.wave}/${state.maxWave}` : `Endless Wave ${state.wave}`;
@@ -626,6 +668,8 @@ function restartGame() {
   turret.rotationSpeed = 8.0;
   document.getElementById('modal-overlay').classList.add('hidden');
   document.getElementById('leaderboard-modal').classList.add('hidden');
+  document.getElementById('pause-modal').classList.add('hidden');
+  clock.getDelta(); // Bersihkan delta clock setelah restart
   updateHUD();
 }
 
@@ -638,6 +682,12 @@ let spawnTimer = 0;
 function animate() {
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
+
+  // JIKA GAME OVER (MATI) ATAU DI-PAUSE: GAME BENAR-BENAR BERHENTI PENUH!
+  if (state.isGameOver || state.isPaused) {
+    env.renderer.render(env.scene, env.camera);
+    return;
+  }
 
   // Reload Amunisi Independen (Missile: 1.6s, Railgun: 3.2s)
   let reloadChanged = false;
