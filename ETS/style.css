@@ -546,3 +546,256 @@ body {
 #leaderboard-table tr:hover td {
   background: rgba(56, 189, 248, 0.08);
 }
+
+/* --- HUD FPP: RADAR TAKTIS 360° & INDIKATOR ARAH ANCAMAN --- */
+#fpp-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.25s ease;
+}
+
+#fpp-overlay.hidden {
+  display: none !important;
+}
+
+#fpp-radar-box {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(15, 23, 42, 0.90);
+  border: 1px solid #38bdf8;
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.6), inset 0 0 16px rgba(56, 189, 248, 0.08);
+  pointer-events: none;
+  user-select: none;
+}
+
+.radar-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  gap: 8px;
+}
+
+.radar-title {
+  color: #38bdf8;
+  letter-spacing: 0.8px;
+}
+
+.radar-threat {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  border: 1px solid #ef4444;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.radar-threat.safe {
+  background: rgba(34, 197, 94, 0.18);
+  color: #4ade80;
+  border-color: #22c55e;
+}
+
+.radar-canvas-wrap {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, rgba(15, 23, 42, 0.95) 75%);
+  border-radius: 50%;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
+}
+
+#fpp-radar-canvas {
+  width: 130px;
+  height: 130px;
+  display: block;
+  border-radius: 50%;
+}
+
+.radar-footer {
+  font-size: 0.62rem;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+#fpp-indicators-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* INDIKATOR PANAH TEPI LAYAR (OFF-SCREEN METEOR DIRECTION) */
+.fpp-edge-arrow {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  z-index: 11;
+  transition: transform 0.04s ease-out;
+}
+
+.fpp-arrow-pointer {
+  font-size: 1.25rem;
+  line-height: 1;
+  color: #ef4444;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.9));
+  display: inline-block;
+  transform-origin: center center;
+}
+
+.fpp-arrow-tag {
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid #ef4444;
+  color: #f87171;
+  font-size: 0.64rem;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+.fpp-edge-arrow.threat-boss .fpp-arrow-pointer {
+  color: #c084fc;
+  filter: drop-shadow(0 0 10px #c084fc);
+}
+.fpp-edge-arrow.threat-boss .fpp-arrow-tag {
+  border-color: #a855f7;
+  color: #e9d5ff;
+  background: rgba(88, 28, 135, 0.92);
+}
+
+.fpp-edge-arrow.threat-speedy .fpp-arrow-pointer {
+  color: #facc15;
+  filter: drop-shadow(0 0 8px #facc15);
+}
+.fpp-edge-arrow.threat-speedy .fpp-arrow-tag {
+  border-color: #facc15;
+  color: #fef08a;
+}
+
+.fpp-edge-arrow.threat-cluster .fpp-arrow-pointer {
+  color: #34d399;
+  filter: drop-shadow(0 0 8px #34d399);
+}
+.fpp-edge-arrow.threat-cluster .fpp-arrow-tag {
+  border-color: #10b981;
+  color: #a7f3d0;
+}
+
+.fpp-edge-arrow.threat-critical .fpp-arrow-pointer {
+  animation: pulse-threat-pointer 0.4s infinite alternate;
+}
+.fpp-edge-arrow.threat-critical .fpp-arrow-tag {
+  animation: pulse-threat-tag 0.4s infinite alternate;
+}
+
+@keyframes pulse-threat-pointer {
+  0% { transform: scale(1); filter: drop-shadow(0 0 6px #ef4444); }
+  100% { transform: scale(1.4); filter: drop-shadow(0 0 14px #ff0000); }
+}
+
+@keyframes pulse-threat-tag {
+  0% { background: rgba(15, 23, 42, 0.92); box-shadow: 0 0 4px #ef4444; }
+  100% { background: rgba(239, 68, 68, 0.55); box-shadow: 0 0 12px #ef4444; }
+}
+
+/* ON-SCREEN TARGET LOCK RETICLE (SAAT METEOR ADA DALAM JARAK PANDANG) */
+.fpp-lockon {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  z-index: 10;
+}
+
+.fpp-lockon-bracket {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid #38bdf8;
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #38bdf8;
+  animation: lockon-subtle-spin 6s linear infinite;
+}
+
+@keyframes lockon-subtle-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.fpp-lockon-tag {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 1px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.fpp-lockon.threat-boss .fpp-lockon-bracket {
+  width: 44px;
+  height: 44px;
+  border-color: #c084fc;
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.8);
+  color: #c084fc;
+}
+.fpp-lockon.threat-boss .fpp-lockon-tag {
+  border-color: #a855f7;
+  color: #f3e8ff;
+}
+
+.fpp-lockon.threat-speedy .fpp-lockon-bracket {
+  border-color: #facc15;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.7);
+  color: #facc15;
+}
+.fpp-lockon.threat-speedy .fpp-lockon-tag {
+  border-color: #facc15;
+  color: #fef08a;
+}
+
+.fpp-lockon.threat-armored .fpp-lockon-bracket {
+  border-color: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+  color: #ef4444;
+}
+.fpp-lockon.threat-armored .fpp-lockon-tag {
+  border-color: #ef4444;
+  color: #fee2e2;
+}

@@ -71,15 +71,30 @@ export class MeteorManager {
     if (customOrigin) {
       mesh.position.copy(customOrigin);
     } else {
+      // Spawning 360 derajat mengelilingi planet secara beragam (semua sisi & ketinggian bervariasi)
+      const spawnAngle = Math.random() * Math.PI * 2;
+      const spawnRadius = 38 + Math.random() * 22; // 38 hingga 60 meter
+      const spawnHeight = 22 + Math.random() * 22; // 22 hingga 44 meter
       mesh.position.set(
-        (Math.random() - 0.5) * 44,
-        30 + Math.random() * 10,
-        -22 - Math.random() * 20
+        Math.cos(spawnAngle) * spawnRadius,
+        spawnHeight,
+        Math.sin(spawnAngle) * spawnRadius
       );
     }
 
-    const target = new THREE.Vector3((Math.random() - 0.5) * 8, 0.5, (Math.random() - 0.5) * 6);
+    // Target pangkalan / turret di tengah planet dengan sedikit variasi acak
+    const target = new THREE.Vector3(
+      (Math.random() - 0.5) * 8,
+      0.5,
+      (Math.random() - 0.5) * 8
+    );
     const velocity = target.sub(mesh.position).normalize().multiplyScalar(cfg.speed);
+
+    // Tambahan sebaran gerak lateral untuk pecahan cluster shard
+    if (typeKey === 'shard') {
+      velocity.x += (Math.random() - 0.5) * 3.5;
+      velocity.z += (Math.random() - 0.5) * 3.5;
+    }
 
     mesh.userData = {
       type: typeKey,

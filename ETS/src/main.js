@@ -513,6 +513,10 @@ document.getElementById('btn-cam').addEventListener('click', () => {
   const camName = env.nextCameraMode();
   document.getElementById('camera-mode-text').textContent = `Cam: ${camName} [K]`;
   document.getElementById('btn-cam').textContent = `[K] Cam: ${camName.split(' ')[0]}`;
+  if (!env.isFPS()) {
+    if (fppOverlay) fppOverlay.classList.add('hidden');
+    if (indicatorsContainer) indicatorsContainer.innerHTML = '';
+  }
 });
 
 document.getElementById('btn-skin').addEventListener('click', () => {
@@ -690,6 +694,7 @@ function endGame(isWin) {
   state.isGameOver = true;
   saveScoreToLeaderboard(state.score, state.wave, state.mode);
 
+  if (indicatorsContainer) indicatorsContainer.innerHTML = '';
   if (bgm) bgm.volume = 0.12; // Kecilkan volume BGM saat layar game over / win muncul
 
   const overlay = document.getElementById('modal-overlay');
@@ -705,6 +710,7 @@ function endGame(isWin) {
 function restartGame() {
   meteorMgr.clearAll();
   env.shieldDome.visible = false;
+  if (indicatorsContainer) indicatorsContainer.innerHTML = '';
   state = {
     ...state,
     hp: 100,
@@ -743,6 +749,231 @@ function restartGame() {
 }
 
 document.getElementById('btn-restart').addEventListener('click', restartGame);
+
+// --- SISTEM INDIKATOR ARAH & RADAR TAKTIS FPP 360 DERAJAT ---
+const fppOverlay = document.getElementById('fpp-overlay');
+const radarCanvas = document.getElementById('fpp-radar-canvas');
+const radarCtx = radarCanvas ? radarCanvas.getContext('2d') : null;
+const radarThreatCount = document.getElementById('radar-threat-count');
+const indicatorsContainer = document.getElementById('fpp-indicators-container');
+
+let radarSweepAngle = 0;
+const _fppCamFwd = new THREE.Vector3();
+const _fppCamRight = new THREE.Vector3();
+const _fppUp = new THREE.Vector3(0, 1, 0);
+const _fppToTarget = new THREE.Vector3();
+const _fppProj = new THREE.Vector3();
+const _cam3dFwd = new THREE.Vector3();
+
+const METEOR_NAMES = {
+  standard: 'METEOR',
+  speedy: 'SPEEDY',
+  armored: 'ARMORED',
+  cluster: 'CLUSTER',
+  shard: 'SHARD',
+  boss: 'BOSS'
+};
+
+const RADAR_COLORS = {
+  standard: '#38bdf8',
+  speedy: '#facc15',
+  armored: '#ef4444',
+  cluster: '#34d399',
+  shard: '#38bdf8',
+  boss: '#c084fc'
+};
+
+function updateFPPIndicators(dt) {
+  if (!fppOverlay || !indicatorsContainer) return;
+
+  const isFPS = env.isFPS && env.isFPS();
+  if (!isFPS) {
+    if (!fppOverlay.classList.contains('hidden')) {
+      fppOverlay.classList.add('hidden');
+      indicatorsContainer.innerHTML = '';
+    }
+    return;
+  }
+
+  if (fppOverlay.classList.contains('hidden')) {
+    fppOverlay.classList.remove('hidden');
+  }
+
+  const meteors = meteorMgr.meteors;
+  const count = meteors.length;
+
+  if (radarThreatCount) {
+    radarThreatCount.textContent = count === 0 ? 'AMAN' : `${count} TARGET`;
+    radarThreatCount.classList.toggle('safe', count === 0);
+  }
+
+  // Arah hadap kamera planar di bidang XZ
+  env.camera.getWorldDirection(_cam3dFwd);
+  _fppCamFwd.copy(_cam3dFwd);
+  _fppCamFwd.y = 0;
+  if (_fppCamFwd.lengthSq() > 0.0001) _fppCamFwd.normalize();
+  else _fppCamFwd.set(0, 0, -1);
+  _fppCamRight.crossVectors(_fppCamFwd, _fppUp).normalize();
+
+  const turretPos = env.camera.position;
+
+  // 1. RENDER RADAR TAKTIS 360° (Heading-Up)
+  if (radarCtx) {
+    const size = 130;
+    const center = size * 0.5;
+    const radarR = 52;
+    const maxRange = 60; // meter deteksi
+
+    radarCtx.clearRect(0, 0, size, size);
+
+    // Lingkaran Konsentris Jangkauan Radar (20m, 40m, 60m)
+    radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.22)';
+    radarCtx.lineWidth = 1;
+    [0.33, 0.66, 1.0].forEach((ratio) => {
+      radarCtx.beginPath();
+      radarCtx.arc(center, center, radarR * ratio, 0, Math.PI * 2);
+      radarCtx.stroke();
+    });
+
+    // Garis Silang Pembantu (Crosshairs)
+    radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.15)';
+    radarCtx.setLineDash([2, 4]);
+    radarCtx.beginPath();
+    radarCtx.moveTo(center, center - radarR);
+    radarCtx.lineTo(center, center + radarR);
+    radarCtx.moveTo(center - radarR, center);
+    radarCtx.lineTo(center + radarR, center);
+    radarCtx.stroke();
+    radarCtx.setLineDash([]);
+
+    // Vision Cone Bidang Pandang Turret (FOV ~60° mengarah ke DEPAN / Atas)
+    radarCtx.fillStyle = 'rgba(56, 189, 248, 0.09)';
+    radarCtx.beginPath();
+    radarCtx.moveTo(center, center);
+    radarCtx.arc(center, center, radarR, -Math.PI / 2 - 0.52, -Math.PI / 2 + 0.52);
+    radarCtx.closePath();
+    radarCtx.fill();
+
+    // Radar Sweep Line (Animasi Pemindaian Taktis)
+    radarSweepAngle += dt * 3.2;
+    const sweepX = center + Math.cos(radarSweepAngle) * radarR;
+    const sweepY = center + Math.sin(radarSweepAngle) * radarR;
+    radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.65)';
+    radarCtx.lineWidth = 1.5;
+    radarCtx.beginPath();
+    radarCtx.moveTo(center, center);
+    radarCtx.lineTo(sweepX, sweepY);
+    radarCtx.stroke();
+
+    // Titik Pusat Turret Markas
+    radarCtx.fillStyle = '#38bdf8';
+    radarCtx.beginPath();
+    radarCtx.arc(center, center, 3.5, 0, Math.PI * 2);
+    radarCtx.fill();
+    radarCtx.strokeStyle = '#ffffff';
+    radarCtx.lineWidth = 1;
+    radarCtx.stroke();
+
+    // Render Blip Titik-titik Meteor pada Radar
+    meteors.forEach((m) => {
+      _fppToTarget.subVectors(m.position, turretPos);
+      const fwd = _fppToTarget.dot(_fppCamFwd);
+      const rgt = _fppToTarget.dot(_fppCamRight);
+      const flatDist = Math.hypot(rgt, fwd);
+      const distRatio = Math.min(flatDist, maxRange) / maxRange;
+      const angle = Math.atan2(-fwd, rgt);
+
+      const dotX = center + Math.cos(angle) * (distRatio * radarR);
+      const dotY = center + Math.sin(angle) * (distRatio * radarR);
+      const color = RADAR_COLORS[m.userData.type] || '#ef4444';
+
+      const isDanger = flatDist < 20;
+      const dotRadius = m.userData.type === 'boss' ? 5.5 : (isDanger ? 4 : 3);
+
+      radarCtx.fillStyle = color;
+      radarCtx.beginPath();
+      radarCtx.arc(dotX, dotY, dotRadius, 0, Math.PI * 2);
+      radarCtx.fill();
+
+      if (isDanger) {
+        radarCtx.strokeStyle = '#ffffff';
+        radarCtx.lineWidth = 1.2;
+        radarCtx.stroke();
+      }
+    });
+  }
+
+  // 2. INDIKATOR ARAH TEPI LAYAR & LOCK-ON RETICLE
+  const winW = window.innerWidth;
+  const winH = window.innerHeight;
+  const cx = winW * 0.5;
+  const cy = winH * 0.5;
+  const margin = 50;
+  const boundW = cx - margin;
+  const boundH = cy - margin;
+
+  let html = '';
+
+  for (let i = 0; i < meteors.length; i++) {
+    const m = meteors[i];
+    const mPos = m.position;
+    const dist = turretPos.distanceTo(mPos);
+
+    _fppToTarget.subVectors(mPos, turretPos);
+    const dotFwd = _fppToTarget.dot(_cam3dFwd);
+    const isBehind = dotFwd <= 0;
+
+    _fppProj.copy(mPos).project(env.camera);
+
+    if (isBehind) {
+      _fppProj.x = -_fppProj.x;
+      _fppProj.y = -_fppProj.y;
+    }
+
+    const typeKey = m.userData.type || 'standard';
+    const typeLabel = METEOR_NAMES[typeKey] || 'METEOR';
+    const isCritical = dist < 22;
+
+    const isOnScreen = !isBehind && Math.abs(_fppProj.x) <= 0.88 && Math.abs(_fppProj.y) <= 0.88;
+
+    if (isOnScreen) {
+      // Reticle Lock-on di atas meteor dalam jarak pandang
+      const px = (_fppProj.x * 0.5 + 0.5) * winW;
+      const py = (-_fppProj.y * 0.5 + 0.5) * winH;
+      html += `
+        <div class="fpp-lockon threat-${typeKey}" style="left:${px.toFixed(1)}px; top:${py.toFixed(1)}px;">
+          <div class="fpp-lockon-bracket">◇</div>
+          <div class="fpp-lockon-tag">${typeLabel} ${Math.round(dist)}m</div>
+        </div>
+      `;
+    } else {
+      // Panah Arah di Tepi Layar untuk meteor di luar pandangan (off-screen)
+      let dirX = _fppProj.x;
+      let dirY = -_fppProj.y;
+      const len = Math.hypot(dirX, dirY) || 1;
+      dirX /= len;
+      dirY /= len;
+
+      const scaleX = boundW / Math.max(Math.abs(dirX), 0.0001);
+      const scaleY = boundH / Math.max(Math.abs(dirY), 0.0001);
+      const scale = Math.min(scaleX, scaleY);
+
+      const ax = cx + dirX * scale;
+      const ay = cy + dirY * scale;
+
+      const angleDeg = Math.atan2(dirY, dirX) * (180 / Math.PI) + 90;
+
+      html += `
+        <div class="fpp-edge-arrow threat-${typeKey} ${isCritical ? 'threat-critical' : ''}" style="left:${ax.toFixed(1)}px; top:${ay.toFixed(1)}px;">
+          <div class="fpp-arrow-pointer" style="transform: rotate(${angleDeg.toFixed(1)}deg);">▲</div>
+          <div class="fpp-arrow-tag">${typeLabel} ${Math.round(dist)}m</div>
+        </div>
+      `;
+    }
+  }
+
+  indicatorsContainer.innerHTML = html;
+}
 
 // --- GAME LOOP UTAMA ---
 const clock = new THREE.Clock();
@@ -856,6 +1087,9 @@ function animate() {
   turret.update(dt);
   vfx.update(dt, env.camera, env.baseCamPos, env.baseCamLook);
   env.starField.rotation.y += dt * 0.02;
+
+  // Perbarui Indikator Arah & Radar Taktis 360° saat mode FPP aktif
+  updateFPPIndicators(dt);
 
   env.renderer.render(env.scene, env.camera);
 }

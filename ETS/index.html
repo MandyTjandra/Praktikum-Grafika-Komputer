@@ -134,6 +134,24 @@
     </div>
   </div>
 
+  <!-- HUD FPP KHUSUS: INDIKATOR ARAH & RADAR TAKTIS 360 DERAJAT -->
+  <div id="fpp-overlay" class="hidden">
+    <!-- Radar Taktis 360 Derajat di Pojok Kiri Bawah -->
+    <div id="fpp-radar-box">
+      <div class="radar-header">
+        <span class="radar-title">🛰️ RADAR 360°</span>
+        <span id="radar-threat-count" class="radar-threat safe">0 TARGET</span>
+      </div>
+      <div class="radar-canvas-wrap">
+        <canvas id="fpp-radar-canvas" width="130" height="130"></canvas>
+      </div>
+      <div class="radar-footer">DEPAN ▲ [KEMUDI 360°]</div>
+    </div>
+
+    <!-- Kontainer Tanda Arah Tepi Layar & Target Lock-On Reticle -->
+    <div id="fpp-indicators-container"></div>
+  </div>
+
   <!-- MODAL PAUSE GAME (RESUME & RESTART) -->
   <div id="pause-modal" class="hidden">
     <div class="modal-box pause-box">

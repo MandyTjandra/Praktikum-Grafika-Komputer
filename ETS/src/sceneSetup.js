@@ -237,6 +237,8 @@ export function initScene() {
     baseCamPos,
     baseCamLook,
     getCamModeIndex: () => camModeIndex,
+    isFPS: () => CAMERA_MODES[camModeIndex].isFPS,
+    getAzimuth: () => azimuth,
     nextCameraMode: () => setCameraMode(camModeIndex + 1),
     setCameraMode,
     rotateCamera,
