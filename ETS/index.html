@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meteor Defense 3D - ETS Grafika Komputer</title>
+  <title>Meteor Defense 3D - Planetary Defense Initiative</title>
   <link rel="stylesheet" href="style.css" />
   <script type="importmap">
     {
@@ -18,7 +18,6 @@
   <!-- START SCREEN / TITLE SCREEN -->
   <div id="start-screen" class="start-screen-overlay">
     <div class="start-content-box">
-      <div class="start-badge">SISTEM PERTAHANAN PLANET • ETS GRAFIKA KOMPUTER</div>
       <h1 class="start-title">METEOR DEFENSE <span class="title-highlight">3D</span></h1>
       <p class="start-subtitle">
         Pertahankan pangkalan dan peradaban planet dari gempuran badai meteor kosmik serta Asteroid Raksasa!
@@ -113,18 +112,44 @@
         <button class="hud-btn" id="btn-cam">[K] Switch Camera</button>
       </div>
 
-      <div class="side-panel">
-        <h4>POWER-UPS (COINS / CD)</h4>
-        <button class="hud-btn" id="btn-pw-shield">[Q] Planet Shield (80c)</button>
-        <button class="hud-btn" id="btn-pw-emp">[E] EMP Nuke (120c)</button>
-        <button class="hud-btn" id="btn-pw-slow">[F] Time Slow (70c)</button>
-        <button class="hud-btn" id="btn-pw-dbl">[G] Double Score (60c)</button>
-        <hr />
-        <h4>MENU, AUDIO &amp; PERINGKAT</h4>
-        <button class="hud-btn highlight-btn" id="btn-hud-settings">[⚙️] Pengaturan</button>
-        <button class="hud-btn highlight-btn" id="btn-music">[N] Musik: 🔊 ON</button>
-        <button class="hud-btn" id="btn-pause">[P / Esc] ⏸️ Pause Game</button>
-        <button class="hud-btn" id="btn-open-leaderboard">[L] Papan Peringkat</button>
+      <!-- Sisi Kanan: Radar & Map (Di Antara Score & Powerup) + Power-Up (Diturunkan) -->
+      <div class="hud-right-stack">
+        <!-- SISTEM RADAR & MINIMAP TAKTIS 360 DERAJAT -->
+        <div id="fpp-radar-box">
+          <div class="radar-header">
+            <div class="radar-title-group">
+              <span class="radar-title">🛰️ RADAR &amp; MAP</span>
+              <span id="radar-range-badge" class="radar-range-badge">65m</span>
+            </div>
+            <span id="radar-threat-count" class="radar-threat safe">0 TARGET</span>
+          </div>
+
+          <div class="radar-canvas-wrap">
+            <!-- Canvas Radar Map (Resolusi Tajam 160x160) -->
+            <canvas id="fpp-radar-canvas" width="160" height="160"></canvas>
+          </div>
+
+          <div class="radar-footer">
+            <div class="radar-heading-text">▲ HADAP KAMERA [360°]</div>
+            <!-- Mini Legend Tipe Meteor & Garis Asal -->
+            <div class="radar-mini-legend">
+              <span style="color:#38bdf8;">● Std</span>
+              <span style="color:#facc15;">● Cepat</span>
+              <span style="color:#ef4444;">● Armor</span>
+              <span style="color:#10b981;">● Clust</span>
+              <span style="color:#c084fc;">● Boss</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Power-Up (Diturunkan di Bawah Map) -->
+        <div class="side-panel powerup-panel">
+          <h4>POWER-UPS (COINS / CD)</h4>
+          <button class="hud-btn" id="btn-pw-shield">[Q] Planet Shield (80c)</button>
+          <button class="hud-btn" id="btn-pw-emp">[E] EMP Nuke (120c)</button>
+          <button class="hud-btn" id="btn-pw-slow">[F] Time Slow (70c)</button>
+          <button class="hud-btn" id="btn-pw-dbl">[G] Double Score (60c)</button>
+        </div>
       </div>
     </div>
 
@@ -180,42 +205,14 @@
         <span><strong>[R]:</strong> Reload</span> |
         <span><strong>[B]:</strong> Tema Planet</span> |
         <span><strong>[N]:</strong> Musik</span> |
-        <span><strong>[P / Esc]:</strong> Pause</span>
+        <span><strong>[L]:</strong> Peringkat</span> |
+        <span><strong>[P / Esc]:</strong> Pause &amp; Menu</span>
       </div>
     </div>
   </div>
 
-  <!-- SISTEM RADAR & MINIMAP TAKTIS 360 DERAJAT (AKTIF DI SEMUA MODE KAMERA) -->
+  <!-- INDIKATOR ARAH TEPI LAYAR & LOCK-ON (SEMUA MODE KAMERA) -->
   <div id="fpp-overlay" class="hidden">
-    <!-- Radar & Map Box di Pojok Kiri Bawah -->
-    <div id="fpp-radar-box">
-      <div class="radar-header">
-        <div class="radar-title-group">
-          <span class="radar-title">🛰️ RADAR &amp; MAP</span>
-          <span id="radar-range-badge" class="radar-range-badge">65m</span>
-        </div>
-        <span id="radar-threat-count" class="radar-threat safe">0 TARGET</span>
-      </div>
-
-      <div class="radar-canvas-wrap">
-        <!-- Canvas Radar Map (Resolusi Tajam 160x160) -->
-        <canvas id="fpp-radar-canvas" width="160" height="160"></canvas>
-      </div>
-
-      <div class="radar-footer">
-        <div class="radar-heading-text">▲ HADAP KAMERA [360°]</div>
-        <!-- Mini Legend Tipe Meteor & Garis Asal -->
-        <div class="radar-mini-legend">
-          <span style="color:#38bdf8;">● Std</span>
-          <span style="color:#facc15;">● Cepat</span>
-          <span style="color:#ef4444;">● Armor</span>
-          <span style="color:#10b981;">● Clust</span>
-          <span style="color:#c084fc;">● Boss</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Kontainer Tanda Arah Tepi Layar & Target Lock-On Reticle -->
     <div id="fpp-indicators-container"></div>
   </div>
 

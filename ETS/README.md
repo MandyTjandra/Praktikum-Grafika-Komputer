@@ -1,7 +1,7 @@
-# Meteor Defense 3D - Evaluasi Tengah Semester (ETS) Grafika Komputer
+# Meteor Defense 3D: Planetary Defense Initiative
 
-Proyek **Mini Game 3D Interaktif berbasis Browser** menggunakan **JavaScript, HTML5, CSS3, dan Three.js**.
-Topik: **Topik 10 - Meteor Defense**.
+Game 3D Sci-Fi Interaktif Berbasis Web yang dibangun menggunakan **JavaScript (ES6 Modules), HTML5, CSS3, dan Three.js**.
+Pemain mengendalikan pangkalan pertahanan planetary meriam ganda untuk menghancurkan badai meteor kosmik, mengelola persenjataan taktis, dan menghadapi Boss Asteroid raksasa.
 
 ---
 
@@ -85,7 +85,7 @@ Topik: **Topik 10 - Meteor Defense**.
     - **Kilatan Meriam (Muzzle Flash)**: Pancaran cahaya dinamis dan animasi recoil hentakan laras meriam ganda.
     - **Latar Belakang Kosmik Procedural**: 3D Procedural Starfield Skybox (1.600 partikel bintang) dengan atmosfer kabut dinamis (`THREE.FogExp2`).
   - **Sensori Umpan Balik & Audio**:
-    - **Background Music (BGM)**: Trek musik tema antariksa sci-fi [`music.mp3`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/assets/music/music.mp3) dengan kontrol tombol HUD / pintasan keyboard `[N]`, dukungan pause otomatis, dan kepatuhan browser autoplay policy.
+    - **Background Music (BGM)**: Trek musik tema antariksa sci-fi [`music.mp3`](./assets/music/music.mp3) dengan kontrol tombol HUD / pintasan keyboard `[N]`, dukungan pause otomatis, dan kepatuhan browser autoplay policy.
     - **Screen Shake**: Kamera berguncang dinamis saat pangkalan tertabrak, saat menembakkan misil, dan saat nuklir EMP meledak.
     - **Sound Effects (Web Audio API Procedural)**: Suara tembakan laser, peluncuran misil bergemuruh, ledakan railgun magnetik, dentuman ledakan meteor, alarm peringatan saat HP kritis (< 30%), dan bunyi reload mekanik.
   - **Kustomisasi**:
@@ -123,18 +123,36 @@ Topik: **Topik 10 - Meteor Defense**.
 
 ---
 
-## 📋 Pemenuhan Rubrik Penilaian Mata Kuliah
+## 🏗️ Struktur Arsitektur Modular Proyek (`src/`)
 
-| Requirement Modul | Implementasi Kode | File Sumber |
+Kode program telah dipecah secara modular (*clean architecture*) dengan pemisahan tanggung jawab yang jelas (*Single Responsibility Principle*):
+
+| Modul File | Peran & Tanggung Jawab |
+| :--- | :--- |
+| [`src/main.js`](./src/main.js) | **Main Orchestrator**: Inisialisasi subsistem, game loop (`animate`), event input mouse/keyboard, dan kontrol siklus hidup game (*lifecycle*). |
+| [`src/sceneSetup.js`](./src/sceneSetup.js) | **Scene, Camera & Lighting**: Penyiapan 3 mode kamera, pencahayaan PBR (Directional, Ambient, Point), bayangan (*shadows*), kabut atmosfer (*Fog*), dan tema planet. |
+| [`src/turret.js`](./src/turret.js) | **Turret & GLB Satellite**: Hierarki *Scene Graph* meriam (Yaw, Pitch, Recoil) serta pemuatan aset 3D [`satellite.glb`](./assets/models/satellite.glb) beserta pemutar 2 animasinya via `THREE.AnimationMixer`. |
+| [`src/meteorManager.js`](./src/meteorManager.js) | **Meteor & Wave Management**: Pembangkitan prosedural 5 jenis meteor (Standard, Speedy, Armored, Cluster, Boss), pelacakan titik asal (*spawn origin*), dan kalkulasi tabrakan. |
+| [`src/weaponSystem.js`](./src/weaponSystem.js) | **Arsenal & Upgrades**: Konfigurasi 3 senjata (Laser, Missile AOE, Railgun Pierce), sistem reload, kalkulasi *damage* raycast, sistem upgrade, dan 4 *abilities* khusus. |
+| [`src/radarManager.js`](./src/radarManager.js) | **Tactical Radar & Minimap 360°**: Render canvas radar 160x160, kompas arah mata angin dinamis (U/T/S/B), vektor lintasan meteor asal, dan panah peringatan bahaya di tepi layar. |
+| [`src/audioManager.js`](./src/audioManager.js) | **Audio & Volume System**: Pengendali musik latar (BGM), sinkronisasi volume/mute audio di UI dan penyimpanan preferensi di `localStorage`. |
+| [`src/uiManager.js`](./src/uiManager.js) | **UI, Modals & HUD**: Layar awal (*Start Screen*), modal pengaturan (*Settings Codex*), papan peringkat (*Leaderboard*), modal jeda (*Pause*), modal kemenangan/kekalahan, dan pembaruan HUD real-time. |
+| [`src/vfxManager.js`](./src/vfxManager.js) | **Visual Effects & Synthesizer**: Efek visual sinar laser, proyektil roket 3D, partikel ledakan, debris gravitasi, guncangan kamera (*screen shake*), dan generator suara prosedural Web Audio API. |
+
+---
+
+## 📋 Spesifikasi Grafika 3D & Fitur Engine
+
+| Fitur / Komponen Grafika 3D | Implementasi Kode | Modul Sumber |
 | :--- | :--- | :--- |
-| **Scene Graph Parent-Child** | `baseGroup` (Parent) &rarr; `headGroup` (Yaw) &rarr; `cannonGroup` (Pitch & Recoil) dan `satelliteGroup` (Orbit 360°) | [`src/turret.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/turret.js) |
-| **Asset GLTF/GLB & 2 Animasi** | Model Satelit Orbital [`satellite.glb`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/assets/models/satellite.glb) (105 KB) dengan **2 Animasi Embedded via `THREE.AnimationMixer`**:<br>1. **`Radar_Scan`**: Rotasi sapuan 360° radar dish & mast + nodding elevasi.<br>2. **`Solar_Wings_Deploy`**: Fleksi sayap panel surya kiri & kanan + denyut semburan plasma ion jet.<br>(Termasuk fallback procedural GLB exporter jika via `file://`). | [`src/turret.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/turret.js) |
-| **PBR Material & Shadows** | `MeshStandardMaterial` dengan metalness & roughness. `castShadow` pada turret, meteor, debris batuan, dan satelit; `receiveShadow` pada permukaan tanah dan batuan | [`src/sceneSetup.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js) |
-| **Pencahayaan (Min. 2 Light)** | 1. `DirectionalLight` dengan bayangan 2048x2048<br>2. `AmbientLight`<br>3. `PointLight` pangkalan & muzzle flash dinamis | [`src/sceneSetup.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js) |
-| **Environment & Fog** | 5 Tema Planet (`PLANET_THEMES`), atmosfer `THREE.FogExp2`, dan Procedural Starfield (1.600 partikel bintang) | [`src/sceneSetup.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js) |
-| **Animasi & Interaksi Raycaster** | Raycaster mouse aiming & clicking, animasi orbit satelit, animasi recoil laras, animasi tumbling meteor, animasi debris gravitasi | [`src/main.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/main.js)<br>[`src/vfxManager.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/vfxManager.js) |
-| **VFX & Audio Feedback** | 5 jenis VFX (Laser beam, Missile 3D, Particle explosion, Debris gravity, Fire trail, Shield dome, Screen shake) + BGM Soundtrack [`music.mp3`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/assets/music/music.mp3) + 10 efek suara sintetis | [`src/vfxManager.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/vfxManager.js) |
-| **Objective, Win/Lose, Restart** | Mode Campaign 3 Wave dengan Boss raksasa, Mode Endless, modal Game Over/Victory, tombol restart instan | [`src/main.js`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/src/main.js) |
+| **Scene Graph Parent-Child** | `baseGroup` (Parent) &rarr; `headGroup` (Yaw) &rarr; `cannonGroup` (Pitch & Recoil) dan `satelliteGroup` (Orbit 360°) | [`src/turret.js`](./src/turret.js) |
+| **Asset GLTF/GLB & 2 Animasi** | Model Satelit Orbital [`satellite.glb`](./assets/models/satellite.glb) (102.7 KB) dengan **2 Animasi Embedded via `THREE.AnimationMixer`**:<br>1. **`Radar_Scan`**: Rotasi sapuan 360° radar dish & mast + nodding elevasi.<br>2. **`Solar_Wings_Deploy`**: Fleksi sayap panel surya kiri & kanan + denyut semburan plasma ion jet.<br>(Termasuk fallback procedural GLB exporter jika via `file://`). | [`src/turret.js`](./src/turret.js) |
+| **PBR Material & Shadows** | `MeshStandardMaterial` dengan metalness & roughness. `castShadow` pada turret, meteor, debris batuan, dan satelit; `receiveShadow` pada permukaan tanah dan batuan | [`src/sceneSetup.js`](./src/sceneSetup.js) |
+| **Pencahayaan (Min. 2 Light)** | 1. `DirectionalLight` dengan bayangan 2048x2048<br>2. `AmbientLight`<br>3. `PointLight` pangkalan & muzzle flash dinamis | [`src/sceneSetup.js`](./src/sceneSetup.js) |
+| **Environment & Fog** | 5 Tema Planet (`PLANET_THEMES`), atmosfer `THREE.FogExp2`, dan Procedural Starfield (1.600 partikel bintang) | [`src/sceneSetup.js`](./src/sceneSetup.js) |
+| **Animasi & Interaksi Raycaster** | Raycaster mouse aiming & clicking, animasi orbit satelit, animasi recoil laras, animasi tumbling meteor, animasi debris gravitasi | [`src/main.js`](./src/main.js)<br>[`src/vfxManager.js`](./src/vfxManager.js) |
+| **VFX & Audio Feedback** | 5 jenis VFX (Laser beam, Missile 3D, Particle explosion, Debris gravity, Fire trail, Shield dome, Screen shake) + BGM Soundtrack [`music.mp3`](./assets/music/music.mp3) + 10 efek suara sintetis | [`src/vfxManager.js`](./src/vfxManager.js) |
+| **Objective, Win/Lose, Restart** | Mode Campaign 3 Wave dengan Boss raksasa, Mode Endless, modal Game Over/Victory, tombol restart instan | [`src/main.js`](./src/main.js) |
 
 ---
 
@@ -148,13 +166,13 @@ python -m http.server 8000
 Buka peramban di `http://localhost:8000`.
 
 ### Opsi 2: Menggunakan VS Code Live Server
-Buka folder `ETS` di VS Code, klik kanan [`index.html`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/index.html) dan pilih **"Open with Live Server"**.
+Buka folder project di VS Code, klik kanan [`index.html`](./index.html) dan pilih **"Open with Live Server"**.
 
 ---
 
 ## 📜 Asset Credits & Attribution
 - **3D Engine**: Three.js (MIT License) oleh Ricardo Cabello (mrdoob).
-- **Model 3D GLB**: Model pertahanan satelit orbital GLTF 2.0 binary ([`satellite.glb`](file:///e:/GitHub's%20Repositories/Praktikum-Grafika-Komputer/ETS/assets/models/satellite.glb)).
+- **Model 3D GLB**: Model pertahanan satelit orbital GLTF 2.0 binary ([`satellite.glb`](./assets/models/satellite.glb)).
 - **Musik Latar Belakang (BGM)**: Sci-Fi Space Defense Soundtrack (`assets/music/music.mp3` via YouTube Audio).
 - **Audio Synthesizer & SFX**: Procedural Web Audio API sound generator (Laser, Missile, Railgun, Explode, Alarm, Reload, Power-Up).
 - **VFX & Shader**: Custom procedural particle system dan dynamic standard material.
