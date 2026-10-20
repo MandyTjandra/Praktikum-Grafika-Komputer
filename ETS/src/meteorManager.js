@@ -18,14 +18,28 @@ export class MeteorManager {
     this.bossMeteor = null;
   }
 
-  spawnMeteor(forcedType = null, customOrigin = null) {
+  spawnMeteor(forcedType = null, customOrigin = null, wave = 1) {
     let typeKey = forcedType;
     if (!typeKey) {
       const r = Math.random();
-      if (r < 0.45) typeKey = 'standard';
-      else if (r < 0.68) typeKey = 'speedy';
-      else if (r < 0.85) typeKey = 'cluster';
-      else typeKey = 'armored';
+      if (wave === 1) {
+        // Wave 1 (Awal Game): Sangat ramah pemula, dominan Standard (85%) & sedikit Speedy (15%)
+        // Tanpa Armored (HP tebal) dan tanpa Cluster yang memecah!
+        if (r < 0.85) typeKey = 'standard';
+        else typeKey = 'speedy';
+      } else if (wave === 2) {
+        // Wave 2: Mulai perkenalkan variasi Cluster dan sedikit Armored
+        if (r < 0.50) typeKey = 'standard';
+        else if (r < 0.75) typeKey = 'speedy';
+        else if (r < 0.90) typeKey = 'cluster';
+        else typeKey = 'armored';
+      } else {
+        // Wave 3+: Komposisi penuh tantangan
+        if (r < 0.35) typeKey = 'standard';
+        else if (r < 0.60) typeKey = 'speedy';
+        else if (r < 0.80) typeKey = 'cluster';
+        else typeKey = 'armored';
+      }
     }
 
     const cfg = METEOR_TYPES[typeKey];
@@ -71,10 +85,10 @@ export class MeteorManager {
     if (customOrigin) {
       mesh.position.copy(customOrigin);
     } else {
-      // Spawning 360 derajat mengelilingi planet secara beragam (semua sisi & ketinggian bervariasi)
+      // Jarak kemunculan di awal game dibuat lebih jauh (52-74m) agar pemain memiliki waktu reaksi cukup
       const spawnAngle = Math.random() * Math.PI * 2;
-      const spawnRadius = 38 + Math.random() * 22; // 38 hingga 60 meter
-      const spawnHeight = 22 + Math.random() * 22; // 22 hingga 44 meter
+      const spawnRadius = (wave === 1 ? 52 : 46) + Math.random() * 22; // 52-74m di wave 1
+      const spawnHeight = 24 + Math.random() * 20;
       mesh.position.set(
         Math.cos(spawnAngle) * spawnRadius,
         spawnHeight,
@@ -82,29 +96,38 @@ export class MeteorManager {
       );
     }
 
+    // Skala kecepatan musuh dibuat lebih bersahabat di wave awal
+    const waveSpeedScale = wave === 1 ? 0.70 : (wave === 2 ? 0.86 : 1.0);
+    const effectiveSpeed = cfg.speed * waveSpeedScale;
+
     // Target pangkalan / turret di tengah planet dengan sedikit variasi acak
     const target = new THREE.Vector3(
-      (Math.random() - 0.5) * 8,
+      (Math.random() - 0.5) * 6,
       0.5,
-      (Math.random() - 0.5) * 8
+      (Math.random() - 0.5) * 6
     );
-    const velocity = target.sub(mesh.position).normalize().multiplyScalar(cfg.speed);
+    const velocity = target.sub(mesh.position).normalize().multiplyScalar(effectiveSpeed);
 
     // Tambahan sebaran gerak lateral untuk pecahan cluster shard
     if (typeKey === 'shard') {
-      velocity.x += (Math.random() - 0.5) * 3.5;
-      velocity.z += (Math.random() - 0.5) * 3.5;
+      velocity.x += (Math.random() - 0.5) * 3.0;
+      velocity.z += (Math.random() - 0.5) * 3.0;
     }
+
+    // Di Wave 1, Standard Meteor hanya butuh 1-2 tembakan laser ringan
+    const initialHp = (wave === 1 && typeKey === 'standard') ? 1.5 : cfg.hp;
 
     mesh.userData = {
       type: typeKey,
-      hp: cfg.hp,
-      maxHp: cfg.hp,
+      hp: initialHp,
+      maxHp: initialHp,
       score: cfg.score,
       coins: cfg.coins,
       velocity,
       rotSpeed: new THREE.Vector3(Math.random() * 2.2, Math.random() * 2.2, Math.random() * 2.2),
-      flashTime: 0
+      flashTime: 0,
+      spawnPos: mesh.position.clone(), // Menyimpan titik asal kemunculan meteor untuk garis lintasan pada Map
+      spawnTime: performance.now()
     };
 
     this.scene.add(mesh);
@@ -113,10 +136,10 @@ export class MeteorManager {
   }
 
   // Mekanik Cluster: Memecah jadi 3 meteor kecil saat hancur
-  spawnClusterShards(originPos) {
+  spawnClusterShards(originPos, wave = 2) {
     for (let i = 0; i < 3; i++) {
       const offset = new THREE.Vector3((Math.random() - 0.5) * 3, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 3);
-      this.spawnMeteor('shard', originPos.clone().add(offset));
+      this.spawnMeteor('shard', originPos.clone().add(offset), wave);
     }
   }
 

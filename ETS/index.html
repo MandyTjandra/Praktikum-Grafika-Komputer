@@ -15,8 +15,58 @@
   </script>
 </head>
 <body>
-  <!-- HUD UTAMA -->
-  <div id="hud">
+  <!-- START SCREEN / TITLE SCREEN -->
+  <div id="start-screen" class="start-screen-overlay">
+    <div class="start-content-box">
+      <div class="start-badge">SISTEM PERTAHANAN PLANET • ETS GRAFIKA KOMPUTER</div>
+      <h1 class="start-title">METEOR DEFENSE <span class="title-highlight">3D</span></h1>
+      <p class="start-subtitle">
+        Pertahankan pangkalan dan peradaban planet dari gempuran badai meteor kosmik serta Asteroid Raksasa!
+      </p>
+
+      <!-- Pilihan Mode Permainan Sebelum Mulai -->
+      <div class="start-mode-selector">
+        <span class="mode-select-label">PILIH MODE PERMAINAN:</span>
+        <div class="mode-btn-group">
+          <button id="btn-start-mode-campaign" class="mode-pill active" type="button">
+            🛡️ Campaign (3 Wave + Boss)
+          </button>
+          <button id="btn-start-mode-endless" class="mode-pill" type="button">
+            ♾️ Endless (Survival Rekor)
+          </button>
+        </div>
+      </div>
+
+      <!-- Tombol Aksi Menu Utama -->
+      <div class="start-menu-buttons">
+        <button id="btn-start-game" class="main-menu-btn play-btn" type="button">
+          <span class="btn-icon">🚀</span>
+          <span class="btn-text">MULAI PERMAINAN (START)</span>
+        </button>
+
+        <button id="btn-start-settings" class="main-menu-btn" type="button">
+          <span class="btn-icon">⚙️</span>
+          <span class="btn-text">PENGATURAN (SETTINGS)</span>
+        </button>
+
+        <button id="btn-start-leaderboard" class="main-menu-btn" type="button">
+          <span class="btn-icon">🏆</span>
+          <span class="btn-text">PAPAN PERINGKAT (LEADERBOARD)</span>
+        </button>
+      </div>
+
+      <!-- Petunjuk Singkat Kontrol di Bagian Bawah -->
+      <div class="start-footer-hints">
+        <span>🖱️ <strong>Bidik &amp; Tembak:</strong> Mouse Kiri</span>
+        <span>🔄 <strong>Kamera 360°:</strong> Kanan Drag / Panah</span>
+        <span>🔫 <strong>Senjata:</strong> [1] Laser • [2] Missile • [3] Railgun</span>
+        <span>⚡ <strong>Abilities:</strong> [Q] [E] [F] [G]</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HUD UTAMA (Tersembunyi sampai permainan dimulai) -->
+  <div id="hud" class="hidden">
     <!-- Baris Atas: Status Utama & Boss Warning -->
     <div class="hud-top">
       <div class="stat-box">
@@ -71,6 +121,7 @@
         <button class="hud-btn" id="btn-pw-dbl">[G] Double Score (60c)</button>
         <hr />
         <h4>MENU, AUDIO &amp; PERINGKAT</h4>
+        <button class="hud-btn highlight-btn" id="btn-hud-settings">[⚙️] Pengaturan</button>
         <button class="hud-btn highlight-btn" id="btn-music">[N] Musik: 🔊 ON</button>
         <button class="hud-btn" id="btn-pause">[P / Esc] ⏸️ Pause Game</button>
         <button class="hud-btn" id="btn-open-leaderboard">[L] Papan Peringkat</button>
@@ -99,7 +150,7 @@
             <span class="wpn-title">[1] Laser</span>
             <span class="wpn-ammo-badge" id="w1-ammo">∞</span>
           </div>
-          <div class="wpn-sub">Dmg: 1.2 • Rapid (170ms)</div>
+          <div class="wpn-sub">Dmg: 1.5 • Rapid (160ms)</div>
           <div class="wpn-role">Tipe: Single Target • Anti-Fast</div>
         </div>
 
@@ -108,7 +159,7 @@
             <span class="wpn-title">[2] Missile</span>
             <span class="wpn-ammo-badge" id="w2-ammo">7/7</span>
           </div>
-          <div class="wpn-sub">Dmg: 4.2 • Area AOE (8.5m)</div>
+          <div class="wpn-sub">Dmg: 4.5 • Area AOE (8.5m)</div>
           <div class="wpn-role">Tipe: Roket Meledak • Crowd Control</div>
         </div>
 
@@ -117,7 +168,7 @@
             <span class="wpn-title">[3] Railgun</span>
             <span class="wpn-ammo-badge" id="w3-ammo">3/3</span>
           </div>
-          <div class="wpn-sub">Dmg: 6.5 • Tembus Segaris</div>
+          <div class="wpn-sub">Dmg: 7.0 • Tembus Segaris</div>
           <div class="wpn-role">Tipe: Piercing Beam • Anti-Boss/Armor</div>
         </div>
       </div>
@@ -134,18 +185,34 @@
     </div>
   </div>
 
-  <!-- HUD FPP KHUSUS: INDIKATOR ARAH & RADAR TAKTIS 360 DERAJAT -->
+  <!-- SISTEM RADAR & MINIMAP TAKTIS 360 DERAJAT (AKTIF DI SEMUA MODE KAMERA) -->
   <div id="fpp-overlay" class="hidden">
-    <!-- Radar Taktis 360 Derajat di Pojok Kiri Bawah -->
+    <!-- Radar & Map Box di Pojok Kiri Bawah -->
     <div id="fpp-radar-box">
       <div class="radar-header">
-        <span class="radar-title">🛰️ RADAR 360°</span>
+        <div class="radar-title-group">
+          <span class="radar-title">🛰️ RADAR &amp; MAP</span>
+          <span id="radar-range-badge" class="radar-range-badge">65m</span>
+        </div>
         <span id="radar-threat-count" class="radar-threat safe">0 TARGET</span>
       </div>
+
       <div class="radar-canvas-wrap">
-        <canvas id="fpp-radar-canvas" width="130" height="130"></canvas>
+        <!-- Canvas Radar Map (Resolusi Tajam 160x160) -->
+        <canvas id="fpp-radar-canvas" width="160" height="160"></canvas>
       </div>
-      <div class="radar-footer">DEPAN ▲ [KEMUDI 360°]</div>
+
+      <div class="radar-footer">
+        <div class="radar-heading-text">▲ HADAP KAMERA [360°]</div>
+        <!-- Mini Legend Tipe Meteor & Garis Asal -->
+        <div class="radar-mini-legend">
+          <span style="color:#38bdf8;">● Std</span>
+          <span style="color:#facc15;">● Cepat</span>
+          <span style="color:#ef4444;">● Armor</span>
+          <span style="color:#10b981;">● Clust</span>
+          <span style="color:#c084fc;">● Boss</span>
+        </div>
+      </div>
     </div>
 
     <!-- Kontainer Tanda Arah Tepi Layar & Target Lock-On Reticle -->
@@ -176,7 +243,9 @@
       
       <div class="modal-action-row">
         <button id="btn-resume" class="action-btn primary-btn">▶️ Lanjutkan (Resume)</button>
-        <button id="btn-pause-restart" class="action-btn secondary-btn">🔄 Mulai Ulang (Restart)</button>
+        <button id="btn-pause-settings" class="action-btn secondary-btn">⚙️ Pengaturan</button>
+        <button id="btn-pause-restart" class="action-btn secondary-btn">🔄 Mulai Ulang</button>
+        <button id="btn-pause-mainmenu" class="action-btn secondary-btn">🏠 Menu Utama</button>
       </div>
     </div>
   </div>
@@ -190,6 +259,7 @@
       <div class="modal-action-row">
         <button id="btn-restart" class="action-btn primary-btn">Main Lagi (Restart)</button>
         <button id="btn-view-leaderboard-modal" class="action-btn secondary-btn">Buka Leaderboard</button>
+        <button id="btn-gameover-mainmenu" class="action-btn secondary-btn">🏠 Menu Utama</button>
       </div>
 
       <div class="credits-box">
@@ -225,6 +295,289 @@
       </div>
 
       <button id="btn-close-leaderboard" class="action-btn primary-btn">Tutup Papan Peringkat</button>
+    </div>
+  </div>
+
+  <!-- MODAL SETTINGS & INTELIJEN SISTEM LENGKAP -->
+  <div id="settings-modal" class="hidden">
+    <div class="modal-box settings-box">
+      <div class="settings-header">
+        <h2>⚙️ PENGATURAN &amp; INTELIJEN SISTEM</h2>
+        <button id="btn-close-settings-x" class="modal-close-x" title="Tutup">✕</button>
+      </div>
+
+      <!-- Tab Navigation Buttons -->
+      <div class="settings-tabs">
+        <button class="settings-tab-btn active" data-tab="tab-audio">🔊 Audio &amp; Suara</button>
+        <button class="settings-tab-btn" data-tab="tab-controls">⌨️ Kontrol</button>
+        <button class="settings-tab-btn" data-tab="tab-enemies">👾 Intelijen Musuh</button>
+        <button class="settings-tab-btn" data-tab="tab-arsenal">🚀 Senjata &amp; Kemampuan</button>
+      </div>
+
+      <!-- Tab 1: Audio & Suara -->
+      <div id="tab-audio" class="settings-tab-content active">
+        <div class="settings-group">
+          <h3>🎵 Trek Musik Latar Belakang (BGM)</h3>
+          <div class="setting-row">
+            <span>Status Musik:</span>
+            <button id="setting-music-toggle" class="setting-toggle-btn active" type="button">🔊 Musik: ON</button>
+          </div>
+          <div class="setting-row">
+            <label for="setting-music-slider">Volume Musik (<span id="setting-music-val">35%</span>):</label>
+            <input type="range" id="setting-music-slider" min="0" max="100" value="35" class="setting-slider" />
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h3>💥 Efek Suara Prosedural (SFX)</h3>
+          <div class="setting-row">
+            <span>Status Efek Suara:</span>
+            <button id="setting-sfx-toggle" class="setting-toggle-btn active" type="button">🔊 SFX: ON</button>
+          </div>
+          <div class="setting-row">
+            <label for="setting-sfx-slider">Volume Suara (<span id="setting-sfx-val">80%</span>):</label>
+            <input type="range" id="setting-sfx-slider" min="0" max="100" value="80" class="setting-slider" />
+          </div>
+          <div class="setting-row test-row">
+            <button id="btn-test-sound" class="setting-test-btn" type="button">🔊 Uji Coba Efek Suara (Test SFX)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Info Kontrol Lengkap -->
+      <div id="tab-controls" class="settings-tab-content">
+        <div class="table-container codex-table-container">
+          <table class="codex-table">
+            <thead>
+              <tr>
+                <th style="width: 32%;">Tombol / Input</th>
+                <th>Fungsi &amp; Tindakan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="key-badge">Mouse Gerak</span></td>
+                <td>Mengarahkan bidikan meriam (*Aiming Turret*) dengan presisi via `THREE.Raycaster`.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">Klik Kiri</span></td>
+                <td>Menembakkan senjata yang sedang aktif ke posisi kursor bidikan.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">Klik Kanan Drag</span> / <span class="key-badge">Alt + Drag</span></td>
+                <td><strong>Rotasi Kamera 360° Bebas</strong> mengelilingi pangkalan (Horizontal &amp; Vertikal).</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">Panah ← ↑ → ↓</span></td>
+                <td>Rotasi kamera 360° menggunakan tombol panah keyboard.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">Scroll Mouse</span></td>
+                <td>Memperbesar atau memperkecil jarak pandang kamera (*Zoom In / Out*).</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">1</span> / <span class="key-badge">2</span> / <span class="key-badge">3</span></td>
+                <td>Ganti senjata: <strong>[1] Laser</strong>, <strong>[2] Missile (AOE)</strong>, <strong>[3] Railgun (Tembus)</strong>.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">R</span></td>
+                <td>Isi ulang amunisi sekunder (*Reload*) atau recharge kapasitor railgun.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">K</span></td>
+                <td>Ganti mode kamera: <strong>Third-Person Orbit</strong>, <strong>First-Person Cockpit</strong>, atau <strong>Top-Down</strong>.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">T</span></td>
+                <td>Ganti <strong>Skin Meriam Turret</strong> (5 variasi skin kosmetik futuristik).</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">B</span></td>
+                <td>Ganti <strong>Tema Planet &amp; Atmosfer</strong> (5 atmosfer lingkungan kosmik).</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">M</span></td>
+                <td>Ganti <strong>Mode Permainan</strong> (Campaign / Endless Survival).</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">N</span></td>
+                <td>Mute / Unmute musik latar BGM cepat.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">P</span> / <span class="key-badge">Escape</span></td>
+                <td>Jeda atau lanjutkan permainan (*Pause &amp; Resume*).</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">L</span></td>
+                <td>Membuka papan peringkat (*Leaderboard*) skor tertinggi lokal.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">Z</span> <span class="key-badge">X</span> <span class="key-badge">C</span> <span class="key-badge">V</span></td>
+                <td>Upgrade Turret: [Z] Damage, [X] Fire Rate, [C] Kapasitas Amunisi, [V] Kecepatan Putar Meriam.</td>
+              </tr>
+              <tr>
+                <td><span class="key-badge">Q</span> <span class="key-badge">E</span> <span class="key-badge">F</span> <span class="key-badge">G</span></td>
+                <td>Aktivasi Abilities: [Q] Planet Shield, [E] EMP Nuke, [F] Time Slow, [G] Double Score.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 3: Info Mengenai Musuh (Enemy Codex) -->
+      <div id="tab-enemies" class="settings-tab-content">
+        <div class="enemy-codex-grid">
+          <!-- Standard -->
+          <div class="enemy-card">
+            <div class="enemy-card-header">
+              <span class="enemy-pill badge-standard">STANDARD</span>
+              <h4>Standard Meteor</h4>
+            </div>
+            <div class="enemy-stats">
+              <span>Kecepatan: Sedang</span> • <span>HP: 2</span> • <span>Skor: 100</span>
+            </div>
+            <p class="enemy-desc">
+              Pecahan batuan antariksa umum. Meluncur stabil menuju markas. Hancurkan dengan mudah menggunakan proyektil apa pun.
+            </p>
+            <div class="enemy-tip">💡 <strong>Taktik:</strong> Gunakan Laser untuk menghemat amunisi sekunder.</div>
+          </div>
+
+          <!-- Speedy -->
+          <div class="enemy-card">
+            <div class="enemy-card-header">
+              <span class="enemy-pill badge-speedy">SPEEDY</span>
+              <h4>Speedy Comet</h4>
+            </div>
+            <div class="enemy-stats">
+              <span>Kecepatan: Sangat Cepat</span> • <span>HP: 1</span> • <span>Skor: 150</span>
+            </div>
+            <p class="enemy-desc">
+              Meteor komet emas kecil dengan laju luncur luar biasa kencang. Memerlukan reflek cepat sebelum menabrak planet.
+            </p>
+            <div class="enemy-tip">💡 <strong>Taktik:</strong> <strong>[1] Laser Instan</strong> dapat melenyapkannya seketika dalam 1 hit!</div>
+          </div>
+
+          <!-- Armored -->
+          <div class="enemy-card">
+            <div class="enemy-card-header">
+              <span class="enemy-pill badge-armored">ARMORED</span>
+              <h4>Armored Meteor</h4>
+            </div>
+            <div class="enemy-stats">
+              <span>Kecepatan: Lambat</span> • <span>HP: 7</span> • <span>Skor: 300</span>
+            </div>
+            <p class="enemy-desc">
+              Meteor merah padat berlapis kerak logam tebal. Mampu menyerap banyak tembakan biasa sebelum hancur meledak.
+            </p>
+            <div class="enemy-tip">💡 <strong>Taktik:</strong> <strong>[3] Railgun Magnetik</strong> menembus kerak bajanya dengan efisiensi tinggi.</div>
+          </div>
+
+          <!-- Cluster -->
+          <div class="enemy-card">
+            <div class="enemy-card-header">
+              <span class="enemy-pill badge-cluster">CLUSTER</span>
+              <h4>Cluster Meteor &amp; Shards</h4>
+            </div>
+            <div class="enemy-stats">
+              <span>Kecepatan: Sedang</span> • <span>HP: 3</span> • <span>Skor: 220 + Bonus</span>
+            </div>
+            <p class="enemy-desc">
+              Meteor kristal hijau berbahaya. Saat hancur, intinya meletup dan <strong>memecah menjadi 3 serpihan (*Shards*)</strong> cepat!
+            </p>
+            <div class="enemy-tip">💡 <strong>Taktik:</strong> Tembak dengan <strong>[2] Missile AOE</strong> saat pecahan baru terpisah!</div>
+          </div>
+
+          <!-- Boss -->
+          <div class="enemy-card boss-card">
+            <div class="enemy-card-header">
+              <span class="enemy-pill badge-boss">⚠️ BOSS ANOMALY</span>
+              <h4>Gigantic Boss Asteroid</h4>
+            </div>
+            <div class="enemy-stats">
+              <span>Ukuran: 3x Raksasa</span> • <span>HP: 35</span> • <span>Skor: 2000</span>
+            </div>
+            <p class="enemy-desc">
+              Asteroid monster raksasa berkawah magma ungu yang mengancam planet di Wave 3. Hantamannya mengikis 45% integritas planet!
+            </p>
+            <div class="enemy-tip">💡 <strong>Taktik:</strong> Gunakan Time Slow [F], tembakkan Missile &amp; Railgun bertubi-tubi, dan siapkan Planet Shield [Q]!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Info Senjata, Upgrade & Kemampuan (Arsenal) -->
+      <div id="tab-arsenal" class="settings-tab-content">
+        <!-- Bagian Senjata -->
+        <h3 class="arsenal-title-heading">🔫 Variasi Senjata Turret</h3>
+        <div class="arsenal-card-grid">
+          <div class="arsenal-item-card wpn-card-laser">
+            <div class="arsenal-card-title" style="color: #38bdf8;">[1] Meriam Laser</div>
+            <div class="arsenal-tags">
+              <span class="tag-pill">Amunisi: ∞ Tak Terbatas</span>
+              <span class="tag-pill">CD: 160ms</span>
+              <span class="tag-pill">Dmg: 1.5</span>
+            </div>
+            <p class="arsenal-desc">Tembakan berkecepatan cahaya (*pinpoint hitscan*). Tidak memerlukan reload sama sekali. Sangat akurat untuk menembak meteor kecil dan cepat.</p>
+          </div>
+
+          <div class="arsenal-item-card wpn-card-missile">
+            <div class="arsenal-card-title" style="color: #f97316;">[2] Peluru Kendali Missile</div>
+            <div class="arsenal-tags">
+              <span class="tag-pill">Kapasitas: 7 Peluru</span>
+              <span class="tag-pill">Reload: 1.6 Detik</span>
+              <span class="tag-pill">AOE: 8.5 Meter</span>
+            </div>
+            <p class="arsenal-desc">Proyektil roket 3D berhulu ledak ledakan area. Menghancurkan kelompok meteor yang saling berdekatan dalam satu ledakan dahsyat.</p>
+          </div>
+
+          <div class="arsenal-item-card wpn-card-railgun">
+            <div class="arsenal-card-title" style="color: #a855f7;">[3] Railgun Magnetik</div>
+            <div class="arsenal-tags">
+              <span class="tag-pill">Kapasitas: 3 Peluru</span>
+              <span class="tag-pill">Recharge: 3.2 Detik</span>
+              <span class="tag-pill">Dmg: 7.0 (Piercing)</span>
+            </div>
+            <p class="arsenal-desc">Berkas plasma magnetik tebal yang <strong>menembus (*pierce*)</strong> seluruh meteor yang berada dalam satu garis lurus laras tembak.</p>
+          </div>
+        </div>
+
+        <!-- Bagian Upgrade -->
+        <h3 class="arsenal-title-heading" style="margin-top: 16px;">🛠️ Sistem Upgrade Turret (Koin Pertahanan)</h3>
+        <div class="arsenal-sub-grid">
+          <div class="arsenal-mini-box">
+            <strong style="color: #38bdf8;">[Z] Damage Senjata:</strong> Meningkatkan daya hancur seluruh jenis senjata sebesar +30% per level.
+          </div>
+          <div class="arsenal-mini-box">
+            <strong style="color: #facc15;">[X] Kecepatan Tembak (Fire Rate):</strong> Mempercepat interval tembakan dan memangkas waktu jeda cooldown senjata.
+          </div>
+          <div class="arsenal-mini-box">
+            <strong style="color: #4ade80;">[C] Kapasitas Amunisi:</strong> Menambah kapasitas maksimum peluru Missile (+2) dan Railgun (+1).
+          </div>
+          <div class="arsenal-mini-box">
+            <strong style="color: #a855f7;">[V] Kecepatan Rotasi Turret:</strong> Mempercepat laju putar kemudi meriam (*traversal*) untuk mengikuti kursor lebih responsif.
+          </div>
+        </div>
+
+        <!-- Bagian Abilities / Power-Ups -->
+        <h3 class="arsenal-title-heading" style="margin-top: 16px;">⚡ Kemampuan Khusus (Power-Up Abilities)</h3>
+        <div class="arsenal-sub-grid">
+          <div class="arsenal-mini-box ability-box">
+            <strong style="color: #38bdf8;">[Q] Planet Shield (80 Koin):</strong> Memunculkan kubah energi pelindung transparan (*Shield Dome*) yang menyerap 1 hantaman meteor penuh tanpa mengurangi HP planet.
+          </div>
+          <div class="arsenal-mini-box ability-box">
+            <strong style="color: #ef4444;">[E] EMP Nuke (120 Koin):</strong> Ledakan pulsa elektromagnetik pembersih layar (*screen clear*) yang menghancurkan seketika semua meteor yang sedang mengudara!
+          </div>
+          <div class="arsenal-mini-box ability-box">
+            <strong style="color: #facc15;">[F] Time Slow (70 Koin):</strong> Memperlambat aliran ruang-waktu kosmik hingga 65% selama 6 detik untuk membidik ancaman krusial dengan tenang.
+          </div>
+          <div class="arsenal-mini-box ability-box">
+            <strong style="color: #4ade80;">[G] Double Score (60 Koin):</strong> Menggandakan seluruh perolehan poin skor sebanyak 2x lipat selama 8 detik.
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-action-row" style="margin-top: 18px;">
+        <button id="btn-close-settings" class="action-btn primary-btn" type="button">Tutup Pengaturan</button>
+      </div>
     </div>
   </div>
 

@@ -54,6 +54,25 @@ Topik: **Topik 10 - Meteor Defense**.
 - **Papan Peringkat (Leaderboard) Lokal**:
   - Pencatatan Top 5 Skor terbaik tersimpan otomatis di `localStorage` peramban.
   - Tombol modal interaktif untuk melihat peringkat kapan saja (`[L]`).
+- **Radar & Minimap Taktis 360° (Aktif di Semua Mode Kamera)**:
+  - **Tersedia di Seluruh Mode Pandang**: Bekerja otomatis di mode *Third-Person*, *First-Person (Turret)*, maupun *Top-Down*.
+  - **Visualisasi Vektor & Titik Asal Meteor (Map Inbound Trajectory)**: Menampilkan titik awal kemunculan meteor dengan gelombang sinyal pulsa (*origin beacon*), garis putus-putus lintasan dari titik asal ke posisi saat ini, serta vektor prediksi tabrakan menuju markas.
+  - **Kompas Arah Mata Angin Dinamis**: Indikator arah `U` (Utara), `T` (Timur), `S` (Selatan), dan `B` (Barat) yang berputar dinamis mengikuti hadap kamera 360°.
+  - **Sudut Pandang Kamera (FOV Cone)**: Menampilkan bidang kerucut pandangan kamera pemain untuk memudahkan orientasi.
+  - **Panah Peringatan Tepi Layar (Off-Screen Threat Indicators)**: Panah penunjuk arah di batas tepi layar yang mengarahkan pandangan pemain ke meteor yang berada di luar jarak pandang / di belakang kamera.
+- **Penyeimbangan Tingkat Kesulitan Awal (Early-Game Balance)**:
+  - **Wave 1 Ramah Pemula**: Komposisi musuh 85% Standard Meteor dan 15% Speedy Meteor (tanpa Armored ber-HP tebal atau Cluster yang memecah di awal).
+  - **Kecepatan & Jarak Spawn Terkalibrasi**: Kecepatan meteor Wave 1 dipangkas ~30%, jarak muncul diperluas hingga 52-74m, dan interval spawn lebih santai (2.5 - 2.8 detik).
+  - **Kekuatan Awal Pemain**: Modal awal koin dinaikkan menjadi 150 koin, damage Laser ditingkatkan menjadi 1.5, putaran turret lebih responsif (10.0 rad/s), dan penalti tabrakan planet di Wave 1 hanya 8 HP.
+- **Start Screen (Title Screen) & Menu Pengaturan Lengkap**:
+  - **Start Screen Sinematik**: Kamera melakukan rotasi orbit 360° yang elegan mengelilingi turret pangkalan di latar belakang saat menu awal terbuka sebelum permainan dimulai.
+  - **Pilihan Mode Awal**: Pemain dapat memilih mode *Campaign* atau *Endless Survival* langsung di layar awal.
+  - **Menu Pengaturan (Settings & Intel Codex)**:
+    - *Audio & Suara*: Pengaturan Musik BGM (On/Off + slider volume 0-100%) dan Suara Efek SFX (On/Off + slider volume 0-100% + tombol uji suara).
+    - *Panduan Kontrol*: Tabel referensi lengkap semua tombol kontrol mouse & keyboard.
+    - *Intelijen Musuh*: Rincian karakteristik, HP, kecepatan, dan taktik jitu melawan 5 jenis meteor (Standard, Speedy, Armored, Cluster, Boss).
+    - *Senjata, Upgrade & Kemampuan*: Panduan lengkap 3 senjata (Laser, Missile, Railgun), 4 upgrade turret, dan 4 abilities khusus (Shield, EMP, Slow, Double Score).
+  - **Papan Peringkat (Leaderboard)**: Dapat diakses langsung dari Start Screen, HUD permainan, serta saat jeda (*Pause*).
 
 ---
 

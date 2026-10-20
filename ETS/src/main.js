@@ -11,9 +11,9 @@ const meteorMgr = new MeteorManager(env.scene, vfx);
 
 // --- KONFIGURASI SENJATA (Syarat: Variasi Senjata 3 Jenis) ---
 const WEAPONS = {
-  1: { name: 'Laser',   color: 0x38bdf8, damage: 1.2, cooldown: 170, aoe: 0,   pierce: false, sound: 'shoot_laser',   maxAmmo: Infinity },
-  2: { name: 'Missile', color: 0xf97316, damage: 4.2, cooldown: 640, aoe: 8.5, pierce: false, sound: 'shoot_missile', maxAmmo: 7 },
-  3: { name: 'Railgun', color: 0xa855f7, damage: 6.5, cooldown: 860, aoe: 0,   pierce: true,  sound: 'shoot_railgun', maxAmmo: 3 }
+  1: { name: 'Laser',   color: 0x38bdf8, damage: 1.5, cooldown: 160, aoe: 0,   pierce: false, sound: 'shoot_laser',   maxAmmo: Infinity },
+  2: { name: 'Missile', color: 0xf97316, damage: 4.5, cooldown: 620, aoe: 8.5, pierce: false, sound: 'shoot_missile', maxAmmo: 7 },
+  3: { name: 'Railgun', color: 0xa855f7, damage: 7.0, cooldown: 840, aoe: 0,   pierce: true,  sound: 'shoot_railgun', maxAmmo: 3 }
 };
 
 let currentWeapon = 1;
@@ -24,15 +24,16 @@ let planetThemeIndex = 0;
 let highScore = parseInt(localStorage.getItem('meteor_defense_hi') || '0', 10);
 
 let state = {
+  isGameStarted: false,
   mode: 'Campaign', // 'Campaign' atau 'Endless'
   hp: 100,
   score: 0,
-  coins: 100, // Modal awal koin untuk mencoba upgrade/power-up
+  coins: 150, // Modal awal koin ramah pemula (150c) untuk upgrade/power-up awal
   combo: 1,
   wave: 1,
   maxWave: 3,
   spawnedInWave: 0,
-  targetPerWave: 8,
+  targetPerWave: 6, // Wave 1 hanya butuh 6 meteor agar awal game lebih mudah & cepat adaptasi
   isGameOver: false,
   isPaused: false,
   // Amunisi & Reload (Laser: Tak Terbatas, Missile: 7, Railgun: 3)
@@ -86,8 +87,8 @@ window.addEventListener('mousemove', (e) => {
 });
 
 window.addEventListener('pointerdown', (e) => {
-  // Abaikan klik tombol HUD / saat modal terbuka / saat game over / saat pause
-  if (e.target.tagName === 'BUTTON' || e.button !== 0 || state.isGameOver || state.isPaused) return;
+  // Abaikan klik jika belum mulai, klik tombol, saat modal terbuka, game over, atau pause
+  if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('.modal-box') || e.target.closest('.start-content-box') || e.button !== 0 || !state.isGameStarted || state.isGameOver || state.isPaused) return;
 
   handleShoot();
 });
@@ -415,25 +416,53 @@ function closeLeaderboard() {
   document.getElementById('leaderboard-modal').classList.add('hidden');
 }
 
-// --- SISTEM AUDIO LATAR BELAKANG (BGM: assets/music/music.mp3) ---
+// --- SISTEM AUDIO & VOLUME (BGM & SFX PROSEDURAL) ---
 const bgm = document.getElementById('bgm-player');
-let isMusicMuted = false;
+let musicVolume = parseFloat(localStorage.getItem('meteor_defense_music_vol') || '0.35');
+let isMusicMuted = localStorage.getItem('meteor_defense_music_mute') === 'true';
+let sfxVolume = parseFloat(localStorage.getItem('meteor_defense_sfx_vol') || '0.8');
+let isSfxMuted = localStorage.getItem('meteor_defense_sfx_mute') === 'true';
 let wasPlayingBeforePause = false;
 
 if (bgm) {
-  bgm.volume = 0.35; // Proporsi volume seimbang agar SFX tembakan/ledakan terdengar jelas
+  bgm.volume = isMusicMuted ? 0 : musicVolume;
 }
+vfx.setSfxVolume(sfxVolume);
+vfx.setSfxMuted(isSfxMuted);
 
-function updateMusicHUD() {
-  const btn = document.getElementById('btn-music');
-  if (!btn) return;
-  if (isMusicMuted || !bgm || bgm.paused) {
-    btn.textContent = '[N] Musik: 🔇 OFF';
-    btn.classList.remove('highlight-btn');
-  } else {
-    btn.textContent = '[N] Musik: 🔊 ON';
-    btn.classList.add('highlight-btn');
+function updateAudioUI() {
+  const isBgmPlaying = bgm && !bgm.paused && !isMusicMuted;
+
+  // Update HUD BGM Button
+  const hudBtn = document.getElementById('btn-music');
+  if (hudBtn) {
+    hudBtn.textContent = isBgmPlaying ? '[N] Musik: 🔊 ON' : '[N] Musik: 🔇 OFF';
+    hudBtn.classList.toggle('highlight-btn', Boolean(isBgmPlaying));
   }
+
+  // Update Settings BGM Toggle & Slider
+  const settingMusicBtn = document.getElementById('setting-music-toggle');
+  const settingMusicSlider = document.getElementById('setting-music-slider');
+  const settingMusicVal = document.getElementById('setting-music-val');
+
+  if (settingMusicBtn) {
+    settingMusicBtn.textContent = isMusicMuted ? '🔇 Musik: OFF' : '🔊 Musik: ON';
+    settingMusicBtn.classList.toggle('active', !isMusicMuted);
+  }
+  if (settingMusicSlider) settingMusicSlider.value = Math.round(musicVolume * 100);
+  if (settingMusicVal) settingMusicVal.textContent = `${Math.round(musicVolume * 100)}%`;
+
+  // Update Settings SFX Toggle & Slider
+  const settingSfxBtn = document.getElementById('setting-sfx-toggle');
+  const settingSfxSlider = document.getElementById('setting-sfx-slider');
+  const settingSfxVal = document.getElementById('setting-sfx-val');
+
+  if (settingSfxBtn) {
+    settingSfxBtn.textContent = isSfxMuted ? '🔇 SFX: OFF' : '🔊 SFX: ON';
+    settingSfxBtn.classList.toggle('active', !isSfxMuted);
+  }
+  if (settingSfxSlider) settingSfxSlider.value = Math.round(sfxVolume * 100);
+  if (settingSfxVal) settingSfxVal.textContent = `${Math.round(sfxVolume * 100)}%`;
 }
 
 function toggleMusic(forceState = null) {
@@ -441,29 +470,229 @@ function toggleMusic(forceState = null) {
   if (forceState !== null) isMusicMuted = !forceState;
   else isMusicMuted = !isMusicMuted;
 
+  localStorage.setItem('meteor_defense_music_mute', String(isMusicMuted));
+
   if (isMusicMuted) {
     bgm.pause();
   } else {
-    bgm.play().then(() => updateMusicHUD()).catch(() => {});
+    bgm.volume = musicVolume;
+    bgm.play().then(() => updateAudioUI()).catch(() => {});
   }
-  updateMusicHUD();
+  updateAudioUI();
 }
 
-// Mulai musik saat gesture interaksi pertama kali (mematuhi browser autoplay policy)
+function setMusicVolume(val) {
+  musicVolume = Math.max(0, Math.min(1, val));
+  localStorage.setItem('meteor_defense_music_vol', String(musicVolume));
+  if (bgm) {
+    bgm.volume = isMusicMuted ? 0 : musicVolume;
+  }
+  updateAudioUI();
+}
+
+function toggleSfx(forceState = null) {
+  if (forceState !== null) isSfxMuted = !forceState;
+  else isSfxMuted = !isSfxMuted;
+
+  localStorage.setItem('meteor_defense_sfx_mute', String(isSfxMuted));
+  vfx.setSfxMuted(isSfxMuted);
+  updateAudioUI();
+}
+
+function setSfxVolume(val) {
+  sfxVolume = Math.max(0, Math.min(1, val));
+  localStorage.setItem('meteor_defense_sfx_vol', String(sfxVolume));
+  vfx.setSfxVolume(sfxVolume);
+  updateAudioUI();
+}
+
 function initMusicOnGesture() {
-  if (bgm && !isMusicMuted && bgm.paused) {
-    bgm.play().then(() => {
-      updateMusicHUD();
-    }).catch(() => {});
+  if (bgm && !isMusicMuted && bgm.paused && state.isGameStarted) {
+    bgm.play().then(() => updateAudioUI()).catch(() => {});
   }
 }
 ['pointerdown', 'keydown', 'click'].forEach((evt) => {
   window.addEventListener(evt, initMusicOnGesture, { once: true });
 });
 
+// --- SISTEM MODAL PENGATURAN (SETTINGS) & INTELIJEN ---
+function openSettings(initialTab = null) {
+  updateAudioUI();
+  const modal = document.getElementById('settings-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    if (initialTab) switchSettingsTab(initialTab);
+  }
+}
+
+function closeSettings() {
+  const modal = document.getElementById('settings-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function switchSettingsTab(tabId) {
+  document.querySelectorAll('.settings-tab-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+  });
+  document.querySelectorAll('.settings-tab-content').forEach((panel) => {
+    panel.classList.toggle('active', panel.id === tabId);
+  });
+}
+
+// Event listener tab pengaturan
+document.querySelectorAll('.settings-tab-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const tabId = btn.getAttribute('data-tab');
+    if (tabId) switchSettingsTab(tabId);
+  });
+});
+
+const btnCloseSettingsX = document.getElementById('btn-close-settings-x');
+if (btnCloseSettingsX) btnCloseSettingsX.addEventListener('click', closeSettings);
+
+const btnCloseSettings = document.getElementById('btn-close-settings');
+if (btnCloseSettings) btnCloseSettings.addEventListener('click', closeSettings);
+
+const settingMusicToggleBtn = document.getElementById('setting-music-toggle');
+if (settingMusicToggleBtn) settingMusicToggleBtn.addEventListener('click', () => toggleMusic());
+
+const settingMusicSlider = document.getElementById('setting-music-slider');
+if (settingMusicSlider) {
+  settingMusicSlider.addEventListener('input', (e) => {
+    setMusicVolume(parseFloat(e.target.value) / 100);
+  });
+}
+
+const settingSfxToggleBtn = document.getElementById('setting-sfx-toggle');
+if (settingSfxToggleBtn) settingSfxToggleBtn.addEventListener('click', () => toggleSfx());
+
+const settingSfxSlider = document.getElementById('setting-sfx-slider');
+if (settingSfxSlider) {
+  settingSfxSlider.addEventListener('input', (e) => {
+    setSfxVolume(parseFloat(e.target.value) / 100);
+  });
+}
+
+const btnTestSound = document.getElementById('btn-test-sound');
+if (btnTestSound) {
+  btnTestSound.addEventListener('click', () => {
+    vfx.initAudio();
+    vfx.playSound('shoot_laser');
+    setTimeout(() => vfx.playSound('explosion'), 160);
+  });
+}
+
+// Tombol Settings dari HUD
+const btnHudSettings = document.getElementById('btn-hud-settings');
+if (btnHudSettings) btnHudSettings.addEventListener('click', () => openSettings());
+
+// --- SISTEM START SCREEN & GAME LIFECYCLE ---
+function setStartMode(mode) {
+  state.mode = mode;
+  const btnCampaign = document.getElementById('btn-start-mode-campaign');
+  const btnEndless = document.getElementById('btn-start-mode-endless');
+  const hudModeBtn = document.getElementById('btn-gamemode');
+
+  if (btnCampaign) btnCampaign.classList.toggle('active', mode === 'Campaign');
+  if (btnEndless) btnEndless.classList.toggle('active', mode === 'Endless');
+  if (hudModeBtn) hudModeBtn.textContent = `[M] Mode: ${mode}`;
+  updateHUD();
+}
+
+function startGame() {
+  state.isGameStarted = true;
+  state.isGameOver = false;
+  state.isPaused = false;
+
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('hud').classList.remove('hidden');
+
+  clock.getDelta(); // Reset delta clock
+  spawnTimer = 0;
+
+  vfx.initAudio();
+  if (bgm && !isMusicMuted) {
+    bgm.volume = musicVolume;
+    bgm.play().then(() => updateAudioUI()).catch(() => {});
+  }
+  updateAudioUI();
+  updateHUD();
+}
+
+function returnToStartScreen() {
+  meteorMgr.clearAll();
+  env.shieldDome.visible = false;
+  if (indicatorsContainer) indicatorsContainer.innerHTML = '';
+
+  state = {
+    ...state,
+    isGameStarted: false,
+    hp: 100,
+    score: 0,
+    coins: 150,
+    combo: 1,
+    wave: 1,
+    spawnedInWave: 0,
+    targetPerWave: 6,
+    isGameOver: false,
+    isPaused: false,
+    ammo: { 1: Infinity, 2: 7, 3: 3 },
+    maxAmmo: { 1: Infinity, 2: 7, 3: 3 },
+    reloading: { 2: false, 3: false },
+    reloadTimers: { 2: 0, 3: 0 },
+    dmgLevel: 1,
+    rateLevel: 1,
+    ammoLevel: 1,
+    rotLevel: 1,
+    shieldActive: false,
+    timeSlowTimer: 0,
+    doubleScoreTimer: 0,
+    alarmCooldown: 0
+  };
+  turret.rotationSpeed = 10.0;
+
+  // Sembunyikan semua modal & HUD
+  document.getElementById('modal-overlay').classList.add('hidden');
+  document.getElementById('leaderboard-modal').classList.add('hidden');
+  document.getElementById('pause-modal').classList.add('hidden');
+  document.getElementById('settings-modal').classList.add('hidden');
+  document.getElementById('hud').classList.add('hidden');
+  if (fppOverlay) fppOverlay.classList.add('hidden');
+
+  // Tampilkan start screen
+  document.getElementById('start-screen').classList.remove('hidden');
+  setStartMode(state.mode);
+}
+
+// Event listener tombol-tombol Start Screen
+const btnStartModeCampaign = document.getElementById('btn-start-mode-campaign');
+if (btnStartModeCampaign) {
+  btnStartModeCampaign.addEventListener('click', () => setStartMode('Campaign'));
+}
+
+const btnStartModeEndless = document.getElementById('btn-start-mode-endless');
+if (btnStartModeEndless) {
+  btnStartModeEndless.addEventListener('click', () => setStartMode('Endless'));
+}
+
+const btnStartGame = document.getElementById('btn-start-game');
+if (btnStartGame) {
+  btnStartGame.addEventListener('click', startGame);
+}
+
+const btnStartSettings = document.getElementById('btn-start-settings');
+if (btnStartSettings) {
+  btnStartSettings.addEventListener('click', () => openSettings());
+}
+
+const btnStartLeaderboard = document.getElementById('btn-start-leaderboard');
+if (btnStartLeaderboard) {
+  btnStartLeaderboard.addEventListener('click', openLeaderboard);
+}
+
 // --- SISTEM PAUSE GAME (RESUME & RESTART) ---
 function togglePause(forceState = null) {
-  if (state.isGameOver) return; // Jika sudah mati/game over, modal game over yang aktif
+  if (!state.isGameStarted || state.isGameOver) return;
 
   const targetState = forceState !== null ? forceState : !state.isPaused;
   state.isPaused = targetState;
@@ -478,11 +707,11 @@ function togglePause(forceState = null) {
     pauseModal.classList.add('hidden');
     clock.getDelta(); // Reset clock delta agar tidak ada lonjakan dt setelah unpause
     if (bgm && wasPlayingBeforePause && !isMusicMuted) {
-      bgm.play().then(() => updateMusicHUD()).catch(() => {});
+      bgm.play().then(() => updateAudioUI()).catch(() => {});
       wasPlayingBeforePause = false;
     }
   }
-  updateMusicHUD();
+  updateAudioUI();
 }
 
 document.getElementById('btn-pause').addEventListener('click', () => togglePause(true));
@@ -491,6 +720,15 @@ document.getElementById('btn-pause-restart').addEventListener('click', () => {
   togglePause(false);
   restartGame();
 });
+
+const btnPauseSettings = document.getElementById('btn-pause-settings');
+if (btnPauseSettings) btnPauseSettings.addEventListener('click', () => openSettings());
+
+const btnPauseMainMenu = document.getElementById('btn-pause-mainmenu');
+if (btnPauseMainMenu) btnPauseMainMenu.addEventListener('click', returnToStartScreen);
+
+const btnGameoverMainMenu = document.getElementById('btn-gameover-mainmenu');
+if (btnGameoverMainMenu) btnGameoverMainMenu.addEventListener('click', returnToStartScreen);
 
 // --- EVENT LISTENER TOMBOL HUD & KEYBOARD ---
 document.getElementById('btn-upg-dmg').addEventListener('click', upgradeDamage);
@@ -513,10 +751,6 @@ document.getElementById('btn-cam').addEventListener('click', () => {
   const camName = env.nextCameraMode();
   document.getElementById('camera-mode-text').textContent = `Cam: ${camName} [K]`;
   document.getElementById('btn-cam').textContent = `[K] Cam: ${camName.split(' ')[0]}`;
-  if (!env.isFPS()) {
-    if (fppOverlay) fppOverlay.classList.add('hidden');
-    if (indicatorsContainer) indicatorsContainer.innerHTML = '';
-  }
 });
 
 document.getElementById('btn-skin').addEventListener('click', () => {
@@ -537,7 +771,7 @@ if (btnMusicEl) {
 
 document.getElementById('btn-gamemode').addEventListener('click', () => {
   state.mode = state.mode === 'Campaign' ? 'Endless' : 'Campaign';
-  document.getElementById('btn-gamemode').textContent = `[M] Mode: ${state.mode}`;
+  setStartMode(state.mode);
   restartGame();
 });
 
@@ -558,19 +792,35 @@ document.getElementById('btn-gamemode').addEventListener('click', () => {
 window.addEventListener('keydown', (e) => {
   const k = e.key.toLowerCase();
 
-  // Tombol Pause / Resume (P atau Escape)
-  if (k === 'p' || k === 'escape') {
+  // Tombol Escape: Tutup modal terbuka atau Jeda/Lanjutkan game
+  if (k === 'escape') {
+    const settingsModal = document.getElementById('settings-modal');
+    if (settingsModal && !settingsModal.classList.contains('hidden')) {
+      closeSettings();
+      return;
+    }
     const lbModal = document.getElementById('leaderboard-modal');
-    if (!lbModal.classList.contains('hidden')) {
+    if (lbModal && !lbModal.classList.contains('hidden')) {
       closeLeaderboard();
       return;
     }
-    togglePause();
+    if (state.isGameStarted && !state.isGameOver) {
+      togglePause();
+      return;
+    }
     return;
   }
 
-  // Jika game sedang di-pause atau sudah game over/mati, cegah input gameplay
-  if (state.isPaused || state.isGameOver) return;
+  // Jika game belum dimulai atau sedang pause/game over, batasi kontrol gameplay
+  if (!state.isGameStarted || state.isPaused || state.isGameOver) {
+    if (k === 'l') openLeaderboard();
+    return;
+  }
+
+  if (k === 'p') {
+    togglePause();
+    return;
+  }
 
   if (['1', '2', '3'].includes(k)) {
     currentWeapon = parseInt(k, 10);
@@ -713,13 +963,14 @@ function restartGame() {
   if (indicatorsContainer) indicatorsContainer.innerHTML = '';
   state = {
     ...state,
+    isGameStarted: true,
     hp: 100,
     score: 0,
-    coins: 100,
+    coins: 150,
     combo: 1,
     wave: 1,
     spawnedInWave: 0,
-    targetPerWave: 8,
+    targetPerWave: 6,
     isGameOver: false,
     ammo: { 1: Infinity, 2: 7, 3: 3 },
     maxAmmo: { 1: Infinity, 2: 7, 3: 3 },
@@ -734,17 +985,21 @@ function restartGame() {
     doubleScoreTimer: 0,
     alarmCooldown: 0
   };
-  turret.rotationSpeed = 8.0;
+  turret.rotationSpeed = 10.0;
   document.getElementById('modal-overlay').classList.add('hidden');
   document.getElementById('leaderboard-modal').classList.add('hidden');
   document.getElementById('pause-modal').classList.add('hidden');
+  document.getElementById('settings-modal').classList.add('hidden');
+  document.getElementById('start-screen').classList.add('hidden');
+  document.getElementById('hud').classList.remove('hidden');
   clock.getDelta(); // Bersihkan delta clock setelah restart
+  spawnTimer = 0;
 
   if (bgm && !isMusicMuted) {
-    bgm.volume = 0.35;
+    bgm.volume = musicVolume;
     bgm.play().catch(() => {});
   }
-  updateMusicHUD();
+  updateAudioUI();
   updateHUD();
 }
 
@@ -783,11 +1038,11 @@ const RADAR_COLORS = {
   boss: '#c084fc'
 };
 
-function updateFPPIndicators(dt) {
+function updateTacticalRadar(dt) {
   if (!fppOverlay || !indicatorsContainer) return;
 
-  const isFPS = env.isFPS && env.isFPS();
-  if (!isFPS) {
+  // Hanya tampil saat game sedang berjalan aktif
+  if (!state.isGameStarted || state.isGameOver) {
     if (!fppOverlay.classList.contains('hidden')) {
       fppOverlay.classList.add('hidden');
       indicatorsContainer.innerHTML = '';
@@ -795,6 +1050,7 @@ function updateFPPIndicators(dt) {
     return;
   }
 
+  // Tampilkan Radar & Minimap di SEMUA mode kamera!
   if (fppOverlay.classList.contains('hidden')) {
     fppOverlay.classList.remove('hidden');
   }
@@ -807,7 +1063,7 @@ function updateFPPIndicators(dt) {
     radarThreatCount.classList.toggle('safe', count === 0);
   }
 
-  // Arah hadap kamera planar di bidang XZ
+  // Vektor Arah Pandang Kamera Planar di bidang XZ
   env.camera.getWorldDirection(_cam3dFwd);
   _fppCamFwd.copy(_cam3dFwd);
   _fppCamFwd.y = 0;
@@ -815,80 +1071,164 @@ function updateFPPIndicators(dt) {
   else _fppCamFwd.set(0, 0, -1);
   _fppCamRight.crossVectors(_fppCamFwd, _fppUp).normalize();
 
-  const turretPos = env.camera.position;
+  const baseCenter = new THREE.Vector3(0, 0, 0);
 
-  // 1. RENDER RADAR TAKTIS 360° (Heading-Up)
+  // 1. RENDER TACTICAL RADAR & MAP (Resolusi Tajam 160x160)
   if (radarCtx) {
-    const size = 130;
-    const center = size * 0.5;
-    const radarR = 52;
-    const maxRange = 60; // meter deteksi
+    const size = 160;
+    const center = size * 0.5; // 80
+    const radarR = 64;
+    const maxRange = 65; // meter jangkauan radar/map
 
     radarCtx.clearRect(0, 0, size, size);
 
-    // Lingkaran Konsentris Jangkauan Radar (20m, 40m, 60m)
+    // Lingkaran Konsentris Jangkauan Radar & Map (20m, 40m, 60m)
     radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.22)';
     radarCtx.lineWidth = 1;
-    [0.33, 0.66, 1.0].forEach((ratio) => {
+    [0.31, 0.62, 0.92].forEach((ratio) => {
       radarCtx.beginPath();
       radarCtx.arc(center, center, radarR * ratio, 0, Math.PI * 2);
       radarCtx.stroke();
     });
 
-    // Garis Silang Pembantu (Crosshairs)
+    // Label Jarak Meter pada Lingkaran Radar
+    radarCtx.fillStyle = 'rgba(56, 189, 248, 0.45)';
+    radarCtx.font = '7px sans-serif';
+    radarCtx.textAlign = 'center';
+    radarCtx.fillText('20m', center, center - radarR * 0.31 + 8);
+    radarCtx.fillText('40m', center, center - radarR * 0.62 + 8);
+
+    // Garis Silang Pembantu Sektor
     radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.15)';
     radarCtx.setLineDash([2, 4]);
     radarCtx.beginPath();
-    radarCtx.moveTo(center, center - radarR);
-    radarCtx.lineTo(center, center + radarR);
-    radarCtx.moveTo(center - radarR, center);
-    radarCtx.lineTo(center + radarR, center);
+    radarCtx.moveTo(center, center - radarR * 0.92);
+    radarCtx.lineTo(center, center + radarR * 0.92);
+    radarCtx.moveTo(center - radarR * 0.92, center);
+    radarCtx.lineTo(center + radarR * 0.92, center);
     radarCtx.stroke();
     radarCtx.setLineDash([]);
 
-    // Vision Cone Bidang Pandang Turret (FOV ~60° mengarah ke DEPAN / Atas)
-    radarCtx.fillStyle = 'rgba(56, 189, 248, 0.09)';
+    // ARAH MATA ANGIN DINAMIS (U = Utara, T = Timur, S = Selatan, B = Barat)
+    // Berputar otomatis mengikuti orientasi kamera 360 derajat
+    const camAngle = Math.atan2(_fppCamFwd.x, -_fppCamFwd.z);
+    const compassDirs = [
+      { label: 'U', angle: -camAngle - Math.PI / 2, color: '#38bdf8' },
+      { label: 'T', angle: -camAngle,               color: '#94a3b8' },
+      { label: 'S', angle: -camAngle + Math.PI / 2, color: '#94a3b8' },
+      { label: 'B', angle: -camAngle + Math.PI,     color: '#94a3b8' }
+    ];
+
+    radarCtx.font = 'bold 8px sans-serif';
+    radarCtx.textBaseline = 'middle';
+    compassDirs.forEach((d) => {
+      const dirDist = radarR * 0.92 - 6;
+      const lx = center + Math.cos(d.angle) * dirDist;
+      const ly = center + Math.sin(d.angle) * dirDist;
+      radarCtx.fillStyle = d.color;
+      radarCtx.fillText(d.label, lx, ly);
+    });
+
+    // Vision Cone Bidang Pandang Kamera (FOV ~60° mengarah ke DEPAN / Atas)
+    radarCtx.fillStyle = 'rgba(56, 189, 248, 0.08)';
     radarCtx.beginPath();
     radarCtx.moveTo(center, center);
-    radarCtx.arc(center, center, radarR, -Math.PI / 2 - 0.52, -Math.PI / 2 + 0.52);
+    radarCtx.arc(center, center, radarR * 0.92, -Math.PI / 2 - 0.52, -Math.PI / 2 + 0.52);
     radarCtx.closePath();
     radarCtx.fill();
 
     // Radar Sweep Line (Animasi Pemindaian Taktis)
-    radarSweepAngle += dt * 3.2;
-    const sweepX = center + Math.cos(radarSweepAngle) * radarR;
-    const sweepY = center + Math.sin(radarSweepAngle) * radarR;
+    radarSweepAngle += dt * 3.0;
+    const sweepX = center + Math.cos(radarSweepAngle) * (radarR * 0.92);
+    const sweepY = center + Math.sin(radarSweepAngle) * (radarR * 0.92);
     radarCtx.strokeStyle = 'rgba(56, 189, 248, 0.65)';
-    radarCtx.lineWidth = 1.5;
+    radarCtx.lineWidth = 1.2;
     radarCtx.beginPath();
     radarCtx.moveTo(center, center);
     radarCtx.lineTo(sweepX, sweepY);
     radarCtx.stroke();
 
-    // Titik Pusat Turret Markas
-    radarCtx.fillStyle = '#38bdf8';
+    // Titik Pusat Pangkalan Markas Planet & Perisai Aktif
+    if (state.shieldActive) {
+      radarCtx.strokeStyle = '#38bdf8';
+      radarCtx.lineWidth = 1.5;
+      radarCtx.beginPath();
+      radarCtx.arc(center, center, 7, 0, Math.PI * 2);
+      radarCtx.stroke();
+    }
+    radarCtx.fillStyle = '#0284c7';
     radarCtx.beginPath();
-    radarCtx.arc(center, center, 3.5, 0, Math.PI * 2);
+    radarCtx.arc(center, center, 4, 0, Math.PI * 2);
     radarCtx.fill();
     radarCtx.strokeStyle = '#ffffff';
-    radarCtx.lineWidth = 1;
+    radarCtx.lineWidth = 1.2;
     radarCtx.stroke();
 
-    // Render Blip Titik-titik Meteor pada Radar
+    const now = performance.now();
+
+    // RENDER LINTASAN ASAL METEOR & BLIP PADA MAP
     meteors.forEach((m) => {
-      _fppToTarget.subVectors(m.position, turretPos);
+      _fppToTarget.subVectors(m.position, baseCenter);
       const fwd = _fppToTarget.dot(_fppCamFwd);
       const rgt = _fppToTarget.dot(_fppCamRight);
       const flatDist = Math.hypot(rgt, fwd);
       const distRatio = Math.min(flatDist, maxRange) / maxRange;
       const angle = Math.atan2(-fwd, rgt);
 
-      const dotX = center + Math.cos(angle) * (distRatio * radarR);
-      const dotY = center + Math.sin(angle) * (distRatio * radarR);
+      const dotX = center + Math.cos(angle) * (distRatio * radarR * 0.92);
+      const dotY = center + Math.sin(angle) * (distRatio * radarR * 0.92);
       const color = RADAR_COLORS[m.userData.type] || '#ef4444';
 
-      const isDanger = flatDist < 20;
-      const dotRadius = m.userData.type === 'boss' ? 5.5 : (isDanger ? 4 : 3);
+      // Titik asal kemunculan meteor (spawn origin)
+      const spawnPos = m.userData.spawnPos || m.position;
+      _fppToTarget.subVectors(spawnPos, baseCenter);
+      const origFwd = _fppToTarget.dot(_fppCamFwd);
+      const origRgt = _fppToTarget.dot(_fppCamRight);
+      const origDist = Math.hypot(origRgt, origFwd);
+      const origRatio = Math.min(origDist, maxRange) / maxRange;
+      const origAngle = Math.atan2(-origFwd, origRgt);
+
+      const origX = center + Math.cos(origAngle) * (origRatio * radarR * 0.92);
+      const origY = center + Math.sin(origAngle) * (origRatio * radarR * 0.92);
+
+      // 1. GARIS VEKTOR ASAL & LINTASAN MENUJU PANGKALAN (Fitur Map Utama)
+      radarCtx.strokeStyle = color;
+      radarCtx.lineWidth = 1;
+      radarCtx.setLineDash([2, 3]);
+      radarCtx.beginPath();
+      radarCtx.moveTo(origX, origY);
+      radarCtx.lineTo(dotX, dotY);
+      radarCtx.stroke();
+      radarCtx.setLineDash([]);
+
+      // Garis lintasan prediksi ke arah pangkalan
+      radarCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      radarCtx.setLineDash([1, 4]);
+      radarCtx.beginPath();
+      radarCtx.moveTo(dotX, dotY);
+      radarCtx.lineTo(center, center);
+      radarCtx.stroke();
+      radarCtx.setLineDash([]);
+
+      // 2. BEACON INDIKATOR TITIK ASAL (PULSE EFFECT)
+      const age = (now - (m.userData.spawnTime || now)) / 1000;
+      if (age < 3.5) {
+        // Efek gelombang pulse melingkar di titik asal kemunculan
+        const pulseR = 3 + (age % 1.2) * 5;
+        radarCtx.strokeStyle = color;
+        radarCtx.lineWidth = 1.2;
+        radarCtx.beginPath();
+        radarCtx.arc(origX, origY, pulseR, 0, Math.PI * 2);
+        radarCtx.stroke();
+      }
+      radarCtx.fillStyle = color;
+      radarCtx.beginPath();
+      radarCtx.arc(origX, origY, 2, 0, Math.PI * 2);
+      radarCtx.fill();
+
+      // 3. BLIP TITIK METEOR SAAT INI
+      const isDanger = flatDist < 22;
+      const dotRadius = m.userData.type === 'boss' ? 5.5 : (isDanger ? 4.2 : 3.2);
 
       radarCtx.fillStyle = color;
       radarCtx.beginPath();
@@ -903,7 +1243,7 @@ function updateFPPIndicators(dt) {
     });
   }
 
-  // 2. INDIKATOR ARAH TEPI LAYAR & LOCK-ON RETICLE
+  // 2. INDIKATOR ARAH TEPI LAYAR & LOCK-ON RETICLE (SEMUA MODE KAMERA)
   const winW = window.innerWidth;
   const winH = window.innerHeight;
   const cx = winW * 0.5;
@@ -917,9 +1257,9 @@ function updateFPPIndicators(dt) {
   for (let i = 0; i < meteors.length; i++) {
     const m = meteors[i];
     const mPos = m.position;
-    const dist = turretPos.distanceTo(mPos);
+    const dist = env.camera.position.distanceTo(mPos);
 
-    _fppToTarget.subVectors(mPos, turretPos);
+    _fppToTarget.subVectors(mPos, env.camera.position);
     const dotFwd = _fppToTarget.dot(_cam3dFwd);
     const isBehind = dotFwd <= 0;
 
@@ -932,22 +1272,14 @@ function updateFPPIndicators(dt) {
 
     const typeKey = m.userData.type || 'standard';
     const typeLabel = METEOR_NAMES[typeKey] || 'METEOR';
-    const isCritical = dist < 22;
+    const isCritical = dist < 24;
 
     const isOnScreen = !isBehind && Math.abs(_fppProj.x) <= 0.88 && Math.abs(_fppProj.y) <= 0.88;
 
-    if (isOnScreen) {
-      // Reticle Lock-on di atas meteor dalam jarak pandang
-      const px = (_fppProj.x * 0.5 + 0.5) * winW;
-      const py = (-_fppProj.y * 0.5 + 0.5) * winH;
-      html += `
-        <div class="fpp-lockon threat-${typeKey}" style="left:${px.toFixed(1)}px; top:${py.toFixed(1)}px;">
-          <div class="fpp-lockon-bracket">◇</div>
-          <div class="fpp-lockon-tag">${typeLabel} ${Math.round(dist)}m</div>
-        </div>
-      `;
-    } else {
-      // Panah Arah di Tepi Layar untuk meteor di luar pandangan (off-screen)
+    // Hanya tampilkan panah pemandu jika meteor berada di luar sudut pandang kamera (off-screen / di belakang)
+    // Simbol kotak bracket dan label di atas meteor dalam layar telah dihapus agar pandangan tetap bersih
+    if (!isOnScreen) {
+      // Panah Arah di Tepi Layar untuk meteor di luar pandangan
       let dirX = _fppProj.x;
       let dirY = -_fppProj.y;
       const len = Math.hypot(dirX, dirY) || 1;
@@ -982,6 +1314,16 @@ let spawnTimer = 0;
 function animate() {
   requestAnimationFrame(animate);
   const dt = clock.getDelta();
+
+  // JIKA BERADA DI START SCREEN (BELUM MULAI):
+  if (!state.isGameStarted) {
+    env.rotateCamera(0.18 * dt, 0);
+    env.updateCamera(dt);
+    turret.update(dt);
+    env.starField.rotation.y += dt * 0.02;
+    env.renderer.render(env.scene, env.camera);
+    return;
+  }
 
   // JIKA GAME OVER (MATI) ATAU DI-PAUSE: GAME BENAR-BENAR BERHENTI PENUH!
   if (state.isGameOver || state.isPaused) {
@@ -1019,24 +1361,27 @@ function animate() {
     }
   }
 
-  // Spawner Gelombang Meteor
+  // Spawner Gelombang Meteor yang Terkalibrasi Ramah di Awal Game
   if (!state.isGameOver) {
     spawnTimer += dt * timeScale;
-    const spawnInterval = Math.max(0.55, 1.45 - state.wave * 0.12);
+    // Di Wave 1 jeda spawn 2.5 - 2.8s (jauh lebih santai dan bersahabat)
+    const spawnInterval = state.wave === 1
+      ? Math.max(2.2, 2.8 - state.spawnedInWave * 0.1)
+      : Math.max(0.65, 1.6 - state.wave * 0.15);
 
     if (spawnTimer >= spawnInterval && state.spawnedInWave < state.targetPerWave) {
       spawnTimer = 0;
       state.spawnedInWave++;
-      const isBoss = state.spawnedInWave === state.targetPerWave && (state.wave === state.maxWave || state.wave % 3 === 0);
-      meteorMgr.spawnMeteor(isBoss ? 'boss' : null);
+      const isBoss = state.spawnedInWave === state.targetPerWave && (state.wave === state.maxWave || (state.mode === 'Endless' && state.wave % 3 === 0));
+      meteorMgr.spawnMeteor(isBoss ? 'boss' : null, null, state.wave);
     } else if (state.spawnedInWave >= state.targetPerWave && meteorMgr.meteors.length === 0) {
       if (state.mode === 'Campaign' && state.wave >= state.maxWave) {
         endGame(true);
       } else {
         state.wave++;
         state.spawnedInWave = 0;
-        state.targetPerWave += 4;
-        state.coins += 45; // Bonus koin setiap wave selesai
+        state.targetPerWave = state.wave === 2 ? 10 : (state.wave === 3 ? 14 : state.targetPerWave + 4);
+        state.coins += 50; // Bonus koin setiap wave selesai
         updateHUD();
       }
     }
@@ -1053,7 +1398,7 @@ function animate() {
     bossHud.classList.add('hidden');
   }
 
-  // Update Meteor & Benturan Planet
+  // Update Meteor & Benturan Planet (Kerusakan Lebih Ringan di Wave Awal)
   meteorMgr.update(dt, timeScale, (hitMeteor) => {
     vfx.createExplosion(hitMeteor.position, 0xef4444, 28, 18);
     vfx.playSound('hitPlanet');
@@ -1064,7 +1409,11 @@ function animate() {
       state.shieldActive = false;
       env.shieldDome.visible = false;
     } else {
-      state.hp -= hitMeteor.userData.type === 'boss' ? 45 : 15;
+      // Kerusakan planet lebih ringan di wave awal (Wave 1: hanya 8 HP)
+      const impactDmg = hitMeteor.userData.type === 'boss'
+        ? 40
+        : (state.wave === 1 ? 8 : (state.wave === 2 ? 12 : 15));
+      state.hp -= impactDmg;
       resetCombo();
       if (state.hp <= 0) endGame(false);
     }
@@ -1088,12 +1437,14 @@ function animate() {
   vfx.update(dt, env.camera, env.baseCamPos, env.baseCamLook);
   env.starField.rotation.y += dt * 0.02;
 
-  // Perbarui Indikator Arah & Radar Taktis 360° saat mode FPP aktif
-  updateFPPIndicators(dt);
+  // Perbarui Indikator Arah & Radar/Map Taktis 360° di SEMUA mode kamera
+  updateTacticalRadar(dt);
 
   env.renderer.render(env.scene, env.camera);
 }
 
+setStartMode('Campaign');
+updateAudioUI();
 renderLeaderboard();
 updateHUD();
 animate();

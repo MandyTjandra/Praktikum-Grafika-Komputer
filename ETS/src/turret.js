@@ -17,7 +17,7 @@ export class Turret {
     this.recoilOffset = 0;
     this.targetYaw = 0;
     this.targetPitch = 0;
-    this.rotationSpeed = 8.0; // Bisa di-upgrade dengan koin
+    this.rotationSpeed = 10.0; // Responsif sejak awal, bisa di-upgrade lebih lanjut
 
     // --- SCENE GRAPH PARENT-CHILD (Syarat C.3) ---
     // Parent: baseGroup -> Child 1: headGroup -> Child 2: cannonGroup

@@ -9,17 +9,40 @@ export class VFXManager {
     this.missiles = [];
     this.shakeIntensity = 0;
     this.audioCtx = null;
+    this.masterGain = null;
+    this.sfxVolume = 0.8;
+    this.sfxMuted = false;
   }
 
   initAudio() {
     if (!this.audioCtx) {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (AudioContextClass) this.audioCtx = new AudioContextClass();
+      if (AudioContextClass) {
+        this.audioCtx = new AudioContextClass();
+        this.masterGain = this.audioCtx.createGain();
+        this.masterGain.gain.setValueAtTime(this.sfxMuted ? 0 : this.sfxVolume, this.audioCtx.currentTime);
+        this.masterGain.connect(this.audioCtx.destination);
+      }
+    }
+  }
+
+  setSfxVolume(val) {
+    this.sfxVolume = Math.max(0, Math.min(1, val));
+    if (this.masterGain && this.audioCtx) {
+      this.masterGain.gain.setValueAtTime(this.sfxMuted ? 0 : this.sfxVolume, this.audioCtx.currentTime);
+    }
+  }
+
+  setSfxMuted(muted) {
+    this.sfxMuted = muted;
+    if (this.masterGain && this.audioCtx) {
+      this.masterGain.gain.setValueAtTime(this.sfxMuted ? 0 : this.sfxVolume, this.audioCtx.currentTime);
     }
   }
 
   playSound(type) {
     try {
+      if (this.sfxMuted) return;
       this.initAudio();
       if (!this.audioCtx) return;
       if (this.audioCtx.state === 'suspended') {
@@ -29,7 +52,11 @@ export class VFXManager {
       const osc = this.audioCtx.createOscillator();
       const gain = this.audioCtx.createGain();
       osc.connect(gain);
-      gain.connect(this.audioCtx.destination);
+      if (this.masterGain) {
+        gain.connect(this.masterGain);
+      } else {
+        gain.connect(this.audioCtx.destination);
+      }
 
       if (type === 'shoot_laser' || type === 'shoot') {
         osc.type = 'sawtooth';
