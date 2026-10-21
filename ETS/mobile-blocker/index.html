@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Akses Dibatasi - Meteor Defense 3D</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="detector.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="guard-card">
+      <!-- Header Terminal -->
+      <div class="card-header">
+        <div class="system-status">
+          <span class="pulse-dot"></span>
+          <span class="status-label">AKSES DITOLAK • UNMET HARDWARE</span>
+        </div>
+        <span class="protocol-tag">PDI-SEC-403</span>
+      </div>
+
+      <!-- Isi Peringatan -->
+      <div class="card-body">
+        <div class="hero-alert">
+          <div class="hero-icon-wrapper">
+            <span class="hero-icon">📱🚫</span>
+          </div>
+          <div>
+            <h1>Diperlukan Terminal Desktop / PC</h1>
+            <span class="game-name">Meteor Defense 3D • Planetary Defense</span>
+          </div>
+          <p class="hero-desc">
+            Sistem mendeteksi bahwa Anda membuka aplikasi ini dari perangkat <strong>layar sentuh / mobile</strong>. Permainan ini dirancang khusus untuk dimainkan menggunakan <strong>Mouse &amp; Keyboard</strong> pada layar komputer.
+          </p>
+        </div>
+
+        <!-- Kotak Diagnostik Perangkat Terdeteksi -->
+        <div class="diagnostics-box">
+          <div class="diag-title">
+            <span>⚙️</span>
+            <span>DIAGNOSTIK PERANGKAT TERDETEKSI</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-key">Status Akses:</span>
+            <span class="diag-val highlight-warn" id="diag-status">Mobile / Tablet Terdeteksi</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-key">Tipe Perangkat:</span>
+            <span class="diag-val" id="diag-type">Memeriksa...</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-key">Resolusi Layar:</span>
+            <span class="diag-val" id="diag-res">Memeriksa...</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-key">Input Pointer:</span>
+            <span class="diag-val" id="diag-pointer">Memeriksa...</span>
+          </div>
+          <div class="diag-row">
+            <span class="diag-key">Multitouch Points:</span>
+            <span class="diag-val" id="diag-touch">Memeriksa...</span>
+          </div>
+        </div>
+
+        <!-- Alasan Kenapa Butuh Desktop -->
+        <div class="req-section">
+          <div class="req-header">
+            <span>📋</span>
+            <span>KENAPA PERANGKAT MOBILE TIDAK DIDUKUNG?</span>
+          </div>
+          <div class="req-grid">
+            <div class="req-item">
+              <span class="req-item-icon">🖱️</span>
+              <div class="req-item-text">
+                <strong>Kontrol Kamera 360° &amp; Mouse Raycasting</strong>
+                <p>Membidik proyektil laser berkecepatan tinggi dan rotasi kamera pangkalan 360 derajat membutuhkan presisi klik kanan drag &amp; kursor mouse.</p>
+              </div>
+            </div>
+
+            <div class="req-item">
+              <span class="req-item-icon">⌨️</span>
+              <div class="req-item-text">
+                <strong>Tombol Taktis Keyboard</strong>
+                <p>Memerlukan kombinasi tombol fisik: [1-3] amunisi senjata, [WASD/Panah] rotasi, [Q/E/F/G] abilities khusus, [R] reload, dan [Z/X/C/V] upgrade.</p>
+              </div>
+            </div>
+
+            <div class="req-item">
+              <span class="req-item-icon">🚀</span>
+              <div class="req-item-text">
+                <strong>Akselerasi Grafis Three.js WebGL</strong>
+                <p>Simulasi badai meteor, ribuan partikel debris kosmik, dan model satelit PBR memerlukan kapabilitas GPU terminal desktop.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi -->
+        <div class="action-group">
+          <button id="btn-copy-link" class="btn btn-primary" type="button">
+            <span>📋</span>
+            <span>Salin Link Game untuk Buka di PC / Laptop</span>
+          </button>
+
+          <button id="btn-recheck" class="btn btn-secondary" type="button">
+            <span>🔄</span>
+            <span>Periksa Ulang Perangkat Saya</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifikasi Salin URL -->
+  <div id="toast" class="toast">
+    <span class="toast-dot"></span>
+    <span id="toast-text">Tautan game berhasil disalin ke clipboard!</span>
+  </div>
+
+  <script>
+    (function () {
+      // 1. Tampilkan diagnostik perangkat
+      const diag = MobileDetector.getDiagnostics();
+      document.getElementById('diag-type').textContent = diag.deviceType;
+      document.getElementById('diag-res').textContent = diag.screenResolution;
+      document.getElementById('diag-pointer').textContent = diag.pointerType;
+      document.getElementById('diag-touch').textContent = diag.maxTouchPoints + ' touch point(s)';
+
+      if (!diag.isMobile) {
+        document.getElementById('diag-status').textContent = 'Desktop Terdeteksi (Aman)';
+        document.getElementById('diag-status').style.color = '#10b981';
+      }
+
+      // Cari URL tujuan game (default: root '../index.html' atau parent)
+      const urlParams = new URLSearchParams(window.location.search);
+      const originalTarget = urlParams.get('from') 
+        ? decodeURIComponent(urlParams.get('from'))
+        : window.location.origin + window.location.pathname.replace(/mobile-blocker(\/index\.html)?$/, '') + 'index.html';
+
+      // 2. Tombol Salin Link
+      const btnCopy = document.getElementById('btn-copy-link');
+      const toast = document.getElementById('toast');
+      let toastTimer = null;
+
+      function showToast(message) {
+        document.getElementById('toast-text').textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3200);
+      }
+
+      btnCopy.addEventListener('click', async () => {
+        try {
+          const cleanUrl = originalTarget.split('?')[0];
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(cleanUrl);
+          } else {
+            // Fallback execCommand
+            const tempInput = document.createElement('input');
+            tempInput.value = cleanUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+          }
+          showToast('✓ Link game berhasil disalin! Silakan kirim & buka di PC/Laptop.');
+        } catch (err) {
+          showToast('Link: ' + originalTarget);
+        }
+      });
+
+      // 3. Tombol Periksa Ulang
+      const btnRecheck = document.getElementById('btn-recheck');
+      btnRecheck.addEventListener('click', () => {
+        if (!MobileDetector.isMobile()) {
+          showToast('✓ Perangkat Desktop terdeteksi! Mengalihkan ke game...');
+          setTimeout(() => {
+            window.location.href = originalTarget;
+          }, 800);
+        } else {
+          showToast('⚠️ Masih terdeteksi sebagai perangkat Mobile / Tablet.');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

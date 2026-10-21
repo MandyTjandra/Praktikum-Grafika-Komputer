@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Mobile Access Restriction Guard -->
+  <script src="mobile-blocker/detector.js"></script>
+  <script>
+    if (window.MobileDetector) {
+      MobileDetector.guardOrRedirect('mobile-blocker/index.html');
+    }
+  </script>
   <title>Meteor Defense 3D - Planetary Defense Initiative</title>
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/favicon/favicon.png" />
