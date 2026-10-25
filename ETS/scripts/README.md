@@ -1,4 +1,4 @@
-### 📂 2. `scripts/README.md` (atau `script/README.md`)
+# 📂 2. `scripts/README.md` (atau `script/README.md`)
 
 ## 📜 Daftar Skrip
 
