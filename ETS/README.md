@@ -2,7 +2,6 @@
 
 Game 3D Sci-Fi Interaktif Berbasis Web yang dibangun menggunakan **JavaScript (ES6 Modules), HTML5, CSS3, dan Three.js (WebGL2)**.
 Pemain mengendalikan pangkalan pertahanan planetary meriam ganda untuk menghancurkan badai meteor kosmik, mengelola persenjataan taktis, dan menghadapi Boss Asteroid raksasa.
-<img width="981" height="623" alt="image" src="https://github.com/user-attachments/assets/f0b12a56-9913-4e42-bf7e-2bc2ad106804" />
 
 
 ---
@@ -18,6 +17,7 @@ Pemain mengendalikan pangkalan pertahanan planetary meriam ganda untuk menghancu
 
 ## 📖 Deskripsi Project
 **Meteor Defense 3D** adalah game pertahanan planet sci-fi di mana pemain bertugas melindungi pangkalan utama dari ancaman badai meteor dan asteroid raksasa. Dengan grafis 3D PBR, pencahayaan dinamis, bayangan nyata, serta efek suara sintetis prosedural, game ini memberikan pengalaman aksi taktis interaktif berbasis web tanpa menggunakan engine game komersial instan.
+<img width="981" height="623" alt="image" src="https://github.com/user-attachments/assets/7abdaa2b-f7e8-4124-b090-887480eb1e1a" />
 
 ---
 
