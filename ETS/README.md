@@ -91,7 +91,20 @@ Pemain mengendalikan pangkalan pertahanan planetary meriam ganda untuk menghancu
 ## 🚀 Cara Menjalankan Project
 
 ### Opsi 1: Menggunakan Python (Direkomendasikan)
-1. Buka terminal di direktori utama project.
-2. Jalankan perintah server lokal:
-   ```bash
-   python -m http.server 8000
+Buka terminal di folder project dan jalankan:
+```bash
+python -m http.server 8000
+```
+Buka peramban di `http://localhost:8000`.
+
+### Opsi 2: Menggunakan VS Code Live Server
+Buka folder project di VS Code, klik kanan [`index.html`](./index.html) dan pilih **"Open with Live Server"**.
+
+---
+
+## 📜 Asset Credits & Attribution
+- **3D Engine**: Three.js (MIT License) oleh Ricardo Cabello (mrdoob).
+- **Model 3D GLB**: Model pertahanan satelit orbital GLTF 2.0 binary ([`satellite.glb`](./assets/models/satellite.glb)).
+- **Musik Latar Belakang (BGM)**: Sci-Fi Space Defense Soundtrack (`assets/music/music.mp3` via YouTube Audio).
+- **Audio Synthesizer & SFX**: Procedural Web Audio API sound generator (Laser, Missile, Railgun, Explode, Alarm, Reload, Power-Up).
+- **VFX & Shader**: Custom procedural particle system dan dynamic standard material.
