@@ -1,72 +1,98 @@
-# Praktikum Grafika Komputer — Pertemuan 1: 2D Graphics Playground
+# 🚀 Meteor Defense 3D: Planetary Defense Initiative
 
-Dokumentasi implementasi modul praktikum mandiri mengenai fondasi *rendering pipeline*, sistem koordinat 2D, *primitive drawing*, penanganan *input* (*event-based* vs *state-based*), serta simulasi kinematika dasar menggunakan **HTML5 Canvas 2D API**.
-
----
-
-## Ringkasan Konsep & Arsitektur
-
-Aplikasi interaktif ini dibangun di atas paradigma siklus hidup grafika komputer:
-
-```text
-USER INPUT ──> UPDATE DATA ──> CLEAR FRAME ──> DRAW PRIMITIVES ──> DISPLAY ──> REPEAT
-```
-
-### 1. Rendering Pipeline
-
-* **Data Layer:** State aplikasi disimpan dalam variabel numerik murni (`player.x`, `player.y`, `mouse.x`, array `bouncingBalls`, dsb.).
-* **Coordinate Transformation:** Kanvas mengadopsi sistem koordinat layar dengan titik $(0,0)$ di kiri atas, sumbu $+X$ ke kanan, dan $+Y$ ke bawah.
-* **Primitive Assembly:** Pembentukan bentuk dasar geometri:
-* `Rectangle` / Bidang latar via `fillRect()` & `clearRect()`.
-* `Circle` via `arc(x, y, radius, 0, Math.PI * 2)`.
-* `Line` & `Grid` via `moveTo()` dan `lineTo()`.
-* `Triangle / Polygon` via path tertutup dengan translasi matriks `translate()` dan `rotate()`.
-
-
-* **Rasterization & Output:** Pengisian warna fragmen piksel menggunakan properti `fillStyle` / `strokeStyle` sebelum ditampilkan pada monitor via `requestAnimationFrame()`.
-
-### 2. Pola Penanganan Input Keyboard
-
-* **State-Based Input (Continuous):**
-Status tombol disimpan dalam struktur data objek/map `keys = {}`. Logika translasi `updatePlayer()` memeriksa status ini di setiap frame, memungkinkan pergerakan halus (*continuous translation*) dan dukungan *multi-key* secara simultan (misal: diagonal $W+D$).
-* **Event-Based Input (Discrete):**
-Event `keydown` dengan filter `!e.repeat` digunakan untuk mengeksekusi aksi diskrit tepat satu kali per penekanan tombol (ganti warna, toggle opsi, reset posisi).
+Game 3D Sci-Fi Interaktif Berbasis Web yang dibangun menggunakan **JavaScript (ES6 Modules), HTML5, CSS3, dan Three.js (WebGL2)**.
+Pemain mengendalikan pangkalan pertahanan planetary meriam ganda untuk menghancurkan badai meteor kosmik, mengelola persenjataan taktis, dan menghadapi Boss Asteroid raksasa.
 
 ---
 
-## Daftar Fitur & Challenge yang Diimplementasikan
+## 👥 Anggota Kelompok & Pembagian Kontribusi
 
-| Kode Challenge | Nama Fitur | Deskripsi Teknis |
-| --- | --- | --- |
-| **Challenge A** | *Bouncing Object* | Pembaruan vektor kinematika $\text{Posisi} = \text{Posisi} + \text{Kecepatan}$ disertai pembalikan arah vektor ($\text{v} = -\text{v}$) saat memotong batas canvas. |
-| **Challenge B** | *Follow Mouse* | Lingkaran kursor yang secara real-time mengikuti pergerakan koordinat mouse (`mouse.x`, `mouse.y`). |
-| **Challenge C** | *Click to Change Color* | Event klik mouse (`mousedown`) yang memicu pergantian indeks warna objek dari palet yang tersedia. |
-| **Challenge D** | *Keyboard Movement* | Kontrol pergerakan segitiga pesawat secara bebas menggunakan tombol WASD atau Arrow Keys dengan normalisasi vektor diagonal. |
-| **Challenge E** | *Mouse Coordinate* | Pelacakan dan transformasi koordinat viewport browser ke koordinat lokal canvas yang ditampilkan pada panel status. |
-| **Challenge 34.1** | *Click to Create Circle* | Instansiasi objek lingkaran baru ke dalam array `spawnedCircles` setiap kali pengguna mengklik area canvas. |
-| **Challenge 34.2** | *Trail Mode* | Fitur komparasi antara pembersihan frame total (`clearRect()`) dengan pelapisan latar semi-transparan (`rgba() fillRect()`) untuk efek jejak visual. |
-| **Challenge 34.3** | *Multiple Moving Objects* | Array of objects `bouncingBalls` yang merepresentasikan independensi data tiap entitas (posisi, radius, warna, dan vektor kecepatan unik). |
+| Nama Anggota | NRP | Pembagian Kontribusi & Tanggung Jawab |
+| :--- | :--- | :--- |
+| **Muhammad Nawfal Alfanni Darussalam** | [Isi NRP Kamu] | **Lead Core Developer**: Arsitektur modular Three.js (`main.js`, `turret.js`), konfigurasi Scene Graph, integrasi model `satellite.glb` + `AnimationMixer`, serta sistem senjata raycasting (`weaponSystem.js`). |
+| **[Nama Anggota 2]** | [NRP 2] | **3D Environment & VFX Specialist**: Penyiapan pencahayaan PBR, 5 tema planet/atmosfer (`sceneSetup.js`), sistem partikel ledakan, debris gravitasi, & Web Audio API synthesizer (`vfxManager.js`). |
+| **[Nama Anggota 3]** | [NRP 3] | **UI/UX & Radar Developer**: Perancangan HUD interaktif, modal Start Screen, Settings Intel Codex, Leaderboard (`uiManager.js`), serta pengembangan Radar & Minimap Taktis 360° (`radarManager.js`). |
 
 ---
 
-## Panduan Kontrol & Penggunaan
+## 📖 Deskripsi Project
+**Meteor Defense 3D** adalah game pertahanan planet sci-fi di mana pemain bertugas melindungi pangkalan utama dari ancaman badai meteor dan asteroid raksasa. Dengan grafis 3D PBR, pencahayaan dinamis, bayangan nyata, serta efek suara sintetis prosedural, game ini memberikan pengalaman aksi taktis interaktif berbasis web tanpa menggunakan engine game komersial instan.
 
-### Keyboard
-
-* W / ↑ : Bergerak ke Atas
-* S / ↓ : Bergerak ke Bawah
-* A / ← : Bergerak ke Kiri
-* D / → : Bergerak ke Kanan
-* T : Mengaktifkan / Menonaktifkan **Trail Mode**
-* R : Reset posisi player dan menghapus semua objek circle yang di-spawn
-
-### Mouse
-
-* **Hover Canvas:** Mengarahkan circle follower dan menampilkan koordinat real-time.
-* **Klik Kiri:** Mengubah warna pesawat player sekaligus membuat satu circle statis pada titik klik.
-
-## Tautan Demo & Repositori
-
-- **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%201/)
-- **Video Demo / Dokumentasi**: [Video Demo](https://drive.google.com/file/d/1W5wBAuFDqBciNBTEMGXkxfmpCehYFaoe/view?usp=sharing)
 ---
+
+## 🎮 Gameplay & Fitur Interaksi
+
+### 1. Sistem Persenjataan & Amunisi
+- **[1] Meriam Laser**: Serangan tembakan berkecepatan tinggi (*instant pinpoint hitscan*) dengan **Amunisi Tak Terbatas ($\infty$)**. Efektif menghancurkan meteor cepat.
+- **[2] Peluru Kendali (Missile)**: Proyektil roket 3D berhulu ledak dengan daya hancur area (*AOE blast*), memiliki **Kapasitas 7 Peluru** (Reload 1.6s).
+- **[3] Railgun Magnetik**: Tembakan berkas energi tebal yang **menembus (*pierce*) seluruh target segaris**, memiliki **Kapasitas 3 Peluru** (Recharge 3.2s).
+
+### 2. Jenis Musuh (Meteor)
+- **Standard**: Meteor batuan umum dengan kecepatan dan HP normal.
+- **Speedy**: Meteor komet kecil berwarna emas yang meluncur sangat cepat.
+- **Armored**: Meteor merah berlapis batuan keras dengan HP tebal.
+- **Cluster**: Meteor kristal hijau yang saat hancur **memecah menjadi 3 serpihan (*shards*)** cepat.
+- **Boss Asteroid**: Asteroid raksasa berkawah magma dengan HP Bar khusus di HUD pada Wave 3.
+
+### 3. Upgrade Turret & Power-Up Abilities
+- **Upgrade Turret**: Meningkatkan *Damage* (`[Z]`), *Fire Rate* (`[X]`), *Max Ammo* (`[C]`), dan *Rotation Speed* (`[V]`) menggunakan koin yang didapatkan dari menghancurkan meteor.
+- **Power-Up Abilities**:
+  - **Planet Shield (`[Q]`)**: Kubah energi transparan yang menyerap 1 hantaman meteor.
+  - **EMP Nuke (`[E]`)**: Gelombang elektromagnetik pembersih layar (*screen clear*).
+  - **Time Slow (`[F]`)**: Memperlambat aliran waktu kosmik sebesar 65% selama 6 detik.
+  - **Double Score (`[G]`)**: Menggandakan perolehan skor (2x) selama 8 detik.
+
+### 4. Sistem Kamera & Radar Taktis 360°
+- **3 Mode Kamera (`[K]`)**: *Third-Person Orbit 360°*, *First-Person Cockpit 360°*, dan *Top-Down Isometric 360°*.
+- **Radar Taktis 360°**: Menampilkan indikator posisi meteor, kompas arah mata angin (U/T/S/B), vektor lintasan asal meteor, dan panah peringatan bahaya di tepi layar (*off-screen indicator*).
+
+---
+
+## ⌨️ Daftar Kontrol Permainan
+
+| Tombol / Input | Fungsi & Tindakan |
+| :--- | :--- |
+| **Gerakan Mouse** | Mengarahkan bidikan meriam (*Aiming Turret*) |
+| **Klik Kiri Mouse** | Menembak meteor menggunakan `THREE.Raycaster` |
+| **Klik Kanan Drag / Alt + Drag** | **Rotasi Kamera 360° Bebas** (Horizontal & Vertikal) |
+| **Tombol Panah (`←` `→` `↑` `↓`)** | Rotasi kamera 360° via keyboard |
+| **Scroll Mouse** | Zoom In / Zoom Out jarak kamera |
+| **`1` / `2` / `3`** | Ganti Senjata: [1] Laser, [2] Missile (AOE), [3] Railgun (Pierce) |
+| **`R`** | Isi ulang amunisi sekunder (*Reload*) |
+| **`K`** | Ganti Mode Kamera (*Third-Person*, *First-Person*, *Top-Down*) |
+| **`T` / `B`** | Kustomisasi Skin Meriam (`[T]`) & Tema Planet (`[B]`) |
+| **`Z` `X` `C` `V`** | Upgrade Turret (Damage, Fire Rate, Max Ammo, Rot Speed) |
+| **`Q` `E` `F` `G`** | Aktivasi Power-Up (Shield, EMP Nuke, Time Slow, Double Score) |
+| **`M`** | Ganti Mode Permainan (*Campaign 3 Wave* / *Endless Survival*) |
+| **`P` / `Escape`** | Menjeda / Melanjutkan permainan (*Pause / Resume*) |
+| **`L`** | Membuka Papan Peringkat (*Leaderboard* lokal) |
+
+---
+
+## 🎨 Fitur Grafika 3D (Engine Specification)
+
+- **Scene Graph Parent-Child**: Hierarki objek `baseGroup` (Parent) &rarr; `headGroup` (Yaw) &rarr; `cannonGroup` (Pitch/Recoil) dan `satelliteGroup` (Orbiting Node).
+- **Aset GLTF/GLB & 2 Animasi**: Model `assets/models/satellite.glb` di-load menggunakan `GLTFLoader` dengan **2 animasi internal** yang dijalankan via `THREE.AnimationMixer` (`Radar_Scan` & `Solar_Wings_Deploy`).
+- **Material PBR & Shadows**: Menggunakan `MeshStandardMaterial` dengan kalkulasi metalness/roughness; `castShadow` diaktifkan pada turret, meteor, dan debris; `receiveShadow` pada planet ground.
+- **Pencahayaan Dinamis**: Kombinasi `DirectionalLight` (dengan shadow map 2048x2048), `AmbientLight`, dan `PointLight` untuk efek muzzle flash dinamis.
+- **Environment & Atmosphere**: 5 variasi tema planet dengan efek kabut eksponensial (`THREE.FogExp2`) dan *3D Procedural Starfield Skybox* (1.600 partikel bintang).
+- **Raycasting & Interaction**: Menggunakan `THREE.Raycaster` untuk memproyeksikan kursor 2D mouse ke dunia 3D guna mengarahkan bidikan dan menghitung titik hantam peluru.
+- **VFX & Audio Feedback**: System partikel ledakan 3D, debris batuan bergravitasi, jejak asap meteor, guncangan kamera (*screen shake*), musik BGM, dan 10 efek suara sintetis via Web Audio API.
+
+---
+
+## ⚡ Challenge / Tantangan dalam Pengembangan
+
+1. **Sinkronisasi Matriks Scene Graph & Raycasting**: Menjaga koordinat bidikan meriam ganda agar tetap presisi mengikuti kursor mouse dari 3 mode kamera yang berbeda (Orbit, FPP, dan Top-Down).
+2. **Manajemen Animasi Aset 3D External**: Mengintegrasikan `THREE.AnimationMixer` untuk menjalankan 2 klip animasi bawaan dari file `.glb` secara simultan tanpa mengganggu *performance frame rate* (60 FPS).
+3. **Kalkulasi Radar 360° Real-Time**: Menerjemahkan koordinat ruang 3D (World Space) ke sistem koordinat polar 2D canvas radar dan proyeksi panah tepi layar (*off-screen threat indicators*).
+
+---
+
+## 🚀 Cara Menjalankan Project
+
+### Opsi 1: Menggunakan Python (Direkomendasikan)
+1. Buka terminal di direktori utama project.
+2. Jalankan perintah server lokal:
+   ```bash
+   python -m http.server 8000
