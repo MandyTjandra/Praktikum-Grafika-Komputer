@@ -110,3 +110,7 @@ Buka folder project di VS Code, klik kanan [`index.html`](./index.html) dan pili
 - **Musik Latar Belakang (BGM)**: Sci-Fi Space Defense Soundtrack (`assets/music/music.mp3` via YouTube Audio).
 - **Audio Synthesizer & SFX**: Procedural Web Audio API sound generator (Laser, Missile, Railgun, Explode, Alarm, Reload, Power-Up).
 - **VFX & Shader**: Custom procedural particle system dan dynamic standard material.
+
+## Tautan Demo & Repositori
+Live Demo / Deployment: Link Web
+Video Demo / Dokumentasi: Video Demo
