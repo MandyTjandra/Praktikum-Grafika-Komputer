@@ -21,7 +21,7 @@ src/
 ```
 
 ## 📑 Rincian Peran Tiap Modul
-1. main.js (Main Orchestrator)
+### 1. main.js (Main Orchestrator)
 Fungsi: Titik masuk (entry point) aplikasi dan pengatur siklus hidup game (game loop via requestAnimationFrame).
 
 Fitur Utama:
@@ -32,7 +32,7 @@ Menangani event input kursor mouse untuk raycasting aiming meriam.
 
 Mengelola transisi state permainan (Start Screen, In-Game, Pause, Victory, Game Over).
 
-2. sceneSetup.js (3D Environment & Camera Engine)
+### 2. sceneSetup.js (3D Environment & Camera Engine)
 Fungsi: Menyiapkan arena pertempuran 3D, sistem pencahayaan PBR, dan 3 mode kamera.
 
 Fitur Utama:
@@ -43,7 +43,7 @@ Lighting PBR: DirectionalLight (Shadow Map 2048x2048), AmbientLight, dan PointLi
 
 Atmosfer: 5 Tema Planet (PLANET_THEMES), kabut eksponensial (THREE.FogExp2), dan Procedural Skybox Starfield (1.600 partikel bintang).
 
-3. turret.js (Scene Graph & GLB Satellite)
+### 3. turret.js (Scene Graph & GLB Satellite)
 Fungsi: Mengelola objek 3D meriam pertahanan dan unit satelit pengintai orbital.
 
 Fitur Utama:
@@ -52,7 +52,7 @@ Scene Graph Parent-Child: baseGroup (Parent) → headGroup (Yaw) → cannonGroup
 
 Aset GLB & Animasi: Memuat assets/models/satellite.glb menggunakan GLTFLoader dan menjalankan 2 klip animasi eksternal via THREE.AnimationMixer (Radar_Scan & Solar_Wings_Deploy).
 
-4. meteorManager.js (Enemies & Wave System)
+### 4. meteorManager.js (Enemies & Wave System)
 Fungsi: Mengatur spawning prosedural, pergerakan, dan deteksi benturan meteor dengan planet.
 
 Fitur Utama:
@@ -61,7 +61,7 @@ Membangkitkan 5 jenis meteor: Standard, Speedy, Armored, Cluster (Shards), dan B
 
 Mengelola progresi gelombang (Wave 1-3) dan eskalasi tingkat kesulitan pada mode Campaign & Endless.
 
-5. weaponSystem.js (Arsenal, Upgrades & Abilities)
+### 5. weaponSystem.js (Arsenal, Upgrades & Abilities)
 Fungsi: Menangani logika persenjataan, amunisi, dan fitur pendukung taktis.
 
 Fitur Utama:
@@ -74,7 +74,7 @@ Sistem Reload: Manajemen amunisi mandiri untuk senjata sekunder.
 
 4 Power-Up Abilities: Planet Shield ([Q]), EMP Nuke ([E]), Time Slow ([F]), dan Double Score ([G]).
 
-6. radarManager.js (Tactical Radar & Off-Screen Threat)
+### 6. radarManager.js (Tactical Radar & Off-Screen Threat)
 Fungsi: Rendering sistem navigasi dan radar taktis 2D real-time.
 
 Fitur Utama:
@@ -85,7 +85,7 @@ Menampilkan titik asal (origin beacon), garis trajektori lintasan meteor, dan FO
 
 Panah peringatan bahaya di tepi layar (off-screen threat indicators) untuk meteor di luar jarak pandang.
 
-7. audioManager.js (Audio System)
+### 7. audioManager.js (Audio System)
 Fungsi: Pengendali musik latar belakang (BGM) dan preferensi volume.
 
 Fitur Utama:
@@ -94,7 +94,7 @@ Kontrol Mute/Unmute ([N]) dan sinkronisasi slider volume BGM/SFX.
 
 Penyimpanan pengaturan suara secara otomatis ke localStorage.
 
-8. vfxManager.js (Visual Effects & Sound Synthesizer)
+### 8. vfxManager.js (Visual Effects & Sound Synthesizer)
 Fungsi: Menghasilkan efek visual 3D dan suara sintetis prosedural.
 
 Fitur Utama:
@@ -103,7 +103,7 @@ VFX 3D: Semburan partikel ledakan, debris batuan bergravitasi, jejak asap meteor
 
 Audio Synthesizer: Generator efek suara Web Audio API tanpa berkas audio eksternal.
 
-9. uiManager.js (User Interface & Modals)
+### 9. uiManager.js (User Interface & Modals)
 Fungsi: Manajemen seluruh elemen antarmuka pengguna (HUD & Modal).
 
 Fitur Utama:
