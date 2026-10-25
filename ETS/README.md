@@ -2,6 +2,7 @@
 
 Game 3D Sci-Fi Interaktif Berbasis Web yang dibangun menggunakan **JavaScript (ES6 Modules), HTML5, CSS3, dan Three.js (WebGL2)**.
 Pemain mengendalikan pangkalan pertahanan planetary meriam ganda untuk menghancurkan badai meteor kosmik, mengelola persenjataan taktis, dan menghadapi Boss Asteroid raksasa.
+![Uploading image.png…]()
 
 ---
 
