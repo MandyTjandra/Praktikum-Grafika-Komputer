@@ -58,6 +58,14 @@ const modules = [
         githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%207",
         desc: "Pengembangan scene 3D tingkat lanjut menggunakan Three.js, meliputi pemuatan model eksternal (GLTF/OBJ Loader), interaksi objek dengan Raycasting, pemetaan lingkungan (Skybox/Environment Mapping), serta animasi hierarkis kompleks.",
         tags: ["Three.js", "GLTF Loader", "Raycasting", "Skybox", "Environment Map", "Hierarchical Animation"]
+    },
+    {
+        id: "ETS",
+        title: "Evaluasi Tengah Semester (ETS)",
+        liveUrl: "./ETS/index.html",
+        githubUrl: "https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/ETS",
+        desc: "Proyek Evaluasi Tengah Semester Grafika Komputer yang mengimplementasikan pipeline grafika, transformasi hierarkis, sistem pencahayaan, serta kontrol interaktif.",
+        tags: ["ETS", "WebGL", "Computer Graphics", "3D Scene", "Interactive"]
     }
 ];
 
