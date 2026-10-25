@@ -111,6 +111,8 @@ Buka folder project di VS Code, klik kanan [`index.html`](./index.html) dan pili
 - **Audio Synthesizer & SFX**: Procedural Web Audio API sound generator (Laser, Missile, Railgun, Explode, Alarm, Reload, Power-Up).
 - **VFX & Shader**: Custom procedural particle system dan dynamic standard material.
 
+---
+
 ## Tautan Demo & Repositori
 
 * **Live Demo / Deployment**: [Link Web](https://mandytjandra.github.io/Praktikum-Grafika-Komputer/Praktikum%207/index.html)
