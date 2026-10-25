@@ -10,7 +10,7 @@ Pemain mengendalikan pangkalan pertahanan planetary meriam ganda untuk menghancu
 | Nama Anggota | NRP | Pembagian Kontribusi & Tanggung Jawab |
 | :--- | :--- | :--- |
 | **Muhammad Nawfal Alfanni Darussalam** | 5025241185 | **Lead Core Developer**: Arsitektur modular Three.js (`main.js`, `turret.js`), konfigurasi Scene Graph, integrasi model `satellite.glb` + `AnimationMixer`, serta sistem senjata raycasting (`weaponSystem.js`). |
-| **[Nama Anggota 2]** | [NRP 2] | **3D Environment & VFX Specialist**: Penyiapan pencahayaan PBR, 5 tema planet/atmosfer (`sceneSetup.js`), sistem partikel ledakan, debris gravitasi, & Web Audio API synthesizer (`vfxManager.js`). |
+| **Mandy Alphafyn Imanuel Tjandra** | 5025241173 | **3D Environment & VFX Specialist**: Penyiapan pencahayaan PBR, 5 tema planet/atmosfer (`sceneSetup.js`), sistem partikel ledakan, debris gravitasi, & Web Audio API synthesizer (`vfxManager.js`). |
 | **[Nama Anggota 3]** | [NRP 3] | **UI/UX & Radar Developer**: Perancangan HUD interaktif, modal Start Screen, Settings Intel Codex, Leaderboard (`uiManager.js`), serta pengembangan Radar & Minimap Taktis 360° (`radarManager.js`). |
 
 ---
