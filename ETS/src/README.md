@@ -1,113 +1,155 @@
-# 📂 Source Code Architecture (`src/`)
+# 🏗️ Modular Game Architecture (`src/`)
 
-Direktori ini berisi seluruh logika utama dan kode program dari **Meteor Defense 3D**.
-Arsitektur program dibangun dengan pendekatan **Modular ES6 Modules (Clean Architecture)** untuk memisahkan tanggung jawab tiap subsistem secara jelas (*Single Responsibility Principle*).
+Direktori ini memuat seluruh kode logika, subsistem grafika 3D, dan engine permainan **Meteor Defense 3D**. Proyek ini menerapkan arsitektur modular modern berbasis **JavaScript ES6 Modules** dengan prinsip *Single Responsibility Principle* (SRP) dan *Clean Architecture* tanpa *bundler* eksternal (100% *native browser imports*).
 
 ---
 
-## 🏗️ Struktur & Fungsi Modul
+## 🗺️ Diagram Arsitektur Subsistem
 
+Diagram di bawah mengilustrasikan bagaimana modul orkestrator [`main.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/main.js) mengoordinasikan interaksi antara subsistem grafika, logika permainan, antarmuka, dan audio:
+
+```mermaid
+flowchart TD
+    MAIN["src/main.js\n(Main Orchestrator & Loop)"]
+
+    subgraph GRAPHICS["3D Scene & Rendering Engine"]
+        SCENE["src/sceneSetup.js\n(Scene, 3 Camera Modes, Lighting, Fog)"]
+        TURRET["src/turret.js\n(Scene Graph, Recoil, GLB Satellite & Mixer)"]
+        VFX["src/vfxManager.js\n(Particles, Debris Physics, Camera Shake)"]
+    end
+
+    subgraph GAMEPLAY["Gameplay & Tactics Engine"]
+        METEOR["src/meteorManager.js\n(5 Enemy Types, Wave Spawner, Splitting)"]
+        WEAPON["src/weaponSystem.js\n(3 Arsenal Modes, Reload, Upgrades, Abilities)"]
+        RADAR["src/radarManager.js\n(Tactical 360° Radar, Trajectory & Off-Screen Warning)"]
+    end
+
+    subgraph INTERFACE["Interface & Audio Engine"]
+        UI["src/uiManager.js\n(HUD Real-time, Settings Codex, Leaderboard)"]
+        AUDIO["src/audioManager.js\n(BGM Controller, Volume Sync, LocalStorage)"]
+    end
+
+    MAIN --> SCENE
+    MAIN --> TURRET
+    MAIN --> METEOR
+    MAIN --> WEAPON
+    MAIN --> RADAR
+    MAIN --> VFX
+    MAIN --> UI
+    MAIN --> AUDIO
+
+    WEAPON -.->|Memicu Efek Visual & SFX| VFX
+    METEOR -.->|Pelacakan Posisi Musuh| RADAR
+    METEOR -.->|Deteksi Benturan & Suara Ledakan| VFX
+    UI -.->|Sinkronisasi Preferensi Suara| AUDIO
 ```
-src/
-├── main.js          # Main Orchestrator, Game Loop, Event Listener & Lifecycle Management
-├── sceneSetup.js    # Scene 3D, Mode Kamera (Orbit, FPP, Top-Down), Light PBR & Atmosphere
-├── turret.js        # Scene Graph Meriam (Yaw/Pitch/Recoil) & Integration Model GLB Satellite
-├── meteorManager.js # Generasi Prosedural 5 Jenis Meteor, Wave Spawner & Hit Detection
-├── weaponSystem.js  # Sistem 3 Senjata, Amunisi/Reload, Upgrade Turret & Power-Up Abilities
-├── radarManager.js  # Tactical Radar Minimap 360°, Vektor Trajektori & Off-Screen Indicators
-├── audioManager.js  # BGM Controller, Sync Volume Audio UI & LocalStorage Settings
-├── vfxManager.js    # Particle System, Debris Gravity, Screen Shake & Web Audio Synthesizer
-└── uiManager.js     # HUD Render, Modal Start Screen, Settings Intel Codex & Leaderboard
+
+---
+
+## 🗂️ Rangkuman Modul & Tanggung Jawab
+
+| File Modul | Peran Utama | Fitur Utama yang Dikelola |
+| :--- | :--- | :--- |
+| **[`main.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/main.js)** | **Master Orchestrator** | Game loop (`requestAnimationFrame`), event input mouse/keyboard, kalkulasi `delta time`, dan *state machine* permainan. |
+| **[`sceneSetup.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js)** | **Scene & Atmosphere** | 3 Mode Kamera 360° (*Third-Person*, *First-Person Turret*, *Top-Down*), pencahayaan PBR, kabut atmosfer, dan 5 tema planet. |
+| **[`turret.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/turret.js)** | **Turret & Satellite** | Hierarki *Scene Graph* meriam (Yaw/Pitch/Recoil), pemuatan model [satellite.glb](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/assets/models/satellite.glb), serta pemutaran 2 animasi `AnimationMixer`. |
+| **[`meteorManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/meteorManager.js)** | **Enemies & Spawning** | Generasi prosedural 5 varian meteor, algoritma pemecahan Cluster Shard, pergerakan trajektori, dan deteksi benturan planet. |
+| **[`weaponSystem.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/weaponSystem.js)** | **Arsenal & Taktik** | Mekanik 3 senjata (Laser, Missile AOE, Railgun Pierce), sistem cooldown reload, 4 upgrade turret, dan 4 abilities khusus. |
+| **[`radarManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/radarManager.js)** | **Tactical Minimap** | Render canvas radar 360° (160x160 px), kompas mata angin dinamis, garis trajektori meteor asal, dan panah peringatan bahaya layar. |
+| **[`audioManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/audioManager.js)** | **Audio & BGM Controller** | Trek musik latar [music.mp3](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/assets/music/music.mp3), slider volume terpadu, tombol mute keyboard, dan sinkronisasi `localStorage`. |
+| **[`vfxManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/vfxManager.js)** | **VFX & Audio Synthesizer** | Semburan partikel ledakan, puing batuan debris gravitasi, efek kubah perisai, *screen shake*, dan synthesizer suara prosedural Web Audio API. |
+| **[`uiManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/uiManager.js)** | **HUD & User Interface** | Layar awal *Start Screen*, HUD status amunisi & HP, papan peringkat lokal *Leaderboard Top 5*, modal *Pause*, dan *Victory/Defeat*. |
+
+---
+
+## 🔍 Penjelasan Mendalam Tiap Modul
+
+### 1. [`main.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/main.js)
+* **Game Loop**: Menghitung `delta time` dengan `THREE.Clock` untuk memastikan seluruh kalkulasi fisika, perputaran, dan animasi berjalan konsisten pada tingkat refresh monitor berapapun (60Hz, 120Hz, 144Hz).
+* **Raycaster Aiming**: Memproyeksikan sinar `THREE.Raycaster` dari posisi kursor mouse ke ruang 3D untuk menentukan orientasi rotasi meriam pangkalan (*turret traversal*).
+* **State Lifecycle**: Mengontrol transisi antar-fase permainan:
+
+```mermaid
+stateDiagram-v2
+    [*] --> StartScreen: Pemuatan Halaman
+    StartScreen --> Playing: Tekan Mulai (Campaign / Endless)
+    Playing --> Paused: Tekan [P] atau [Escape]
+    Paused --> Playing: Resume Permainan
+    Playing --> Victory: Selesaikan Wave 3 & Kalahkan Boss
+    Playing --> GameOver: HP Planet Mencapai 0
+    Victory --> StartScreen: Restart Permainan
+    GameOver --> StartScreen: Coba Lagi
 ```
 
-## 📑 Rincian Peran Tiap Modul
-### 1. main.js (Main Orchestrator)
-Fungsi: Titik masuk (entry point) aplikasi dan pengatur siklus hidup game (game loop via requestAnimationFrame).
+---
 
-Fitur Utama:
+### 2. [`sceneSetup.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/sceneSetup.js)
+* **Sistem Kamera Fleksibel**:
+  * *Third-Person Orbit*: Mengitari pangkalan dengan kontrol mouse klik-kanan drag atau tombol panah keyboard.
+  * *First-Person Cockpit*: Pandangan langsung dari sudut pandang laras meriam dengan kebebasan toleh 360°.
+  * *Top-Down Isometric*: Sudut pandang strategis dari atas untuk pemantauan medan secara menyeluruh.
+* **Pencahayaan Bertingkat**:
+  * `THREE.DirectionalLight`: Menyimulasikan cahaya bintang kosmik dengan kalkulasi bayangan beresolusi tinggi (*Shadow Map* 2048x2048).
+  * `THREE.AmbientLight`: Memberikan pencahayaan lingkungan dasar agar bagian gelap tetap terbaca secara visual.
+  * `THREE.PointLight`: Menghasilkan kilatan cahaya dinamis saat meriam menembak (*muzzle flash*).
+* **5 Tema Planet Dinamis**: Memungkinkan pergantian instan visual tanah, kabut atmosfer (`THREE.FogExp2`), dan warna langit kosmik (Lunar Slate, Mars Red, Ice Europa, Toxic Alien, dan Volcanic Ash) dengan menekan tombol **`[B]`**.
 
-Mengordinasikan update frame antar-modul (turret, meteor, weapon, radar, vfx).
+---
 
-Menangani event input kursor mouse untuk raycasting aiming meriam.
+### 3. [`turret.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/turret.js)
+* **Hierarki Scene Graph**:
+  ```text
+  turretGroup (Root)
+  └── baseMesh (Pondasi Pangkalan)
+      └── headGroup (Rotasi Horizontal - Yaw)
+          ├── bodyMesh (Kokpit & Armor)
+          └── cannonGroup (Rotasi Vertikal - Pitch & Animasi Recoil Laras)
+  ```
+* **Integrasi Satelit GLB**: Memuat file model biner [`satellite.glb`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/assets/models/satellite.glb) via `GLTFLoader`. Model ditempatkan pada lintasan orbit lingkaran di atas pangkalan dan digerakkan oleh `THREE.AnimationMixer` untuk memutar klip animasi `Radar_Scan` dan `Solar_Wings_Deploy`.
 
-Mengelola transisi state permainan (Start Screen, In-Game, Pause, Victory, Game Over).
+---
 
-### 2. sceneSetup.js (3D Environment & Camera Engine)
-Fungsi: Menyiapkan arena pertempuran 3D, sistem pencahayaan PBR, dan 3 mode kamera.
+### 4. [`meteorManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/meteorManager.js)
+* **5 Varian Meteor Kosmik**:
+  * **Standard**: Karakteristik kecepatan dan ketahanan seimbang.
+  * **Speedy**: Berukuran ramping dengan akselerasi tinggi berwarna keemasan.
+  * **Armored**: Berlapis batuan magma tebal dengan HP tinggi.
+  * **Cluster**: Kristal hijau yang saat hancur memecah menjadi 3 anak serpihan (*shards*).
+  * **Boss Asteroid**: Asteroid raksasa berkawah dengan diameter 3x lipat dan bar HP khusus di HUD.
+* **Vektor Lintasan Asal**: Merekam koordinat awal pemunculan (*spawn origin coordinates*) setiap meteor untuk disuplai ke modul radar taktis.
 
-Fitur Utama:
+---
 
-3 Mode Kamera ([K]): Third-Person Orbit, First-Person Cockpit, dan Top-Down Isometric.
+### 5. [`weaponSystem.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/weaponSystem.js)
+* **Persenjataan**:
+  * **[1] Meriam Laser**: Tembakan hitscan instan pinpoint tanpa jeda reload ($\infty$ amunisi).
+  * **[2] Peluru Kendali Missile**: Roket berpemandu dengan radius ledakan area (AOE blast), kapasitas 7 peluru.
+  * **[3] Railgun**: Berkas energi magnetik tebal yang menembus (*pierce*) banyak asteroid dalam satu garis lurus, kapasitas 3 peluru.
+* **Sistem Upgrade Turret**: Peningkatan bertingkat menggunakan koin pertempuran untuk Damage (`[Z]`), Fire Rate (`[X]`), Max Ammo (`[C]`), dan Kecepatan Rotasi (`[V]`).
+* **Abilities Taktis**: Pelindung Planet (`[Q]`), Nuklir EMP (`[E]`), Time Slow (`[F]`), dan Double Score (`[G]`).
 
-Lighting PBR: DirectionalLight (Shadow Map 2048x2048), AmbientLight, dan PointLight dinamis.
+---
 
-Atmosfer: 5 Tema Planet (PLANET_THEMES), kabut eksponensial (THREE.FogExp2), dan Procedural Skybox Starfield (1.600 partikel bintang).
+### 6. [`radarManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/radarManager.js)
+* **Radar Minimap Canvas 2D (160x160 px)**: Memproyeksikan posisi 3D seluruh meteor ke bidang radar 2D horizontal secara real-time.
+* **Kompas Arah Dinamis**: Menampilkan jarum mata angin (`U`, `T`, `S`, `B`) yang berputar mengikuti sudut hadap kamera.
+* **Off-Screen Threat Indicators**: Menampilkan indikator panah merah berkedip di tepi layar browser jika ada meteor yang mendekat di luar bidang pandang kamera pemain.
 
-### 3. turret.js (Scene Graph & GLB Satellite)
-Fungsi: Mengelola objek 3D meriam pertahanan dan unit satelit pengintai orbital.
+---
 
-Fitur Utama:
+### 7. [`vfxManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/vfxManager.js)
+* **Sistem Partikel & Fisika Debris**: Menghasilkan hamburan batu 3D acak yang mengalami gravitasi ke bawah, perlambatan udara, dan rotasi tumbling saat meteor hancur.
+* **Synthesizer Web Audio API Prosedural**: Membangkitkan frekuensi audio tembakan laser, desis roket, ledakan railgun, dan alarm peringatan secara matematis menggunakan osilator audio (`OscillatorNode` & `GainNode`) langsung di peramban tanpa membebani bandwidth jaringan.
 
-Scene Graph Parent-Child: baseGroup (Parent) → headGroup (Yaw) → cannonGroup (Pitch/Recoil) dan satelliteGroup (Orbit Node).
+---
 
-Aset GLB & Animasi: Memuat assets/models/satellite.glb menggunakan GLTFLoader dan menjalankan 2 klip animasi eksternal via THREE.AnimationMixer (Radar_Scan & Solar_Wings_Deploy).
+### 8. [`audioManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/audioManager.js)
+* **Pengendali Musik BGM**: Memutar trek musik latar berformat MP3 secara looping dengan transisi halus (*fade-in / fade-out*).
+* **Sinkronisasi Pengaturan**: Menyimpan preferensi volume musik, volume SFX, dan status mute ke `localStorage` agar pengaturan pemain tetap tersimpan saat halaman dimuat ulang.
 
-### 4. meteorManager.js (Enemies & Wave System)
-Fungsi: Mengatur spawning prosedural, pergerakan, dan deteksi benturan meteor dengan planet.
+---
 
-Fitur Utama:
-
-Membangkitkan 5 jenis meteor: Standard, Speedy, Armored, Cluster (Shards), dan Boss Asteroid.
-
-Mengelola progresi gelombang (Wave 1-3) dan eskalasi tingkat kesulitan pada mode Campaign & Endless.
-
-### 5. weaponSystem.js (Arsenal, Upgrades & Abilities)
-Fungsi: Menangani logika persenjataan, amunisi, dan fitur pendukung taktis.
-
-Fitur Utama:
-
-3 Senjata: Meriam Laser (Hitscan), Peluru Kendali Missile (AOE Blast), dan Railgun Magnetik (Pierce Beam).
-
-Sistem Reload: Manajemen amunisi mandiri untuk senjata sekunder.
-
-4 Upgrade Turret: Damage ([Z]), Fire Rate ([X]), Max Ammo ([C]), dan Rotation Speed ([V]).
-
-4 Power-Up Abilities: Planet Shield ([Q]), EMP Nuke ([E]), Time Slow ([F]), dan Double Score ([G]).
-
-### 6. radarManager.js (Tactical Radar & Off-Screen Threat)
-Fungsi: Rendering sistem navigasi dan radar taktis 2D real-time.
-
-Fitur Utama:
-
-Render Canvas 2D (160x160) dengan kompas arah mata angin dinamis (U/T/S/B).
-
-Menampilkan titik asal (origin beacon), garis trajektori lintasan meteor, dan FOV kamera.
-
-Panah peringatan bahaya di tepi layar (off-screen threat indicators) untuk meteor di luar jarak pandang.
-
-### 7. audioManager.js (Audio System)
-Fungsi: Pengendali musik latar belakang (BGM) dan preferensi volume.
-
-Fitur Utama:
-
-Kontrol Mute/Unmute ([N]) dan sinkronisasi slider volume BGM/SFX.
-
-Penyimpanan pengaturan suara secara otomatis ke localStorage.
-
-### 8. vfxManager.js (Visual Effects & Sound Synthesizer)
-Fungsi: Menghasilkan efek visual 3D dan suara sintetis prosedural.
-
-Fitur Utama:
-
-VFX 3D: Semburan partikel ledakan, debris batuan bergravitasi, jejak asap meteor, beam laser, dan guncangan kamera (screen shake).
-
-Audio Synthesizer: Generator efek suara Web Audio API tanpa berkas audio eksternal.
-
-### 9. uiManager.js (User Interface & Modals)
-Fungsi: Manajemen seluruh elemen antarmuka pengguna (HUD & Modal).
-
-Fitur Utama:
-
-Pembaruan HUD real-time (HP, Skor, Combo, Amunisi, Boss Bar).
-
-Modal interaktif: Start Screen, Pause Menu, Game Over / Victory, Leaderboard, dan Settings Intel Codex.
+### 9. [`uiManager.js`](file:///c:/GitHub/Praktikum-Grafika-Komputer/ETS/src/uiManager.js)
+* **Tampilan HUD Real-time**: Mengelola indikator visual HP pangkalan, amunisi sekunder, indikator reload berputar, perolehan skor, pengganda combo (*combo streak*), dan bar HP Boss.
+* **Settings & Intel Codex**: Dialog informatif yang menyajikan informasi taktik musuh, panduan persenjataan, serta pengaturan audio dan kontrol.
+* **Leaderboard Lokal**: Menyimpan dan menampilkan 5 skor rekor tertinggi di peramban web.
