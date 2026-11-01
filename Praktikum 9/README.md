@@ -1,12 +1,15 @@
 # Praktikum 9 - Pemodelan 3D Prop (Blender)
 
 ## Identitas Kelompok
-* **Nama Kelompok**: 
-* **Anggota Kelompok**:
-  1. Nama:  (NIM: )
-  2. Nama:  (NIM: )
-  3. Nama:  (NIM: )
-* **Kelas / Program Studi**: 
+
+- **Nama** : Mandy Alphafyn Imanuel Tjandra  
+- **NRP**  : 5025241173  
+- **Kelas**: B  
+
+- **Nama** : Muhammad Nawfal Alfanni Darussalam  
+- **NRP**  : 5025241185  
+- **Kelas**: B  
+
 
 ---
 
