@@ -156,10 +156,10 @@ Hasil akhir aset 3D peti (*Final Base Mesh Prop*) yang telah rapi, memiliki topo
 ---
 
 ## 10. Link Video Demo
-* **Link Video Demo**: `[Masukkan Link Video Demo di Sini (YouTube / Google Drive)]`
+* **Link Video Demo**: [Link Video](https://drive.google.com/file/d/1SyNIeqaddqiXuVxk_ckhp7jXTmPoP_2Z/view?usp=sharing)
 
 ---
 
 ## 11. Link Repository GitHub
-* **Repository**: [https://github.com/MandyTjandra/Praktikum-Grafika-Komputer](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer)
-* **Direktori Praktikum 9**: [https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%209](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%209)
+* **Repository**: [Link Repository](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer)
+* **Direktori Praktikum 9**: [Link Direktori Praktikum 9](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%209)
