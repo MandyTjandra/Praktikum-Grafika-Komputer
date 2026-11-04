@@ -347,4 +347,4 @@ Hasil akhir render aset *Stylized PBR Chest Prop* dengan integrasi penuh tekstur
 ## 16. Link Repository & Demo
 * **Repository GitHub**: [Link Repository](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer)
 * **Direktori Praktikum 10**: [Link Direktori Praktikum 10](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%2010)
-* **Link Video Demo**: [Link Video Demo Praktikum 10](https://drive.google.com/file/d/1SyNIeqaddqiXuVxk_ckhp7jXTmPoP_2Z/view?usp=sharing)
+* **Link Video Demo**: [Link Video Demo Praktikum 10](https://drive.google.com/file/d/1XtO51O8qczv8of8erFrSyBRIAJdsqsIq/view?usp=sharing)
