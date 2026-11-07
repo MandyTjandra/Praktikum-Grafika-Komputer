@@ -1,4 +1,4 @@
-# Praktikum 11 - Blender Lighting, Camera Composition, and Rendering
+# Tugas Blender Scene 3D Lengkap
 
 ## Identitas Kelompok
 
@@ -17,431 +17,316 @@
 ---
 
 ## Daftar Isi
-1. [Nama Asset dan Konsep Visual](#1-nama-asset-dan-konsep-visual)
-2. [Peningkatan Geometri & Asset Upgrade 3D](#2-peningkatan-geometri--asset-upgrade-3d)
-3. [Sistem Pencahayaan Studio (Three-Point Lighting + Interior Accent)](#3-sistem-pencahayaan-studio-three-point-lighting--interior-accent)
-4. [Komposisi Kamera & Sinematografi](#4-komposisi-kamera--sinematografi)
-5. [Rigging Kinematik & Animasi Keyframe](#5-rigging-kinematik--animasi-keyframe)
-6. [Analisis Komparatif Rendering: EEVEE Next vs CYCLES Path Tracing](#6-analisis-komparatif-rendering-eevee-next-vs-cycles-path-tracing)
-7. [Shader & PBR Material Network](#7-shader--pbr-material-network)
-8. [Tabel Eksperimen & Analisis Teknis](#8-tabel-eksperimen--analisis-teknis)
-9. [Struktur Berkas & Hirarki Outliner](#9-struktur-berkas--hirarki-outliner)
-10. [Dokumentasi Visual 10 Tahapan](#10-dokumentasi-visual-10-tahapan)
-11. [Checklist Pengumpulan Tugas](#11-checklist-pengumpulan-tugas)
-12. [Link Repository & Panduan Eksekusi](#12-link-repository--panduan-eksekusi)
+1. [Gambaran Umum Proyek](#1-gambaran-umum-proyek)
+2. [Ketentuan 1: Model Hasil Modeling Sendiri & Tekstur Buatan Sendiri](#2-ketentuan-1-model-hasil-modeling-sendiri--tekstur-buatan-sendiri)
+3. [Ketentuan 2: Model Eksternal & Tekstur PBR Lengkap](#3-ketentuan-2-model-eksternal--tekstur-pbr-lengkap)
+4. [Ketentuan 3: Penggabungan Scene, Skala, Ground, dan Elemen Pendukung](#4-ketentuan-3-penggabungan-scene-skala-ground-dan-elemen-pendukung)
+5. [Ketentuan 4: Sistem Pencahayaan (Lighting Setup)](#5-ketentuan-4-sistem-pencahayaan-lighting-setup)
+6. [Ketentuan 5: Pengaturan Kamera, Focal Length, Sudut Pandang & Komposisi](#6-ketentuan-5-pengaturan-kamera-focal-length-sudut-pandang--komposisi)
+7. [Ketentuan 6: Final Rendering & Analisis Perbedaan Material](#7-ketentuan-6-final-rendering--analisis-perbedaan-material)
+8. [Dokumentasi Visual & Galeri Render](#8-dokumentasi-visual--galeri-render)
+9. [Struktur Berkas & Hirarki Scene](#9-struktur-berkas--hirarki-scene)
+10. [Panduan Eksekusi di Blender](#10-panduan-eksekusi-di-blender)
 
 ---
 
-## 1. Nama Asset dan Konsep Visual
+## 1. Gambaran Umum Proyek
 
-* **Nama Asset**: *Cinematic Pirate Treasure Chest Showcase (Full Mechanical Rig, 140+ Gold Doubloon Hoard, Studio Lighting & Path Traced Render)*
-* **Konsep Asset**:
-  Melanjutkan evolusi aset peti harta karun dari **Praktikum 9** (*Geometri & Modeling Topologi Dasar*) dan **Praktikum 10** (*PBR Texturing & UV Unwrapping 2K*), Praktikum 11 menghadirkan lompatan kualitas sinematik menyeluruh (*cinematic presentation pipeline*). 
+Proyek ini disusun untuk memenuhi seluruh kriteria dan ketentuan tugas penyusunan **Scene 3D Lengkap** menggunakan **Blender 5.2 LTS**. 
 
-  Aset dasar ditingkatkan menjadi prop kapal bajak laut legendaris yang fungsional secara mekanis: dilengkapi tutup lengkung barel (*arched barrel vault lid*) yang dapat membuka pada engsel belakang, sistem pengunci gembok kuningan antik (*brass padlock & swinging latch*), sepasang pegangan cincin gantung besi samping (*drop-ring iron handles*), serta timbunan harta karun masif (*treasure hoard*) yang melimpah keluar dari rongga peti ke atas lantai dek kapal kayu (*weathered ship deck*).
+Scene ini menggabungkan dua kategori model 3D dalam satu kesatuan lingkungan (*environment*) tematik yang sinematik:
+1. **Model Hasil Modeling Sendiri**: Aset peti harta karun kayu-besi (*Stylized PBR Treasure Chest Prop*) yang dimodelkan, di-*unwrap* UV secara manual, serta dilapisi tekstur PBR buatan sendiri.
+2. **Model Eksternal dengan Tekstur PBR Lengkap**: Aset lentera kuningan antik (*Antique Brass Diya Lantern* - CC0 Poly Haven) yang memiliki dan mengimplementasikan seluruh saluran tekstur PBR standar industri (*Base Color, Ambient Occlusion, Roughness, Metallic, Normal Map, dan Emission*).
 
-* **Pilar Pembelajaran Praktikum 11**:
-  1. **Studio Lighting Mastery**: Penerapan kaidah klasik *Three-Point Lighting* (Key Light, Fill Light, Rim Light) ditambah lampu aksen internal (*Interior Treasure Glow*) untuk membangun *depth*, *mood*, dan separasi siluet 3D.
-  2. **Cinematic Camera Composition**: Pengaturan lensa $50\text{mm}$ standar industri sinematik, sudut pandang *Three-Quarter Hero Angle*, pembingkaian berorientasi *Rule of Thirds*, serta simulasi optik kamera nyata melalui *Depth of Field (DoF)* dengan bokeh bilah apertur $f/2.8$.
-  3. **Kinematic Animation**: Rangkaian gerak terkoordinasi 150 frame (pembukaan tutup peti, pelepasan kait gembok, penyalaan pendaran emas magis, dan pergerakan kamera *dolly push-in* halus).
-  4. **Rendering Engine Evaluation**: Perbandingan komprehensif antara rasterisasi real-time berbasis raytracing (*EEVEE Next*) dan penelusuran sinar fisik tanpa bias (*CYCLES Path Tracing*) di Blender 5.2 LTS.
+Kedua model ditata di atas lantai dek kapal kayu maritim (*rustic wooden deck floor*), diperkaya dengan elemen pendukung berupa taburan 40 koin emas doubloon 3D dan kristal permata ruby faset, disinari oleh tata cahaya studio *Three-Point Lighting* berpadu dengan pencahayaan lokal fungsional (*practical light*), dibidik dengan kamera sinematik $50\text{mm}$ berorientasi *Rule of Thirds*, serta dirender menggunakan engine fisik **CYCLES Path Tracing** dengan manajemen warna dinamis **AgX**.
 
 ---
 
-## 2. Peningkatan Geometri & Asset Upgrade 3D
+## 2. Ketentuan 1: Model Hasil Modeling Sendiri & Tekstur Buatan Sendiri
 
-Untuk mengubah peti statis dari modul sebelumnya menjadi prop sinematik siap panggung, dilakukan serangkaian penambahan dan perombakan geometri:
+### A. Geometri dan Riwayat Pemodelan
+Model yang digunakan adalah aset **Peti Harta Karun** (`Chest_Base` dan `Rivet_Array`) yang dibangun secara mandiri pada Praktikum 9 dan 10:
+* **Primitive Dasar**: Dibangun dari primitive **Cube** yang dipotong, diekstrusi, diberi bevel pada rusuk-rusuk fungsional untuk menangkap kilau *specular*, serta primitive **Cylinder** dengan 32 segmen melingkar yang diskalakan menjadi paku keling (*rivets*) logam modular.
+* **Topologi Bersih**: Geometri bebas dari *non-manifold edges*, *interior faces*, maupun *duplicate vertices*. Skala telah dinormalisasi (*Applied Scale* $(1.0, 1.0, 1.0)$) dan arah normal permukaan telah dikoreksi keluar (*Recalculate Outside*).
 
-```
-                                [Lid_Curved] (Rotasi X: 0° -> -102°)
-                                    │      \
-               [Hinge_Left] ────────┤       \─── [Padlock_Hasp] (Swing Latch)
-               [Hinge_Right] ───────┘        └── [Padlock_Body]
-                                    │
-                              [Chest_Base] (Dimensi: 3.6m x 2.0m x 1.4m)
-                             /      │     \
-     [Handle_Side_Left] ────┘       │      └──── [Handle_Side_Right]
-                                    │
-                          [Treasure_Hoard]
-                         ┌──────────┴────────────────────────┐
-                         │                                   │
-                [Treasure_Mound]                     [Pirate_Chalice]
-                (Gundukan Emas Dasar)                (Piala Emas Berukir)
-                         │
-        ┌────────────────┼────────────────┬──────────────────┐
-        ▼                ▼                ▼                  ▼
- [Coins_Scatter]  [Coin_Stacks]    [Coins_Spill_Rim]  [Coins_Floor_Deck]
- (100+ Koin Emas) (3 Tumpukan Rapi) (Tumpahan Bibir)  (Berserakan di Dek)
-                         │
-                  [Gemstones]
-            (Ruby, Emerald, Sapphire)
-```
+### B. UV Mapping Manual
+Proses pemetaan UV dilakukan secara terencana menggunakan 53 *seam* struktural:
+* Memisahkan bidang papan kayu depan, samping, belakang, dan dasar ke dalam UV island terpisah.
+* Memisahkan sabuk pelat besi tempa (*reinforcement straps*) dan pelat kunci kuningan (*escutcheon*).
+* Memastikan *texel density* seragam tanpa adanya peregangan (*stretching*) atau distorsi koordinat ($U, V$).
 
-### Rincian Komponen Geometri:
-1. **Badan Peti (`Chest_Base`)**:
-   - Mempertahankan dimensi proporsional $3.6\text{ m} \times 2.0\text{ m} \times 1.4\text{ m}$ dengan rongga penyimpanan dalam (*inner cavity*) sedalam $1.15\text{ m}$.
-   - Sudut luar diperkuat dengan pelat besi penahan (*iron corner brackets*) dan kaki penopang bawah (*skid runners*).
-2. **Tutup Melengkung Barel (`Lid_Curved`)**:
-   - Dibuat dari separuh tabung silinder parametrik berpenampang busur lengkung (*barrel vault*) dengan ketebalan dinding ganda (*solidified shell*).
-   - Memiliki titik tumpu (*pivot axis*) yang dikunci secara presisi pada engsel belakang $(X = 0, Y = 1.02\text{ m}, Z = 0.70\text{ m})$, memungkinkan rotasi engsel natural $-102^\circ$ tanpa penetrasi mesh (*mesh clipping*).
-3. **Engsel Besi Belakang (`Hinge_Left` & `Hinge_Right`)**:
-   - Terpasang kokoh pada posisi simetris $X = \pm 1.25\text{ m}$, menjepit pertemuan antara badan peti dan tutup barel dengan pin pengunci silindris.
-4. **Mekanisme Kunci Depan (`Escutcheon_Plate`, `Padlock_Body`, `Padlock_Hasp`)**:
-   - Pelat kunci kuningan bermotif bajak laut di dinding depan ($Y = -1.02\text{ m}$).
-   - Gembok kuningan antik gantung (*hanging padlock*) lengkap dengan cincin pengait (*hasp ring*) yang membuka berayun saat tutup peti mulai terangkat.
-5. **Pegangan Cincin Besi Tempa Samping (`Handle_Side_Left` & `Handle_Side_Right`)**:
-   - Dudukan braket besi di dinding kiri dan kanan ($X = \pm 1.83\text{ m}$) dengan cincin torus gantung bebas (*heavy iron drop-rings*).
-6. **Timbunan Harta Karun Masif (`Treasure_Hoard`)**:
-   - **Gundukan Emas (`Treasure_Mound`)**: Struktur dasar organik melengkung yang memenuhi dasar dan rongga dalam peti.
-   - **140+ Koin Emas Doubloon 3D Individual (`Coins_Scatter`)**:
-     - Setiap koin memiliki geometri silinder pipih 32 faset berdiameter $0.18\text{ m}$ dengan tepi beveled dan ukiran relief timbul.
-     - Terbagi atas 4 kelompok penempatan alami:
-       1. *Mound Scatter*: Lebih dari 100 koin tersebar acak dengan orientasi rotasi 3-sumbu di atas gundukan emas.
-       2. *Coin Stacks*: 3 susunan kolom koin tertata rapi (masing-masing 8–12 koin) yang saling bertumpuk stabil.
-       3. *Rim Spillover*: Deretan koin yang tersangkut dan meluncur di atas bibir bevel pelat depan.
-       4. *Floor Deck Scatter*: Koin-koin yang terjatuh dan bertebaran di atas papan dek kapal kayu di sekeliling peti.
-   - **Permata Potong Faset (`Gem_Ruby`, `Gem_Emerald`, `Gem_Sapphire`)**: Kristal faset oktahedral dan dodekahedral transparan dengan transmisi indeks refraksi tinggi ($1.58 - 1.77$).
-   - **Piala Emas Bajak Laut (`Pirate_Chalice`)**: Cawan emas bertangkai ramping dengan hiasan beading melingkar yang tertancap di tengah gundukan koin.
-7. **Lantai Dek Kapal (`Ship_Deck_Floor`)**:
-   - Alas bidang luas $32\text{ m} \times 32\text{ m}$ bertekstur papan kayu mahoni gelap untuk menghilangkan batas horizon pada sudut kamera rendah.
+### C. Tekstur PBR Buatan Sendiri (Resolusi $2048 \times 2048$)
+Seluruh tekstur untuk model sendiri dibuat dan diintegrasikan ke dalam material `Chest_PBR_Mat` dan `Rivet_Brass_PBR_Mat` di direktori `textures/`:
+
+| Nama Berkas Tekstur | Saluran PBR (*Channel*) | Color Space | Deskripsi & Fungsi Visual |
+| :--- | :--- | :--- | :--- |
+| `chest_basecolor.png` | **Base Color / Albedo** | sRGB | Pola serat kayu mahoni gelap, pelat besi tempa gelap berkarat, dan lis bingkai kuningan. |
+| `chest_roughness.png` | **Roughness** | Non-Color | Variasi kilap mikro: kayu bersifat doff/semi-matte ($\approx 0.65$), pelat besi tempa ($\approx 0.75$), kuningan licin ($\approx 0.25$). |
+| `chest_metallic.png` | **Metallic** | Non-Color | Mask biner pemisah konduktor logam ($1.0$ pada plat dan bingkai) vs isolator dielektrik kayu ($0.0$). |
+| `chest_normal.png` | **Normal Map** | Non-Color | Tangent-space normal untuk celah alur kayu, kedalaman bevel, dan relief permukaan logam tanpa menambah poligon. |
+| `chest_emission.png` | **Emission** | sRGB | Inti segel magis/sci-fi cyan cerah di tengah pelat kunci yang memancarkan pendaran cahaya. |
+| `rivet_basecolor.png` | **Base Color (Rivet)** | sRGB | Warna emas kuningan pekat untuk barisan paku keling. |
+| `rivet_metallic.png` | **Metallic (Rivet)** | Non-Color | Nilai logam penuh ($1.0$). |
+| `rivet_roughness.png` | **Roughness (Rivet)** | Non-Color | Permukaan kuningan semi-glossy halus ($\approx 0.22$). |
+| `rivet_normal.png` | **Normal (Rivet)** | Non-Color | Kelengkungan kepala kubah paku keling. |
 
 ---
 
-## 3. Sistem Pencahayaan Studio (Three-Point Lighting + Interior Accent)
+## 3. Ketentuan 2: Model Eksternal & Tekstur PBR Lengkap
 
-Pencahayaan adalah instrumen utama dalam sinematografi 3D untuk memandu mata penonton (*visual hierarchy*), mempertegas volume geometris (*dimensionality*), dan membangun atmosfer (*mood*). Scene ini mengimplementasikan sistem **Four-Point Cinematic Studio Rig**:
+### A. Identitas Model Eksternal
+* **Nama Aset**: *Antique Brass Diya Lantern* (Rangka Lentera Gantung/Duduk Kuningan Tradisional).
+* **Sumber & Lisensi**: Poly Haven (CC0 Public Domain).
+* **Komponen Mesh**:
+  * `brass_diya_lantern`: Badan utama lentera kuningan heksagonal berornamen ukiran bintang pada kubah atas, engsel, kait penutup, dan mangkuk minyak/api.
+  * `brass_diya_lantern_chain`: Sambungan rantai gantung kuningan vertikal.
+  * `brass_diya_lantern_glass`: Panel-panel kaca pelindung transparan dengan sifat transmisi optik sejati.
+  * `brass_diya_lantern_flame`: Geometri nyala api sumbu lentera bersuhu tinggi.
+
+### B. Implementasi 6 Saluran Tekstur PBR Lengkap
+Model eksternal ini dilengkapi dengan seluruh saluran tekstur PBR di direktori `textures/external_lantern/`:
 
 ```
-                       [Rim / Back Light] (Spot 800W, Cool Cyan 6500K)
-                                    \
-                                     \  (Arah Pencahayaan Tepi)
-                                      ▼
-    [Fill Light]                [CHEST PROP]                [Key Light]
- (Area 450W, 5800K)  ───────>   [ + Hoard ]   <───────  (Spot 1200W, Warm 4200K)
- (Rasio 1:3 Kontras)                 ▲                     (Sudut 45° Hero)
-                                     │
-                             [Interior Glow]
-                           (Point 220W, Gold 2400K)
+ShaderNodeTexCoord (UV)
+   ├── tex_diff (sRGB) ────[ Color A ]─── Mix (MULTIPLY) ──> Principled BSDF [ Base Color ]
+   ├── tex_ao   (Non-Color)─[ Color B ]───────┘
+   ├── tex_metal (Non-Color)──────────────────────────────> Principled BSDF [ Metallic ]
+   ├── tex_rough (Non-Color)──────────────────────────────> Principled BSDF [ Roughness ]
+   ├── tex_norm  (Non-Color)──> Normal Map (Strength 1.0)──> Principled BSDF [ Normal ]
+   └── tex_emit  (sRGB)───────────────────────────────────> Principled BSDF [ Emission Color ]
+                                                            Principled BSDF [ Emission Strength: 3.5 ]
 ```
 
-### Parameter Konfigurasi Lampu:
-
-| Nama Sumber Cahaya | Tipe Lampu | Daya (Watt) | Temperatur / Warna | Posisi $(X, Y, Z)$ | Karakteristik & Peran Sinematik |
-|:-------------------|:----------:|:-----------:|:------------------:|:------------------:|:--------------------------------|
-| **`Light_Key`** | `SPOT` | $1200\text{ W}$ | Warm Hue $(1.0, 0.94, 0.86)$ $\approx 4200\text{ K}$ | $(4.5, -4.0, 5.0)$ | **Cahaya Utama**: Diposisikan pada sudut $45^\circ$ azimuth depan-kanan dan elevasi $40^\circ$. Membentuk bayangan tajam terarah, memunculkan tekstur serat kayu dan kilau specular tajam pada pelat besi sudut. Sudut spot $45^\circ$, blend $0.25$. |
-| **`Light_Fill`** | `AREA` | $450\text{ W}$ | Soft Slate $(0.82, 0.88, 1.0)$ $\approx 5800\text{ K}$ | $(-4.2, -3.2, 3.2)$ | **Cahaya Pengisi**: Diposisikan berlawanan di sisi kiri depan dengan ukuran pemancar luas ($2.5\text{ m} \times 2.5\text{ m}$). Melembutkan area bayangan gelap (*occluded shadows*) dengan rasio kontras ideal $1:3$ tanpa menciptakan bayangan ganda. |
-| **`Light_Rim`** | `SPOT` | $800\text{ W}$ | Crisp Cyan $(0.78, 0.90, 1.0)$ $\approx 6500\text{ K}$ | $(-2.8, 4.6, 4.2)$ | **Cahaya Tepi/Belakang**: Diposisikan di belakang prop mengarah ke kamera. Menghasilkan garis kontur highlight tipis (*edge rim specular*) di sepanjang busur tutup barel dan engsel belakang, memisahkan objek secara tegas dari latar gelap. |
-| **`Light_Interior`** | `POINT` | $0\text{ W} \to 220\text{ W}$ *(Animated)* | Golden Gold $(1.0, 0.72, 0.20)$ $\approx 2400\text{ K}$ | $(0.0, 0.0, 0.85)$ | **Lampu Aksen Internal**: Berada di tengah rongga peti tepat di atas koin. Teranimasi menyala dramatis saat tutup peti membuka, memantulkan kilau keemasan magis ke wajah penonton dan permata. |
-| **`World Ambient`** | `SURFACE` | Strength $0.35$ | Dark Amber $(0.12, 0.10, 0.09)$ | Lingkungan Global | Memberikan radiansi lingkungan temaram khas kabin kapal bajak laut malam hari, mencegah area bayangan total menjadi hitam pekat (*crushed blacks*). |
+1. **Base Color / Albedo (`lantern_basecolor.png`)**:
+   * Format: PNG, Color Space: **sRGB**.
+   * Menampilkan reflektansi warna material kuningan tua dengan patina alami dan noda oksidasi halus.
+2. **Ambient Occlusion (`lantern_ao.png`)**:
+   * Format: PNG, Color Space: **Non-Color**.
+   * Digabungkan dengan Base Color menggunakan node **Mix (Type: MULTIPLY, Factor: 1.0)**. Menggelapkan rongga-rongga sempit, sudut pertemuan tiang rangka, dan lipatan bawah kubah secara akurat.
+3. **Metallic (`lantern_metallic.png`)**:
+   * Format: PNG, Color Space: **Non-Color**.
+   * Mengatur sifat konduktivitas logam kuningan ($1.0$) pada seluruh rangka struktural lentera dan rantai.
+4. **Roughness (`lantern_roughness.png`)**:
+   * Format: PNG, Color Space: **Non-Color**.
+   * Memberikan variasi mikro-tekstur: area tepi aus memiliki roughness rendah yang mengkilap, sedangkan lekukan berdebu memiliki roughness lebih tinggi.
+5. **Normal Map (`lantern_normal.png`)**:
+   * Format: PNG, Color Space: **Non-Color**.
+   * Dihubungkan melalui node **Normal Map (Strength: 1.0)** ke socket *Normal* Principled BSDF. Menghasilkan kedalaman mikroskopis pada ukiran bintang, plat sambungan, dan rivet rangka.
+6. **Emission (`lantern_emissive.png`)**:
+   * Format: PNG, Color Space: **sRGB**.
+   * Dihubungkan ke socket *Emission Color* dengan *Emission Strength* $3.5$. Mengemisikan cahaya pendar hangat pada sumbu api lentera.
 
 ---
 
-## 4. Komposisi Kamera & Sinematografi
+## 4. Ketentuan 3: Penggabungan Scene, Skala, Ground, dan Elemen Pendukung
 
-Pengaturan kamera dirancang berdasarkan prinsip sinematografi kamera film format besar (*large format cinematography*):
+### A. Komposisi & Proporsi Skala
+Kedua model digabungkan ke dalam satu ruang 3D terpadu dengan proporsi yang realistis:
+* **Peti Harta Karun (`Self_Modeled_Chest_Group`)**:
+  * Skala: $(0.6, 0.6, 0.6)$ menghasilkan dimensi proporsional $2.16\text{ m} \times 1.20\text{ m} \times 0.84\text{ m}$.
+  * Posisi: diletakkan di sisi kiri komposisi ($X = -0.95, Y = 0.20, Z = 0.42$), tepat menapak di atas lantai.
+  * Rotasi: sedikit diputar $-14^\circ$ pada sumbu Z agar tampak depan dan samping kanan menghadap kamera (*Three-Quarter view*).
+* **Lentera Kuningan Eksternal (`External_PBR_Lantern_Group`)**:
+  * Skala: $(6.0, 6.0, 6.0)$ menghasilkan tinggi total $0.80\text{ m}$ (lentera lantai/meja kapal yang kokoh).
+  * Posisi: diletakkan di sisi kanan depan ($X = 1.30, Y = -0.30, Z = 0.00$), menciptakan kedalaman spasial (*foreground-to-midground relationship*).
+  * Rotasi: diputar $+20^\circ$ pada sumbu Z agar sudut rangka dan jendela kaca menangkap cahaya utama.
 
-```
-                                          Z
-                                          │
-                                          │  [Camera_Hero] (Z = 4.0m)
-                                          │     │
-                                          │     │ (Focal Length: 50mm, f/2.8)
-                                          │     ▼
-                                          │   [Target_Focus_Cam] (Z = 0.62m)
-                                          │  /
-                                          ├─/───────────── Y
-                                         / │
-                                        /  │
-                                     X /   [Chest Center: (0, 0, 0)]
-```
+### B. Ground (Lantai Dek Kapal Kayu)
+* Objek mesh berukuran luas $24\text{ m} \times 24\text{ m}$ (`Rustic_Deck_Ground`) meniadakan *horizon clipping*.
+* Dilapisi material **Deck_Wood_PBR** prosedural berbasis gelombang (*Wave Texture*) terarah horizontal dan beralur tajam:
+  * Alur celah papan kayu (*deep mahogany groove*) gelap ($\text{Base Color: } #090503$).
+  * Permukaan kayu mahoni hangat ($\text{Base Color: } #21140B$) dengan variasi *fine organic noise*.
+  * Parameter Roughness $0.55$ dan Bump Map normal $0.22$ menghasilkan pantulan specular lantai basah yang kaya.
 
-### A. Focal Length & Perspektif Lensa
-* **Panjang Fokal**: $50\text{mm}$ (*Standard Prime Lens*).
-* **Alasan Pemilihan**: Lensa $50\text{mm}$ pada sensor Full Frame ($36\text{mm} \times 24\text{mm}$) memberikan bidang pandang (*Field of View*) $\approx 39.6^\circ$ horizontal. Sudut ini merepresentasikan perspektif mata manusia paling alami bebas dari distorsi lengkung cembung (*barrel distortion*) khas lensa wide-angle ($< 28\text{mm}$) maupun pemipihan kedalaman ruang (*spatial flattening*) khas lensa telephoto ($> 100\text{mm}$).
-
-### B. Sudut Pandang & Framing (Three-Quarter Hero Angle)
-* **Kamera Utama (`Camera_Hero`)**:
-  * **Posisi Awal (Frame 1)**: $(X = 6.5, Y = -6.5, Z = 4.0)$ meter.
-  * **Titik Bidik Terkunci (`Target_Focus_Cam`)**: $(X = 0.10, Y = -0.65, Z = 0.62)$ meter.
-  * **Orientasi Framing**: Sudut $3/4$ tampak serong depan memperlihatkan tiga bidang sekaligus (bidang depan tempat gembok kunci, bidang samping tempat cincin handle, serta kelengkungan atas dan isi rongga emas).
-  * **Kaidah Rule of Thirds**: Titik kunci gembok dan tumpukan koin depan diposisikan tepat pada persimpangan garis sepertiga bawah-tengah (*lower-third focal intersection*), memandu mata penonton secara instan ke pusat narasi.
-
-### C. Simulasi Kedalaman Ruang (Depth of Field & Bokeh)
-* **Aperture f-Stop**: $f/2.8$.
-* **Aperture Blades**: $7$ bilah diafragma terpasang (*7-blade polygonal diaphragm*).
-* **Fokus Target**: Terkunci presisi menggunakan constraint `Track To` pada empty object `Target_Focus_Cam` yang diletakkan tepat pada koin emas terdepan.
-* **Efek Visual**:
-  - Bagian depan koin, bibir peti, dan gembok tampil dengan ketajaman kristal (*pin-sharp focal plane*).
-  - Latar belakang papan dek kapal dan sudut terjauh ruangan meluruh lembut menjadi bokeh estetik (*smooth optical defocusing*), memberikan separasi kedalaman yang dramatis.
+### C. Elemen Pendukung (Koin Emas & Permata Ruby)
+* **40 Koin Emas Doubloon (`Treasure_Coins_Scatter`)**:
+  * Model koin silinder bertepi bevel dengan material **Gold_Doubloon_PBR** (Metallic: $0.95$, Roughness: $0.22$, Base Color: Emas Kuning Tua).
+  * Disebarkan secara artistik menghubungkan sudut peti dengan dasar lentera, membentuk garis penuntun visual (*leading line*).
+* **Kristal Permata Ruby Faset (`Ruby_Gem_PBR`)**:
+  * Ico-sphere faset bersudut tajam dengan sifat transmisi optik kaca (*Transmission Weight: 0.92, Roughness: 0.05, IOR: 1.77, Deep Red Base Color*).
+  * Menghasilkan pembiasan caustics merah cerah saat tertimpa cahaya lentera dan key light.
 
 ---
 
-## 5. Rigging Kinematik & Animasi Keyframe
+## 5. Ketentuan 4: Sistem Pencahayaan (Lighting Setup)
 
-Animasi berdurasi **150 frame** dengan kecepatan standar sinematik **24 frame per detik (fps)**, menghasilkan total durasi tayang **6.25 detik**.
+Sistem pencahayaan disusun menggunakan kombinasi **Three-Point Studio Lighting** profesional ditambah dua sumber cahaya fungsional lokal (*practical/accent lights*):
 
 ```
-Frame:    0        20        40        60        80       100       120       140   150
-Timeline: ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼───┤
-Lid Rot:  [0° Tutup Rapat────] [ Rotasi Berputar -102° ───] [ Terbuka Penuh Mantap ──]
-Hasp:     [Kunci Rapat] [Buka 45°]
-Glow:     [0 Watt ───────────] [ Naik Drastis 0W -> 220W ─] [ Bersinar Stabil 220W ──]
-Camera:   [Dolly Push-in Dimulai ──────────────────────────────────────> Posisi Dekat]
+                       [ Rim Light (380W) ]
+                             (Back)
+                               │
+               ┌───────────────┴───────────────┐
+               │                               │
+       [ Peti Harta Karun ]          [ Lentera Kuningan ]
+        (Cyan Accent 25W)             (Flame Light 45W)
+               │                               │
+               └───────────────┬───────────────┘
+                               │
+       [ Key Light (550W) ]    │    [ Fill Light (160W) ]
+        (Warm White 4000K)     │     (Cool Blue 7500K)
+                               │
+                         [ Kamera 50mm ]
 ```
 
-### Rincian Fase Animasi:
-
-1. **Fase 1: Ketegangan Awal & Pembukaan Kunci (Frame 1 – 35)**:
-   - Peti berada dalam kondisi tertutup rapat. Tutup barel diam pada rotasi $0^\circ$.
-   - Pada Frame 10 hingga 30, cincin pengait gembok (`Padlock_Hasp`) berputar membuka sebesar $+45^\circ$, memberikan umpan balik mekanis bahwa segel pengaman telah terlepas (*unlatched*).
-   - Kamera mulai meluncur perlahan mendekat (*slow push-in*).
-
-2. **Fase 2: Pengangkatan Tutup & Kemunculan Cahaya (Frame 35 – 85)**:
-   - Tutup barel (`Lid_Curved`) berputar pada poros sumbu $X$ lokal dari rotasi $0^\circ$ menuju $-102^\circ$ ($-1.78\text{ rad}$) menggunakan kurva interpolasi **Bézier Ease-In-Out**.
-   - Gerakan dimulai perlahan karena bobot besi-kayu yang berat, berakselerasi di tengah bukaan, dan melambat halus saat mendekati sudut bukaan maksimum.
-   - Lampu interior emas (`Light_Interior`) menyala serentak mengikuti bukaan tutup, meningkatkan intensitas energi secara eksponensial dari $0\text{ W}$ (Frame 35) hingga mencapai puncaknya $220\text{ W}$ (Frame 85).
-
-3. **Fase 3: Kemilau Penuh & Penyelesaian Gerak (Frame 85 – 150)**:
-   - Tutup peti berhenti stabil pada bukaan $-102^\circ$ dengan gerakan *micro-settle bounce* yang realistis.
-   - Kamera `Camera_Hero` menyelesaikan pergerakan *dolly push-in* dari jarak $(6.5, -6.5, 4.0)$ ke $(5.7, -5.7, 3.6)$, memperbesar detail 140+ koin emas dan permata di dalam rongga.
-   - Pendaran cahaya emas dan pantulan specular berkilau stabil hingga frame akhir.
+1. **Key Light (Lampu Kunci Utama)**:
+   * **Tipe**: Area Light ($2.5\text{ m} \times 2.5\text{ m}$).
+   * **Energi**: $550\text{ W}$, **Warna**: Hangat (#FFEED9 / 4000K).
+   * **Posisi**: $(-3.5, -4.5, 4.0)$ dengan sudut datang elevasi $52^\circ$ dari kiri depan.
+   * **Peran**: Menjadi sumber iluminasi dominan yang memahat bentuk 3D, memunculkan tekstur serat kayu peti, serta menghasilkan highlight berkilau pada paku keling kuningan dan kubah lentera.
+2. **Fill Light (Lampu Pengisi)**:
+   * **Tipe**: Area Light besar ($4.0\text{ m} \times 4.0\text{ m}$).
+   * **Energi**: $160\text{ W}$, **Warna**: Biru Dingin Lembut (#BFDFFF / 7500K).
+   * **Posisi**: $(4.5, -3.0, 2.8)$ dari arah kanan.
+   * **Peran**: Melembutkan bayangan gelap di sisi kanan peti dan celah koin, menghasilkan kontras rasio terukur ($1:3.4$) tanpa menghilangkan kesan dimensional.
+3. **Rim Light (Lampu Punggung / Siluet)**:
+   * **Tipe**: Area Light ($2.0\text{ m} \times 2.0\text{ m}$).
+   * **Energi**: $380\text{ W}$, **Warna**: Putih Bersih (#E6F2FF).
+   * **Posisi**: $(0.0, 4.0, 3.5)$ dari arah belakang atas menghadap kamera.
+   * **Peran**: Menciptakan garis tepi kilau (*rim highlight*) yang tegas di sepanjang bahu atas peti dan mata rantai lentera, memisahkan objek dari latar gelap.
+4. **Practical Lantern Flame Light (Lampu Api Lentera)**:
+   * **Tipe**: Point Light ($Radius: 0.05\text{ m}$).
+   * **Energi**: $45\text{ W}$, **Warna**: Oranye Api Hangat (#FF9926).
+   * **Posisi**: $(1.30, -0.30, 0.72)$ tepat di dalam kubah kaca lentera.
+   * **Peran**: Memancarkan radiansi cahaya nyata yang memantul di kaca lentera, lantai dek, dan permukaan koin emas di sekitarnya.
+5. **Chest Rune Accent Light (Lampu Aksen Magis Peti)**:
+   * **Tipe**: Point Light ($Radius: 0.08\text{ m}$).
+   * **Energi**: $25\text{ W}$, **Warna**: Cyan Elektrik (#0DE0FF).
+   * **Posisi**: $(-0.95, 0.20, 0.75)$ di dalam rongga inti peti.
+   * **Peran**: Memperkuat pendaran visual simbol rune pada tekstur emisi peti.
 
 ---
 
-## 6. Analisis Komparatif Rendering: EEVEE Next vs CYCLES Path Tracing
+## 6. Ketentuan 5: Pengaturan Kamera, Focal Length, Sudut Pandang & Komposisi
 
-Blender 5.2 menghadirkan arsitektur render engine generasi terbaru. Pada proyek ini dilakukan pengujian komparatif menyeluruh pada frame puncak keindahan (Frame 100) antara **EEVEE Next** dan **CYCLES Path Tracing**:
+### A. Hero Cinematic Camera
+* **Focal Length**: **$50\text{mm}$ Standard Cinematic Lens**. Panjang fokus ini dipilih karena memberikan perspektif alami yang menyerupai mata manusia tanpa distorsi lengkung tepi (*barrel distortion*) khas lensa sudut lebar maupun kompresi datar telephoto.
+* **Sudut Pandang**: **Three-Quarter Hero Perspective** (Elevasi $25^\circ$, Azimuth miring dari depan-tengah). Memperlihatkan secara bersamaan tampak depan, tampak atas, dan tampak samping dari kedua model.
+* **Constraint Pelacakan**: Dilengkapi constraint `Track To` yang terkunci presisi pada objek `Camera_Focus_Target` di titik tengah antara peti dan lentera ($(0.0, -0.1, 0.45)$).
+* **Depth of Field (DoF)**:
+  * Fitur optik kamera aktif dengan aperture **$f/4.0$**.
+  * Memberikan ketajaman kristal pada bidang fokal utama (peti, koin, dan lentera) sekaligus menghasilkan kelembutan bokeh halus pada lantai di latar depan dekat dan latar belakang jauh.
 
-| Parameter Evaluasi | EEVEE Next (Blender 5.2) | CYCLES Path Tracing | Analisis & Implikasi Grafika Komputer |
-|:-------------------|:-------------------------|:--------------------|:--------------------------------------|
-| **Metode Dasar Rendering** | Rasterisasi Real-time dengan Screen-Space Raytracing & Horizon-Based Indirect Lighting | *Physically Based Unbiased Monte Carlo Path Tracing* | EEVEE Next mengestimasi persamaan radiansi melalui trik rasterisasi cepat, sedangkan Cycles menyelesaikan integral render secara matematis murni dengan menembakkan jutaan sinar foton. |
-| **Global Illumination (GI)** | Fast Screen-Space Global Illumination (SSGI) | Multi-Bounce Full Radiosity (12 Bounces) | Pada EEVEE Next, cahaya pantulan emas ke tutup bagian dalam terlihat cukup baik namun terbatas pada geometri yang terlihat di layar (*screen space limitation*). Pada Cycles, inter-refleksi emas memantul berulang kali, menghasilkan pendaran hangat (*color bleeding*) yang sempurna dan realistis di setiap sudut rongga. |
-| **Material Transmisi & Permata (Gemstones)** | Screen Space Refraction (SSR) dengan estimasi IOR | True Volumetric Refraction, Dispersion, & Internal Total Reflection | EEVEE Next merefleksikan latar belakang 2D di dalam permata dengan approximation Fresnel. Cycles merefleksikan sinar yang menembus kristal faset, membiaskan sinar sesuai hukum Snellius ($n_1 \sin \theta_1 = n_2 \sin \theta_2$), dan menghasilkan bayangan berwarna (*colored caustics*) di atas tumpukan koin. |
-| **Penanganan Bayangan (Shadows)** | Shadow Maps dengan Virtual Shadow Map PCF Filtering | Physically Traced Area Light Penumbra & Contact Occlusion | Cycles menghasilkan gradasi bayangan lembut (*penumbra*) yang membesar secara proporsional sesuai jarak penghalang dari sumber area light, serta oklusi kontak mikro (*micro-contact shadow*) yang sangat tajam di sela-sela tumpukan koin. EEVEE menghasilkan bayangan cepat namun sedikit kehilangan detail kontak sub-milimeter. |
-| **Refleksi Logam & Anisotropi** | Raytraced Specular Buffers dengan Denoising Temporal | Microfacet GGX Distribution dengan Multiple Bounces | Pada EEVEE Next, pantulan koin emas tampak bersih dan sangat berkilau. Pada Cycles, interaksi pantulan koin-ke-koin menghasilkan kedalaman kilau emas yang kaya, tebal, dan bernuansa tembaga-kuningan alami. |
-| **Waktu Komputasi Render (Frame 100, 1080p)** | $\approx \mathbf{0.85\text{ detik}}$ | $\approx \mathbf{19.4\text{ detik}}$ (Cycles CPU 24 Samples + Denoising) | EEVEE Next unggul mutlak dalam efisiensi waktu hingga **22 kali lipat lebih cepat**, menjadikannya standar ideal untuk pratinjau animasi dan interaktivitas real-time, sedangkan Cycles adalah standar mutlak untuk *final master beauty shot*. |
-
----
-
-## 7. Shader & PBR Material Network
-
-Seluruh material pada prop mengadopsi standar **Principled BSDF** dengan properti optik berbasis fisika:
-
-```
-[Principled BSDF]
- ├── Base Color        ──> Albedo Spektrum Material
- ├── Metallic          ──> 1.0 (Konduktor) vs 0.0 (Dielektrik)
- ├── Roughness         ──> Distribusi Mikro-kekasaran Permukaan
- ├── IOR / Transmisi   ──> Indeks Bias Cahaya Kaca/Permata (1.58 - 1.77)
- └── Normal            ──> Perturbasi Vektor Normal Tangen
-```
-
-### Rincian Material Utama:
-1. **`Gold_Doubloon_PBR` (Koin Emas Bajak Laut & Piala)**:
-   - `Base Color`: Emas murni berkarakter bajak laut $(1.0, 0.766, 0.20)$
-   - `Metallic`: $1.0$ (Konduktor murni)
-   - `Roughness`: $0.22$ (Memberikan kilap tajam dengan sebaran specular halus)
-2. **`Antique_Brass_PBR` (Gembok & Pelat Kunci)**:
-   - `Base Color`: Kuningan berumur $(0.85, 0.65, 0.25)$
-   - `Metallic`: $0.95$
-   - `Roughness`: $0.32$ (Satin aus dengan pantulan difus)
-3. **`Hammered_Iron_PBR` (Engsel, Braket, & Cincin Handle)**:
-   - `Base Color`: Besi tempa arang $(0.12, 0.12, 0.13)$
-   - `Metallic`: $0.98$
-   - `Roughness`: $0.40$
-4. **`Gem_Ruby`, `Gem_Emerald`, `Gem_Sapphire` (Permata Berharga)**:
-   - `Transmission Weight`: $1.0$
-   - `Roughness`: $0.05$ (Kristal jernih)
-   - `IOR`: Ruby ($1.77$), Emerald ($1.58$), Sapphire ($1.77$)
-   - `Base Color`: Ruby Crimson $(0.85, 0.05, 0.10)$, Emerald Green $(0.05, 0.75, 0.20)$, Sapphire Blue $(0.05, 0.20, 0.90)$
-5. **`Chest_PBR_Mat` & `ShipDeck_Wood` (Papan Kayu Mahoni)**:
-   - `Base Color`: Cokelat kayu mahoni tua $(0.25, 0.14, 0.08)$
-   - `Metallic`: $0.0$ (Dielektrik alami)
-   - `Roughness`: $0.65$ (Kayu kasar tak divernis)
-   - `Normal`: Tangen Map untuk alur celah papan dan serat kayu
+### B. Kamera Tambahan untuk Detail Shot
+1. **`Closeup_Lantern_Camera`**:
+   * Focal Length: $65\text{mm}$, Aperture: $f/2.8$.
+   * Membidik khusus lentera kuningan eksternal untuk memperlihatkan tekstur mikro PBR (Base Color, AO, Roughness, Metallic, Normal, dan nyala api).
+2. **`Closeup_Chest_Camera`**:
+   * Focal Length: $55\text{mm}$, Aperture: $f/3.2$.
+   * Membidik khusus peti harta karun untuk memperlihatkan tekstur serat kayu mahoni, pelat besi tempa, paku keling kuningan, dan pendaran inti rune cyan.
 
 ---
 
-## 8. Tabel Eksperimen & Analisis Teknis
+## 7. Ketentuan 6: Final Rendering & Analisis Perbedaan Material
 
-| No | Eksperimen | Variasi Parameter | Pengamatan & Temuan Grafis |
-|:--:|:-----------|:------------------|:---------------------------|
-| 1 | **Key Light Angle** | Sudut $0^\circ$ (Frontal) vs Sudut $45^\circ$ | Cahaya frontal menghilangkan persepsi kedalaman objek karena bayangan jatuh di belakang prop. Sudut $45^\circ$ membentuk gradasi bayangan dramatis yang memperjelas bentuk kubah tutup peti dan lekukan koin. |
-| 2 | **Fill Ratio** | Tanpa Fill ($1:\infty$) vs Fill Lembut ($1:3$) | Tanpa Fill, sisi kiri peti menjadi siluet gelap pekat tanpa detail material (*crushed shadows*). Fill berdaya sepertiga membuka detail papan kayu sisi kiri secara natural tanpa menimbulkan bayangan bersaing. |
-| 3 | **Rim Separation** | Rim Light ON vs OFF | Tanpa Rim Light, tutup peti kayu gelap menyatu dengan latar belakang gelap. Rim Light menghasilkan garis kontur putih-kebiruan tipis yang memisahkan siluet prop secara elegan dari latar. |
-| 4 | **Interior Accent** | Tanpa Lampu Dalam vs Point 220W | Tanpa lampu dalam, isi peti tampak mati dan gelap saat terbuka. Lampu interior berwarna emas menciptakan efek magis *treasure illumination* yang memancarkan pendaran ke sekeliling ruangan. |
-| 5 | **Focal Length** | $24\text{mm}$ (Wide) vs $50\text{mm}$ (Standard) vs $135\text{mm}$ (Tele) | Lensa $24\text{mm}$ mendistorsi proporsi peti (sudut depan membesar tak wajar). Lensa $135\text{mm}$ memipihkan kedalaman ruang. Lensa $50\text{mm}$ menghasilkan proporsi volumetrik paling ideal dan proporsional. |
-| 6 | **Depth of Field** | DoF OFF (Deep Focus) vs DoF ON ($f/2.8$) | DoF OFF membuat seluruh tekstur lantai dek kapal bersaing memperebutkan perhatian penonton. DoF ON memburamkan lantai menjadi bokeh halus dan mengunci perhatian mata $100\%$ pada peti dan koin. |
-| 7 | **Render Engine** | EEVEE Next vs CYCLES Path Tracing | EEVEE Next sangat responsif untuk evaluasi animasi ($< 1$ detik/frame). Cycles memberikan integrasi fisik cahaya mutlak, terutama pada pembiasan cahaya permata dan bayangan kontak mikro antar koin. |
+### A. Konfigurasi Engine CYCLES Path Tracing
+Final rendering dieksekusi menggunakan penelusuran sinar fisik tanpa bias (**Cycles Physically Based Path Tracing**) di Blender 5.2 LTS:
+* **Resolusi Render**: Full HD ($1920 \times 1080$), Rasio Aspek $16:9$.
+* **Denoising AI**: **OpenImageDenoise (OIDN)** berkinerja tinggi untuk membersihkan noise pada pantulan glossy dan kaca transmisi.
+* **Manajemen Warna**: **AgX** (*AgX - Medium High Contrast*), standar modern Blender yang mencegah *highlight clipping* pada emisi api dan pendaran rune magis.
+* **Ray Bounces**: Max Bounces 4, Diffuse 2, Glossy 2, Transmission 4.
+
+### B. Perbandingan & Kontras Karakter Material
+
+| Nama Objek | Kategori Material | Shader / Komponen | Karakteristik Visual yang Ditampilkan |
+| :--- | :--- | :--- | :--- |
+| **Badan Peti** | Organik / Kayu | PBR Wood Planks | Roughness medium-high ($0.65$), difusi serat kayu bertekstur, alur celah gelap dengan normal bump tegas. |
+| **Sabuk Tepi Peti** | Logam / Besi | Rough Forged Iron | Metallic ($1.0$), Roughness tinggi ($0.75$), warna hitam arang dengan tepi aus (*edge wear*). |
+| **Paku Keling Peti** | Logam / Kuningan | Polished Brass | Metallic ($1.0$), Roughness rendah ($0.22$), tangkapan highlight specular tajam dari Key Light. |
+| **Inti Rune Peti** | Emisi Magis | Cyan Glow Emission | Pancaran mandiri warna cyan terang (#0DE0FF), memancarkan cahaya ke bibir kayu di sekitarnya. |
+| **Rangka Lentera** | Logam Eksternal | Aged Brass PBR + AO | Metallic ($1.0$), tekstur kuningan tua beroksidasi, bayangan oklusi gelap pada lipatan rangka heksagonal. |
+| **Kaca Lentera** | Dielektrik Transparan | Glass Transmission | Transmisi penuh ($0.95$), Roughness ultra-rendah ($0.04$), IOR $1.45$, pembiasan nyata cahaya api interior. |
+| **Nyala Api Lentera** | Emisi Suhu Tinggi | Flame Fire Emission | Emisi oranye-kuning terang (#FF8810) dengan intensitas emisi $15.0$ - $20.0$. |
+| **Koin Doubloon** | Logam Mulia | Pure Metallic Gold | Metallic ($0.95$), kilau kuning emas mewah dengan bayangan kontak mikro antar koin. |
+| **Permata Ruby** | Mineral Optik | Faceted Ruby Crystal | Transmisi ($0.92$), IOR $1.77$, dispersi internal merah tua kaya caustics. |
+| **Lantai Dek** | Kayu Maritim | Rustic Timber Deck | Papan kayu paralel horizontal beralur gelap dengan specular sheen halus dari pantulan langit-langit. |
 
 ---
 
-## 9. Struktur Berkas & Hirarki Outliner
+## 8. Dokumentasi Visual & Galeri Render
 
-Struktur organisasi file proyek pada Blender Outliner:
+### A. Final Master Beauty Showcase (Cycles 1080p)
+Tampilan mahakarya utama yang menampilkan integrasi utuh model peti hasil modeling sendiri, model lentera eksternal PBR lengkap, koin emas, pencahayaan 3-titik, dan lantai dek kapal kayu:
+
+![Final Master Beauty Showcase](screenshots/01_final_master_showcase.png)
+
+---
+
+### B. Detail Shot Model Eksternal: Antique Brass Lantern (PBR Showcase)
+Menampilkan secara jelas ke-6 saluran tekstur PBR (Base Color, AO, Roughness, Metallic, Normal, dan Emission) pada rangka kuningan, kaca transparan, dan api lentera:
+
+![Detail Shot Model Eksternal](screenshots/03_lantern_pbr_detail.png)
+
+---
+
+### C. Detail Shot Model Sendiri: Stylized PBR Chest Prop
+Menampilkan tekstur buatan sendiri pada badan peti kayu mahoni, pelat besi tempa, paku keling kuningan, dan pendaran inti rune cyan:
+
+![Detail Shot Model Sendiri](screenshots/04_chest_pbr_detail.png)
+
+---
+
+### D. Clay / Workbench Scene Overview (Analisis Geometri & Topologi)
+Tampilan model dasar (*clay shading*) yang memperlihatkan proporsi skala, susunan objek, dan relasi spasial dalam viewport:
+
+![Clay Overview](screenshots/05_scene_overview_clay.png)
+
+---
+
+## 9. Struktur Berkas & Hirarki Scene
 
 ```
-P11_5025241173_Mandy_5025241185_Nawfal.blend
-├── Collection: Prop_Chest
-│   ├── Chest_Base               (Badan utama peti dengan rongga dalam)
-│   ├── Lid_Curved               (Tutup barel melengkung teranimasi rotasi X)
-│   ├── Hinge_Left               (Engsel besi kiri)
-│   ├── Hinge_Right              (Engsel besi kanan)
-│   ├── Escutcheon_Plate         (Pelat kunci kuningan depan)
-│   ├── Padlock_Body             (Badan gembok kuningan gantung)
-│   ├── Padlock_Hasp             (Cincin kait gembok teranimasi swing)
-│   ├── Handle_Side_Left         (Pegangan cincin gantung besi sisi kiri)
-│   └── Handle_Side_Right        (Pegangan cincin gantung besi sisi kanan)
-├── Collection: Treasure_Hoard
-│   ├── Treasure_Mound           (Gundukan emas dasar pengisi rongga)
-│   ├── Coins_Scatter            (140+ Koin emas doubloon 3D individual)
-│   ├── Pirate_Chalice           (Piala emas bajak laut tertancap)
-│   ├── Gem_Ruby                 (Permata merah delima faset)
-│   ├── Gem_Emerald              (Permata hijau zamrud faset)
-│   └── Gem_Sapphire             (Permata biru safir faset)
-├── Collection: Environment
-│   └── Ship_Deck_Floor          (Lantai dek kayu kapal 32m x 32m)
-├── Collection: Studio_Lighting
-│   ├── Light_Key                (Spot Light 1200W, 4200K, sudut 45°)
-│   ├── Light_Fill               (Area Light 450W, 5800K, soft contrast)
-│   ├── Light_Rim                (Spot Light 800W, 6500K, back edge contour)
-│   └── Light_Interior           (Point Light teranimasi 0W -> 220W)
-└── Collection: Cinematic_Cameras
-    ├── Camera_Hero              (Kamera sinematik 50mm, f/2.8 DoF, Dolly Push-in)
-    ├── Cam_Studio_Overview      (Kamera studio high-angle 35mm dokumentasi rig)
-    ├── Cam_Macro_Coins          (Kamera makro 85mm close-up koin emas)
-    └── Target_Focus_Cam         (Empty Object target DoF & pembingkaian)
+Tugas Blender Scene 3D Lengkap/
+├── Tugas Blender Scene 3D Lengkap.blend   # File Blender master scene 3D lengkap
+├── build_scene.py                         # Script otomatisasi perakitan seluruh scene
+├── render_scene.py                        # Script otomatisasi rendering seluruh shot
+├── README.md                              # Laporan komprehensif dokumentasi tugas
+├── models/
+│   └── brass_diya_lantern.blend           # Aset model eksternal sumber (Poly Haven CC0)
+├── textures/
+│   ├── chest_basecolor.png                # Tekstur buatan sendiri: Base Color Peti (2K)
+│   ├── chest_roughness.png                # Tekstur buatan sendiri: Roughness Peti (2K)
+│   ├── chest_metallic.png                 # Tekstur buatan sendiri: Metallic Peti (2K)
+│   ├── chest_normal.png                   # Tekstur buatan sendiri: Normal Map Peti (2K)
+│   ├── chest_emission.png                 # Tekstur buatan sendiri: Emission Peti (2K)
+│   ├── rivet_basecolor.png                # Tekstur buatan sendiri: Base Color Rivet
+│   ├── rivet_roughness.png                # Tekstur buatan sendiri: Roughness Rivet
+│   ├── rivet_metallic.png                 # Tekstur buatan sendiri: Metallic Rivet
+│   ├── rivet_normal.png                   # Tekstur buatan sendiri: Normal Rivet
+│   └── external_lantern/
+│       ├── lantern_basecolor.png          # Tekstur eksternal: Base Color Lentera (1K)
+│       ├── lantern_ao.png                 # Tekstur eksternal: Ambient Occlusion Lentera (1K)
+│       ├── lantern_roughness.png          # Tekstur eksternal: Roughness Lentera (1K)
+│       ├── lantern_metallic.png           # Tekstur eksternal: Metallic Lentera (1K)
+│       ├── lantern_normal.png             # Tekstur eksternal: Normal Map Lentera (1K)
+│       └── lantern_emissive.png           # Tekstur eksternal: Emission Lentera (1K)
+├── screenshots/
+│   ├── 01_final_master_showcase.png       # Render Hero Master Showcase (1080p)
+│   ├── 02_cycles_hero_showcase.png        # Render Cycles Hero Shot (1080p)
+│   ├── 03_lantern_pbr_detail.png          # Closeup Detail Model Eksternal (1080p)
+│   ├── 04_chest_pbr_detail.png            # Closeup Detail Model Sendiri (1080p)
+│   └── 05_scene_overview_clay.png         # Overview Geometri Clay / Workbench
+└── images/                                # Direktori cermin aset gambar dokumentasi
 ```
 
 ---
 
-## 10. Dokumentasi Visual 10 Tahapan
+## 10. Panduan Eksekusi di Blender
 
-Berikut adalah dokumentasi visual bertahap resolusi tinggi ($1920 \times 1080$) yang tersimpan pada direktori `screenshots/` dan `images/`:
-
----
-
-### Tahap 1: Asset Upgrade & Assembly Breakdown (`01_model_upgrade_breakdown.png`)
-Perakitan lengkap seluruh komponen mekanis aset 3D: tutup barel berengsel pada poros belakang, pelat kunci depan dengan gembok gantung, sepasang handle cincin besi samping, tumpukan harta karun koin dan permata, serta lantai dek kapal kayu.
-
-![Asset Upgrade Breakdown](screenshots/01_model_upgrade_breakdown.png)
-
----
-
-### Tahap 2: Wireframe Topology & Mesh Density (`02_wireframe_topology.png`)
-Pemeriksaan kerapatan topologi jaring polygon (*wireframe view*). Menunjukkan distribusi edge loop yang bersih, efisiensi penempatan vertex pada kelengkungan busur tutup peti, serta normalisasi skala $(1.0, 1.0, 1.0)$ pada seluruh komponen.
-
-![Wireframe Topology](screenshots/02_wireframe_topology.png)
-
----
-
-### Tahap 3: Treasure Hoard & Macro Coin Detail (`03_treasure_hoard_coins.png`)
-Pengambilan gambar sudut makro (*macro shot* $85\text{mm}$) dengan kedalaman ruang tipis ($f/1.8$). Memperlihatkan detail 140+ koin emas doubloon individual, susunan tumpukan kolom koin, tumpahan koin di bibir peti, piala emas, serta permata faset transparan.
-
-![Treasure Hoard Coins](screenshots/03_treasure_hoard_coins.png)
-
----
-
-### Tahap 4: Studio Lighting Setup Overview (`04_three_point_lighting_setup.png`)
-Tampak atas studio (*high-angle studio overview*) memperlihatkan posisi geometris, sudut pancaran, dan orientasi kerucut Three-Point Lighting rig: Key Light di kanan-depan, Fill Light di kiri-depan, Rim Light di belakang, serta kamera dan lantai panggung.
-
-![Studio Lighting Setup](screenshots/04_three_point_lighting_setup.png)
-
----
-
-### Tahap 5: Lighting Study Panel (Key, Fill, Rim, All + Glow) (`05_lighting_study_key_fill_rim.png`)
-Panel komparatif matriks $2 \times 2$ yang membuktikan peran optik masing-masing sumber cahaya secara terisolasi:
-1. **Key Light Only**: Pencahayaan kuat dengan kontras dan bayangan pekat.
-2. **Key + Fill Light**: Bayangan pekat sisi kiri terisi lembut dengan rasio kontras seimbang.
-3. **Full 3-Point (Key + Fill + Rim)**: Penambahan highlight garis kontur di siluet tepi atas.
-4. **Final Cinematic (3-Point + Interior Glow)**: Pendaran emas magis memancar hangat dari dalam peti.
-
-![Lighting Study Panel](screenshots/05_lighting_study_key_fill_rim.png)
-
----
-
-### Tahap 6: Camera Composition & Depth of Field Study (`06_camera_composition_dof.png`)
-Panel perbandingan berdampingan ($1 \times 2$) evaluasi optik kamera:
-- **Kiri (DoF Disabled - Deep Focus)**: Seluruh scene tajam seragam, tekstur lantai bersaing dengan subjek utama.
-- **Kanan (DoF Enabled - f/2.8 Bokeh)**: Bidang fokus terkunci pada koin emas, latar belakang meluruh lembut menciptakan isolasi visual hero asset yang elegan.
-
-![Camera Composition DoF](screenshots/06_camera_composition_dof.png)
-
----
-
-### Tahap 7: Keyframe Animation Timeline Filmstrip (`07_animation_timeline_keyframes.png`)
-Filmstrip kronologis $2 \times 2$ rangkaian gerak animasi sepanjang 150 frame:
-1. **Frame 1 (State Tertutup)**: Peti tertutup rapat, gembok terkunci, lampu dalam mati.
-2. **Frame 35 (Unlatching & Start Lift)**: Pengait gembok berayun terbuka, tutup peti mulai terangkat.
-3. **Frame 85 (Full Open & Max Radiance)**: Tutup mencapai rotasi $-102^\circ$, cahaya emas interior mencapai $220\text{ W}$.
-4. **Frame 150 (Final Hero Settle & Push-in)**: Posisi akhir kamera bergerak mendekat menyingkap kemilau harta karun secara utuh.
-
-![Animation Keyframes Filmstrip](screenshots/07_animation_timeline_keyframes.png)
-
----
-
-### Tahap 8: EEVEE Next Real-Time Render (`08_eevee_next_render.png`)
-Hasil render resolusi penuh ($1920 \times 1080$) menggunakan engine generasi terbaru **EEVEE Next** di Blender 5.2. Memperlihatkan performa real-time berkecepatan tinggi dengan raytraced screen-space reflections, specular highlights yang renyah, dan kestabilan temporal.
-
-![EEVEE Next Render](screenshots/08_eevee_next_render.png)
-
----
-
-### Tahap 9: CYCLES Physically Based Path Tracing (`09_cycles_pathtracing_render.png`)
-Hasil render resolusi penuh ($1920 \times 1080$) menggunakan **CYCLES Path Tracing**. Menampilkan radiansi pencahayaan global multi-bounce fisik sejati, pembiasan optik nyata pada permata Ruby, Emerald, dan Sapphire, serta bayangan kontak mikro antar koin yang kaya dan mendalam.
-
-![Cycles Path Tracing Render](screenshots/09_cycles_pathtracing_render.png)
-
----
-
-### Tahap 10: Final Master Beauty Showcase (`10_final_hero_showcase.png`)
-Tampilan mahakarya (*Hero Beauty Shot*) final resolusi tinggi mengintegrasikan seluruh elemen: peningkatan model 3D, material PBR logam dan kayu, pencahayaan 3-titik dramatis, DoF optik $f/2.8$, serta kemilau harta karun bajak laut.
-
-![Final Master Hero Showcase](screenshots/10_final_hero_showcase.png)
-
----
-
-## 11. Checklist Pengumpulan Tugas
-
-- [x] File `.blend` utama tersedia dengan penamaan standar: `P11_5025241173_Mandy_5025241185_Nawfal.blend`.
-- [x] File salinan tugas mandiri tersedia: `Tugas Blender 3.blend`.
-- [x] Geometri peti ditingkatkan dengan tutup lengkung berengsel mekanis (`Lid_Curved`).
-- [x] Poros rotasi tutup berada di sumbu engsel belakang yang akurat (rotasi buka $-102^\circ$).
-- [x] Ornamen engsel besi belakang, pelat kunci depan, dan gembok terpasang rapi.
-- [x] Sepasang pegangan cincin gantung besi samping (*drop-ring handles*) terpasang di kedua sisi.
-- [x] Harta karun melimpah: gundukan emas, 140+ koin emas doubloon 3D individual, tumpukan koin, tumpahan bibir, dan koin di lantai.
-- [x] Permata potong faset (Ruby merah, Emerald hijau, Sapphire biru) dengan transmisi optik IOR tinggi.
-- [x] Piala emas bajak laut bertangkai terpasang di atas gundukan harta.
-- [x] Lantai dek kapal kayu berukuran luas ($32\text{ m} \times 32\text{ m}$) mencegah horizon clipping.
-- [x] Sistem pencahayaan Three-Point Lighting lengkap (Key Light, Fill Light, Rim Light).
-- [x] Lampu aksen interior rongga peti teranimasi menyala seiring bukaan tutup ($0\text{ W} \to 220\text{ W}$).
-- [x] Pengaturan rasio kontras Fill-to-Key seimbang ($1:3$) dan rim highlight tegas.
-- [x] Kamera sinematik $50\text{mm}$ terpasang pada sudut Three-Quarter Hero Angle.
-- [x] Depth of Field (DoF) aktif dengan aperture $f/2.8$ dan fokus terkunci pada koin emas terdepan.
-- [x] Animasi 150 frame (24 fps) berjalan mulus dengan interpolasi Bézier Ease-In-Out.
-- [x] Pengujian komparatif EEVEE Next vs CYCLES Path Tracing terdokumentasi dan dianalisis mendalam.
-- [x] 10 dokumentasi visual bertahap lengkap pada folder `screenshots/` dan `images/`.
-- [x] Laporan README.md komprehensif, akademis, dan terstruktur rapi.
-
----
-
-## 12. Link Repository & Panduan Eksekusi
-
-### A. Tautan Repository
-* **Repository GitHub**: [Link Repository](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer)
-* **Direktori Tugas**: [Link Direktori Tugas Blender Scene 3D Lengkap](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Tugas%20Blender%20Scene%203D%20Lengkap)
-
-### B. Panduan Menjalankan File di Blender
-1. Buka software **Blender 5.2 LTS** (atau versi Blender 4.x / 5.x ke atas).
-2. Pilih menu **File -> Open...** lalu arahkan ke:
+### A. Membuka Berkas di Blender GUI
+1. Jalankan aplikasi **Blender 5.2 LTS** (atau Blender 4.x / 5.x ke atas).
+2. Pilih menu **File -> Open...** lalu arahkan ke berkas:
    ```
-   Tugas Blender Scene 3D Lengkap/P11_5025241173_Mandy_5025241185_Nawfal.blend
+   Tugas Blender Scene 3D Lengkap/Tugas Blender Scene 3D Lengkap.blend
    ```
-3. **Memutar Animasi**:
-   - Tekan bilah spasi (`Spacebar`) untuk memutar timeline animasi dari Frame 1 hingga 150.
-   - Perhatikan pembukaan tutup peti, pelepasan kunci, pendaran cahaya interior, dan pergerakan kamera *dolly push-in*.
-4. **Berpindah Kamera**:
-   - Buka menu *Scene Properties* atau pilih kamera yang diinginkan (`Camera_Hero`, `Cam_Macro_Coins`, atau `Cam_Studio_Overview`), lalu tekan `Ctrl + Numpad 0` untuk mengaktifkan kamera aktif.
-5. **Melakukan Render Frame**:
-   - Tekan `F12` untuk merender still frame pada frame aktif saat ini.
-   - Untuk beralih antara EEVEE Next dan Cycles, buka tab **Render Properties** -> ubah opsi **Render Engine** antara `EEVEE` dan `Cycles`.
+3. Tekan **Numpad 0** untuk masuk ke tampilan kamera aktif (`Hero_Cinematic_Camera`).
+4. Tekan **Z -> Rendered** untuk melihat tampilan interaktif real-time dengan pencahayaan penuh.
+5. Untuk beralih ke kamera closeup:
+   * Pilih `Closeup_Lantern_Camera` atau `Closeup_Chest_Camera` di panel Outliner, lalu tekan **Ctrl + Numpad 0**.
+
+### B. Menjalankan Rendering Ulang
+* Tekan tombol **F12** pada keyboard untuk merender still frame beresolusi penuh $1920 \times 1080$.
+* Atau eksekusi script render otomatis melalui terminal PowerShell:
+  ```powershell
+  & "C:\Program Files\Blender Foundation\Blender 5.2\blender.exe" -b "Tugas Blender Scene 3D Lengkap\Tugas Blender Scene 3D Lengkap.blend" --python "Tugas Blender Scene 3D Lengkap\render_scene.py"
+  ```
