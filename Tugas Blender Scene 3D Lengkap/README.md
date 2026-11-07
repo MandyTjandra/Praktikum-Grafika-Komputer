@@ -429,13 +429,13 @@ Tampilan mahakarya (*Hero Beauty Shot*) final resolusi tinggi mengintegrasikan s
 
 ### A. Tautan Repository
 * **Repository GitHub**: [Link Repository](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer)
-* **Direktori Praktikum 11**: [Link Direktori Praktikum 11](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Praktikum%2011)
+* **Direktori Tugas**: [Link Direktori Tugas Blender Scene 3D Lengkap](https://github.com/MandyTjandra/Praktikum-Grafika-Komputer/tree/main/Tugas%20Blender%20Scene%203D%20Lengkap)
 
 ### B. Panduan Menjalankan File di Blender
 1. Buka software **Blender 5.2 LTS** (atau versi Blender 4.x / 5.x ke atas).
 2. Pilih menu **File -> Open...** lalu arahkan ke:
    ```
-   Praktikum 11/P11_5025241173_Mandy_5025241185_Nawfal.blend
+   Tugas Blender Scene 3D Lengkap/P11_5025241173_Mandy_5025241185_Nawfal.blend
    ```
 3. **Memutar Animasi**:
    - Tekan bilah spasi (`Spacebar`) untuk memutar timeline animasi dari Frame 1 hingga 150.
