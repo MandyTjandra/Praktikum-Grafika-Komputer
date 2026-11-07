@@ -279,19 +279,18 @@ Tugas Blender Scene 3D Lengkap/
 │       ├── lantern_metallic.png           # Tekstur eksternal: Metallic Lentera (1K)
 │       ├── lantern_normal.png             # Tekstur eksternal: Normal Map Lentera (1K)
 │       └── lantern_emissive.png           # Tekstur eksternal: Emission Lentera (1K)
-├── screenshots/
-│   ├── 01_model_upgrade_breakdown.png     # Tahap 1: Asset upgrade breakdown
-│   ├── 02_wireframe_topology.png          # Tahap 2: Topologi wireframe
-│   ├── 03_treasure_hoard_coins.png        # Tahap 3: Detail timbunan harta karun
-│   ├── 03_lantern_pbr_detail.png          # Detail closeup PBR model eksternal
-│   ├── 04_three_point_lighting_setup.png  # Tahap 4: Setup Three-Point Lighting
-│   ├── 05_lighting_study_key_fill_rim.png # Tahap 5: Studi pencahayaan
-│   ├── 06_camera_composition_dof.png      # Tahap 6: Komposisi kamera & DoF
-│   ├── 07_animation_timeline_keyframes.png# Tahap 7: Timeline 4 keyframe animasi
-│   ├── 08_eevee_next_render.png           # Tahap 8: Render EEVEE Next 1080p
-│   ├── 09_cycles_pathtracing_render.png   # Tahap 9: Render Cycles Path Tracing 1080p
-│   └── 10_final_hero_showcase.png         # Tahap 10: Final Master Hero Showcase
-└── images/                                # Direktori cermin aset gambar dokumentasi
+└── screenshots/
+    ├── 01_model_upgrade_breakdown.png     # Tahap 1: Asset upgrade breakdown
+    ├── 02_wireframe_topology.png          # Tahap 2: Topologi wireframe
+    ├── 03_treasure_hoard_coins.png        # Tahap 3: Detail timbunan harta karun
+    ├── 03_lantern_pbr_detail.png          # Detail closeup PBR model eksternal
+    ├── 04_three_point_lighting_setup.png  # Tahap 4: Setup Three-Point Lighting
+    ├── 05_lighting_study_key_fill_rim.png # Tahap 5: Studi pencahayaan
+    ├── 06_camera_composition_dof.png      # Tahap 6: Komposisi kamera & DoF
+    ├── 07_animation_timeline_keyframes.png# Tahap 7: Timeline 4 keyframe animasi
+    ├── 08_eevee_next_render.png           # Tahap 8: Render EEVEE Next 1080p
+    ├── 09_cycles_pathtracing_render.png   # Tahap 9: Render Cycles Path Tracing 1080p
+    └── 10_final_hero_showcase.png         # Tahap 10: Final Master Hero Showcase
 ```
 
 ---
